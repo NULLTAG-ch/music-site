@@ -1,0 +1,53 @@
+name: Deploy to GitHub Pages
+
+# Pages must be enabled once: repo Settings → Pages → Source = "GitHub Actions".
+# The `build` job runs on any branch (keeps PR CI green); the `deploy` job only
+# runs on `main`, because the auto-created `github-pages` environment is branch
+# protected to the default branch.
+
+on:
+  push:
+    branches:
+      - main
+      - claude/music-landing-page-KcIPo
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment, don't cancel an in-progress one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          # Idempotent; ensures the Pages site exists (Actions source).
+          enablement: true
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

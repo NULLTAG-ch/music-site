@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Release cover placeholder">
+  <!-- PLACEHOLDER — replace with the real square cover artwork -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d1d24"/>
+      <stop offset="1" stop-color="#0b0b0d"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#g)"/>
+  <circle cx="150" cy="135" r="46" fill="none" stroke="#6c63ff" stroke-width="3"/>
+  <circle cx="150" cy="135" r="6" fill="#6c63ff"/>
+  <text x="150" y="225" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="600"
+        fill="#a1a1aa" text-anchor="middle" letter-spacing="3">COVER ART</text>
+</svg>

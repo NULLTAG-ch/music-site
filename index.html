@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NULLTAG — Listen everywhere</title>
+  <meta name="description" content="All NULLTAG music in one place — stream the latest release on every platform." />
+
+  <link rel="canonical" href="https://music.nulltag.ch" />
+  <meta name="theme-color" content="#0b0b0d" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <!-- Open Graph / Twitter (replace og-image with a 1200x630 PNG for best results) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NULLTAG — Listen everywhere" />
+  <meta property="og:description" content="All NULLTAG music in one place — every platform, one link." />
+  <meta property="og:url" content="https://music.nulltag.ch" />
+  <meta property="og:image" content="https://music.nulltag.ch/assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+    <div class="container">
+
+      <header class="profile">
+        <img id="logo" class="logo" src="assets/logo.svg" alt="logo" width="88" height="88" />
+        <h1 id="name" class="name"></h1>
+        <p id="tagline" class="tagline"></p>
+      </header>
+
+      <section id="release" class="release" aria-label="Latest release">
+        <img class="release-art" src="assets/cover-placeholder.svg" alt="cover art" width="96" height="96" />
+        <div class="release-body">
+          <span class="release-eyebrow">Latest release</span>
+          <h2 class="release-title"></h2>
+          <p class="release-subtitle"></p>
+          <a class="release-cta" href="#">Listen everywhere</a>
+        </div>
+      </section>
+
+      <section aria-label="Streaming platforms">
+        <h2 class="section-title">Stream</h2>
+        <ul id="streaming-list" class="link-list"></ul>
+      </section>
+
+      <section aria-label="Social media">
+        <h2 class="section-title">Follow</h2>
+        <ul id="social-list" class="social-list"></ul>
+      </section>
+
+      <footer class="footer">
+        © <span id="year"></span> <span id="footer-name"></span>
+      </footer>
+
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
