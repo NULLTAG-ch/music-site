@@ -1,6 +1,9 @@
 name: Deploy to GitHub Pages
 
-# One-time setup: repo Settings → Pages → Source = "GitHub Actions".
+# Pages must be enabled once: repo Settings → Pages → Source = "GitHub Actions".
+# The `build` job runs on any branch (keeps PR CI green); the `deploy` job only
+# runs on `main`, because the auto-created `github-pages` environment is branch
+# protected to the default branch.
 
 on:
   push:
@@ -20,11 +23,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,8 +32,7 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
-          # Enable Pages (Actions source) automatically on first run so the
-          # workflow doesn't require the repo Settings toggle. Idempotent.
+          # Idempotent; ensures the Pages site exists (Actions source).
           enablement: true
 
       - name: Upload site artifact
@@ -41,6 +40,14 @@ jobs:
         with:
           path: .
 
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
