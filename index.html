@@ -198,40 +198,48 @@
         <div class="chapter-right" id="catalog-right">EVERY RELEASE · PLAYABLE</div>
       </div>
 
-      <div class="embed-wrap embed-wrap--spotify">
-        <div class="embed-consent">
-          <p class="embed-consent-text">Plays from <strong>Spotify</strong> — loading it sends data to Spotify (cookies). Your choice is saved on this device.</p>
-          <button class="embed-load" type="button">▶ Load Spotify player</button>
-          <a class="embed-open" href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener noreferrer">or open on Spotify ↗</a>
+      <div class="player-pick" role="tablist" aria-label="Choose how to listen">
+        <button class="pp-btn pp-on" type="button" data-pick="deezer">▶ Previews · in-page</button>
+        <button class="pp-btn" type="button" data-pick="spotify">Spotify</button>
+        <a class="pp-btn pp-link" href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" target="_blank" rel="noopener noreferrer">Apple Music ↗</a>
+        <a class="pp-btn pp-link" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener noreferrer">SoundCloud ↗</a>
+      </div>
+
+      <div id="pick-deezer" class="player-panel">
+        <div class="filter-row" id="filter-row" hidden>
+          <button class="chip chip--on" type="button" id="cat-all" disabled>ALL · —</button>
         </div>
-        <iframe title="NULLTAG on Spotify — every release"
-          data-src="https://open.spotify.com/embed/artist/5V17xFUuN6H4jqZNChnrdV?utm_source=generator"
-          loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          frameborder="0"></iframe>
-      </div>
-
-      <p class="embed-note">Full discography &amp; previews above · open on every platform in <a href="#listen">Listen</a>.</p>
-
-      <div class="filter-row" id="filter-row" hidden>
-        <button class="chip chip--on" type="button" id="cat-all" disabled>ALL · —</button>
-      </div>
-
-      <div id="releases-grid" class="catalog-grid"></div>
-
-      <div id="album-view" class="album-view" hidden>
-        <button id="album-back" class="album-back" type="button">← All releases</button>
-        <div class="album-head">
-          <img id="album-cover" class="album-cover" alt="" width="120" height="120" />
-          <div class="album-headtext">
-            <h3 id="album-title" class="album-title"></h3>
-            <p id="album-meta" class="album-meta"></p>
-            <a id="album-link" class="album-link" target="_blank" rel="noopener noreferrer">Open on Deezer ↗</a>
+        <div id="releases-grid" class="catalog-grid"></div>
+        <div id="album-view" class="album-view" hidden>
+          <button id="album-back" class="album-back" type="button">← All releases</button>
+          <div class="album-head">
+            <img id="album-cover" class="album-cover" alt="" width="120" height="120" />
+            <div class="album-headtext">
+              <h3 id="album-title" class="album-title"></h3>
+              <p id="album-meta" class="album-meta"></p>
+              <a id="album-link" class="album-link" target="_blank" rel="noopener noreferrer">Open on Deezer ↗</a>
+            </div>
           </div>
+          <ol id="tracklist" class="tracklist"></ol>
         </div>
-        <ol id="tracklist" class="tracklist"></ol>
+        <p id="releases-status" class="releases-status" role="status">Loading the release feed…</p>
       </div>
 
-      <p id="releases-status" class="releases-status" role="status">Loading the release feed…</p>
+      <div id="pick-spotify" class="player-panel" hidden>
+        <div class="embed-wrap embed-wrap--spotify">
+          <div class="embed-consent">
+            <p class="embed-consent-text">Plays from <strong>Spotify</strong> — loading it sends data to Spotify (cookies). Your choice is saved on this device.</p>
+            <button class="embed-load" type="button">▶ Load Spotify player</button>
+            <a class="embed-open" href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener noreferrer">or open on Spotify ↗</a>
+          </div>
+          <iframe title="NULLTAG on Spotify — every release"
+            data-src="https://open.spotify.com/embed/artist/5V17xFUuN6H4jqZNChnrdV?utm_source=generator"
+            loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            frameborder="0"></iframe>
+        </div>
+      </div>
+
+      <p class="embed-note">In-page previews need no account · open NULLTAG on <a href="#listen">every platform</a>.</p>
     </section>
 
     <!-- ===== §03 UPDATES ===== -->
@@ -376,11 +384,9 @@
           <div class="avatar-stage">
             <div class="avatar-disc">
               <svg id="avatar-stars" class="avatar-stars" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
-              <div class="avatar-mark">
-                <span class="lockup lockup--stacked">
-                  <svg class="mark" style="width:300px;height:300px"><use href="#mark-bisect" /></svg>
-                  <span class="wordmark wordmark--lg">NULLTAG</span>
-                </span>
+              <div class="avatar-mark avatar-mark--canon">
+                <span class="av-stack">NULL<br />TAG</span>
+                <span class="av-rule"></span>
               </div>
             </div>
           </div>

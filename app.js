@@ -494,10 +494,38 @@
       });
     }
 
+    // §01 cover comes from the real release feed (config artwork is only
+    // the offline fallback). Match the pinned title to a feed release,
+    // else use the newest. Only the cover/alt is overridden — the curated
+    // title/subtitle from config stay.
+    function applyFeatured(sorted) {
+      if (!sorted || !sorted.length) return;
+      var want = String((C.latestRelease || {}).title || "")
+        .toLowerCase().replace(/[^a-z0-9]/g, "");
+      var pick = null;
+      if (want) {
+        pick = sorted.filter(function (a) {
+          var t = String(a.title || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+          return t && (t.indexOf(want) === 0 || want.indexOf(t) === 0);
+        })[0] || null;
+      }
+      if (!pick) pick = sorted[0];
+      var c = coverOf(pick);
+      if (!c) return;
+      var img = byId("latest-cover");
+      if (img) {
+        img.src = c;
+        img.alt = ((C.latestRelease || {}).title || pick.title || "") + " cover art";
+      }
+      var hl = byId("hero-latest");
+      if (hl) hl.textContent = String((C.latestRelease || {}).title || pick.title || "—").toUpperCase();
+    }
+
     function renderGrid(albums) {
       var list = albums.slice().sort(function (a, b) {
         return String(b.release_date || "").localeCompare(String(a.release_date || ""));
       });
+      applyFeatured(list);
       if (cfg.limit) list = list.slice(0, cfg.limit);
 
       list.forEach(function (al) {
@@ -617,6 +645,24 @@
         try { localStorage.setItem(KEY, "1"); } catch (e) {}
         activateAll();
       });
+    });
+  })();
+
+  // ---- §02 Player chooser — multiple ways to listen -----------------------
+  (function playerPick() {
+    var btns = document.querySelectorAll(".player-pick [data-pick]");
+    if (!btns.length) return;
+    function show(pick) {
+      Array.prototype.forEach.call(document.querySelectorAll(".player-panel"), function (p) {
+        var on = p.id === "pick-" + pick;
+        if (on) p.removeAttribute("hidden"); else p.setAttribute("hidden", "");
+      });
+      Array.prototype.forEach.call(btns, function (b) {
+        b.classList.toggle("pp-on", b.getAttribute("data-pick") === pick);
+      });
+    }
+    Array.prototype.forEach.call(btns, function (b) {
+      b.addEventListener("click", function () { show(b.getAttribute("data-pick")); });
     });
   })();
 })();

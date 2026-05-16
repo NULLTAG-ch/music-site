@@ -1284,3 +1284,43 @@ h2.chapter-label {
 .rc-schiene { display: inline-flex; align-items: center; gap: 6px; color: var(--bone-dim); }
 .rc-schiene-dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
 .filter-row .chip { cursor: pointer; }
+
+/* ============================================================
+   §02 Player chooser — multiple listen options
+   ============================================================ */
+.player-pick {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin: 0 0 24px;
+}
+.pp-btn {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--bone-dim);
+  background: var(--void);
+  border: 1px solid var(--border);
+  padding: 11px 16px; cursor: pointer; text-decoration: none;
+  transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
+}
+.pp-btn:hover { color: var(--bone); border-color: var(--border-warm); }
+.pp-btn.pp-on { color: var(--bone); border-color: var(--tiefrot); }
+.pp-link { color: var(--muted); }
+.pp-link:hover { color: var(--tiefrot); border-color: var(--tiefrot); }
+.player-panel { display: block; }
+
+/* ============================================================
+   §08 Identity — canonical stacked NULL/TAG avatar
+   ============================================================ */
+.avatar-mark--canon {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+}
+.av-stack {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 16vw, 132px);
+  line-height: 0.84; letter-spacing: -0.015em;
+  text-align: center; color: var(--bone);
+}
+.av-rule {
+  margin-top: 18px;
+  width: 84px; height: 5px; background: var(--tiefrot);
+}
