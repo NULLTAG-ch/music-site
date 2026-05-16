@@ -136,6 +136,66 @@
     });
   })();
 
+  // ---- §03 Updates (config + auto YouTube uploads from the feed) -----------
+  var feedUpdates = [];
+  function renderUpdates() {
+    var wrap = byId("updates-list");
+    var section = byId("updates");
+    if (!wrap) return;
+    var seen = {};
+    var list = (C.updates || []).concat(feedUpdates).filter(function (u) {
+      if (!u || (!u.text && !u.title)) return false;
+      var key = (u.url || "") + "|" + (u.text || u.title);
+      if (seen[key]) return false;
+      seen[key] = 1;
+      return true;
+    }).sort(function (a, b) {
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+
+    if (!list.length) { if (section) section.setAttribute("hidden", ""); return; }
+    if (section) section.removeAttribute("hidden");
+    wrap.textContent = "";
+    list.forEach(function (u) {
+      var hasUrl = u.url && u.url !== "#";
+      var row = el(hasUrl ? "a" : "div", {
+        class: "update-row",
+        href: hasUrl ? u.url : null,
+        target: hasUrl ? "_blank" : null,
+        rel: hasUrl ? "noopener noreferrer" : null
+      });
+      row.appendChild(el("span", { class: "update-date" }, u.date || ""));
+      row.appendChild(el("span", { class: "update-tag" }, (u.platform || "NEWS").toUpperCase()));
+      row.appendChild(el("span", { class: "update-text" }, u.text || u.title || ""));
+      if (hasUrl) row.appendChild(el("span", { class: "update-arrow", "aria-hidden": "true" }, "→"));
+      wrap.appendChild(row);
+    });
+    var right = byId("updates-right");
+    if (right) right.textContent = list.length + " ENTRIES";
+  }
+  renderUpdates();
+
+  // ---- §04 Upcoming projects ----------------------------------------------
+  (function upcoming() {
+    var wrap = byId("upcoming-list");
+    var section = byId("upcoming");
+    if (!wrap) return;
+    var list = C.upcoming || [];
+    if (!list.length) { if (section) section.setAttribute("hidden", ""); return; }
+    list.forEach(function (p, i) {
+      var row = el("div", { class: "upcoming-row" });
+      row.appendChild(el("span", { class: "upcoming-idx" }, (i + 1 < 10 ? "0" : "") + (i + 1)));
+      var body = el("div", { class: "upcoming-body" });
+      body.appendChild(el("div", { class: "upcoming-title" }, p.title || "Untitled"));
+      if (p.note) body.appendChild(el("div", { class: "upcoming-note" }, p.note));
+      row.appendChild(body);
+      row.appendChild(el("span", { class: "upcoming-eta" }, (p.eta || "TBA").toUpperCase()));
+      wrap.appendChild(row);
+    });
+    var right = byId("upcoming-right");
+    if (right) right.textContent = list.length + " IN PIPELINE";
+  })();
+
   // ---- §02 Catalog feed + interactive player -------------------------------
   // Pulled live from Deezer (no key, no CORS). Progressive enhancement:
   // failure simply leaves the catalog empty + status hidden; the pinned
@@ -363,14 +423,44 @@
       var all = byId("cat-all"); if (all) all.textContent = "ALL · " + nn;
     }
 
+    // Never leave the catalog empty: if no live feed is available, show the
+    // distributor links so fans can always reach the music.
+    function fallbackListen() {
+      grid.textContent = "";
+      var dist = (C.streaming || []).filter(function (s) { return s.url && s.url !== "#"; });
+      if (!dist.length) { if (status) status.setAttribute("hidden", ""); return; }
+      dist.forEach(function (s) {
+        var card = el("a", {
+          class: "release-card release-card--listen", href: s.url,
+          target: "_blank", rel: "noopener noreferrer",
+          "aria-label": "Open " + s.label
+        });
+        var cw = el("div", { class: "release-cover" });
+        cw.appendChild(el("span", { class: "rc-fallback" }, s.label.charAt(0)));
+        cw.appendChild(el("span", { class: "release-cover-stamp" }, "LISTEN"));
+        cw.appendChild(el("span", { class: "rc-play", "aria-hidden": "true" }, "↗"));
+        card.appendChild(cw);
+        var meta = el("div", { class: "release-card-meta" });
+        meta.appendChild(el("div", { class: "release-card-title" }, s.label));
+        meta.appendChild(el("div", { class: "release-card-sub" }, "OPEN ↗"));
+        card.appendChild(meta);
+        grid.appendChild(card);
+      });
+      if (status) status.textContent =
+        dist.length + " platforms · live catalog loads from Deezer when available";
+      var cr = byId("catalog-right"); if (cr) cr.textContent = "STREAMING · EVERYWHERE";
+      var all = byId("cat-all"); if (all) all.textContent = "LISTEN · " + dist.length;
+      var hc = byId("hero-catalog"); if (hc) hc.textContent = "LIVE";
+    }
+
     function liveJsonp() {
       jsonp("https://api.deezer.com/artist/" + encodeURIComponent(cfg.deezerArtistId) +
             "/albums?limit=" + (cfg.limit || 24),
         function (resp) {
           if (resp && resp.data && resp.data.length) renderGrid(resp.data);
-          else if (status) status.setAttribute("hidden", "");
+          else fallbackListen();
         },
-        function () { if (status) status.setAttribute("hidden", ""); },
+        fallbackListen,
         9000);
     }
 
@@ -378,6 +468,9 @@
       fetch("releases.json", { cache: "no-store" })
         .then(function (r) { if (!r.ok) throw 0; return r.json(); })
         .then(function (data) {
+          if (data && data.updates && data.updates.length) {
+            feedUpdates = data.updates; renderUpdates();
+          }
           var albums = data && data.albums ? data.albums : [];
           if (albums.length) renderGrid(albums);
           else liveJsonp();

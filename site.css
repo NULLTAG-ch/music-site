@@ -1023,3 +1023,72 @@ body.player-open { padding-bottom: 86px; }
 .crop--xs .crop-disc { width: 42px; height: 42px; box-shadow: 0 0 0 2px var(--ring); }
 .crop--xs .crop-word { font-size: 15px; }
 .crop--xs .crop-rule { bottom: 7px; height: 2px; }
+
+/* ============================================================
+   §03 UPDATES — what just dropped
+   ============================================================ */
+.updates-list { border-top: 1px solid var(--border); }
+.update-row {
+  display: grid;
+  grid-template-columns: 104px 116px 1fr 28px;
+  gap: 20px;
+  align-items: center;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  color: var(--bone);
+  text-decoration: none;
+  transition: background var(--t-base) var(--ease), padding var(--t-base) var(--ease);
+}
+a.update-row:hover { background: rgba(255,42,85,0.05); padding-left: 14px; }
+a.update-row:hover .update-arrow { color: var(--tiefrot); transform: translateX(4px); }
+.update-date { font-size: 11px; letter-spacing: 0.16em; color: var(--muted); }
+.update-tag { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tiefrot); }
+.update-text { font-size: 14px; letter-spacing: 0.01em; color: var(--bone); }
+.update-arrow { text-align: right; color: var(--muted); transition: color var(--t-base) var(--ease), transform var(--t-base) var(--ease); }
+@media (max-width: 720px) {
+  .update-row { grid-template-columns: 1fr; gap: 6px; }
+  .update-arrow { display: none; }
+  .update-text { font-size: 15px; }
+}
+
+/* ============================================================
+   §04 UPCOMING — pipeline
+   ============================================================ */
+.upcoming-list { border-top: 1px solid var(--border); }
+.upcoming-row {
+  display: flex; align-items: flex-start; gap: 22px;
+  padding: 22px 4px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+}
+.upcoming-idx { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); padding-top: 6px; }
+.upcoming-body { flex: 1; min-width: 0; }
+.upcoming-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--bone);
+}
+.upcoming-note { margin-top: 8px; font-size: 13px; line-height: 1.6; color: var(--muted); }
+.upcoming-eta {
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--tiefrot); white-space: nowrap; padding-top: 6px;
+}
+
+/* ============================================================
+   Catalog fallback — distributor cards when no live feed
+   ============================================================ */
+.rc-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: clamp(56px, 9vw, 116px);
+  color: var(--bone);
+  background: radial-gradient(circle at 50% 45%, #15131c 0%, #0a0a0a 70%);
+}
+.release-card--listen .release-card-sub { color: var(--tiefrot); }

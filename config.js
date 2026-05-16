@@ -3,10 +3,10 @@
  *  music.nulltag.ch — CONTENT
  * ============================================================================
  *  This is the ONLY file you normally need to edit. Change the values below
- *  (via the GitHub web UI is fine), commit, and the page redeploys itself.
+ *  (via the GitHub web UI is fine), commit — the page redeploys itself.
  *
- *  Only platforms that actually exist are listed. The release grid is loaded
- *  live from Deezer's public API at page load — no build step, no API key.
+ *  Everything here works with zero external services. The release grid is
+ *  additionally enriched live from Deezer when available.
  * ============================================================================
  */
 window.CONFIG = {
@@ -17,8 +17,7 @@ window.CONFIG = {
     shareUrl: "https://music.nulltag.ch"
   },
 
-  // Pinned hero release. Also the fallback if the live feed can't load.
-  // Set show:false to hide the whole card.
+  // Pinned hero release. Always shown — the dependable front door.
   latestRelease: {
     show: true,
     title: "Plastic Paradise EP",
@@ -28,16 +27,19 @@ window.CONFIG = {
     listenUrl: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431"
   },
 
-  // Auto-loaded release overview. Pulled client-side from Deezer's public
-  // JSONP API (CORS-free, no key). Degrades silently if it can't load.
+  // Release overview. Enriched live from Deezer (no key) and/or a
+  // releases.json baked by the feed Action. If neither is available the
+  // catalog falls back to the streaming links below so fans can ALWAYS
+  // get to the music.
   releases: {
     show: true,
     source: "deezer",
     deezerArtistId: "388775221",
+    youtubeChannelId: "UCWl0DW85arbD6uHnD29HA_Q",
     limit: 24
   },
 
-  // Streaming platforms — rendered in this order. Real links only.
+  // Where the music lives — every distributor, in display order.
   streaming: [
     { label: "Spotify",       url: "https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" },
     { label: "Apple Music",   url: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" },
@@ -47,9 +49,23 @@ window.CONFIG = {
     { label: "Deezer",        url: "https://www.deezer.com/artist/388775221" }
   ],
 
-  // Social links — rendered as a compact row. Real links only.
+  // Social profiles.
   social: [
     { label: "Instagram", url: "https://www.instagram.com/nulltag.ch/" },
     { label: "YouTube",   url: "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" }
+  ],
+
+  // Updates / news — "what just dropped". Add a line, commit, it's live.
+  // Newest first is fine; the page sorts by date anyway.
+  // YouTube uploads are appended automatically by the feed Action.
+  updates: [
+    { date: "2026-05-16", platform: "Release",   text: "Plastic Paradise EP is out — listen on every platform.", url: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" },
+    { date: "2026-05-16", platform: "Instagram", text: "New visuals + behind-the-scenes on Instagram.",            url: "https://www.instagram.com/nulltag.ch/" }
+  ],
+
+  // Upcoming projects — what's next. eta is free text (e.g. "Q3 2026").
+  upcoming: [
+    { title: "LICHTJAHRE Vol.1", eta: "2026", note: "Cosmic frenchcore — 8-track rail. In mix." },
+    { title: "NACHTSTROM NS-01", eta: "2026", note: "German night-techno — first single. Writing." }
   ]
 };
