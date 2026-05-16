@@ -1,6 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="favicon placeholder">
-  <!-- PLACEHOLDER — replace with the NULLTAG CD mark -->
-  <rect width="64" height="64" rx="14" fill="#0b0b0d"/>
-  <text x="32" y="34" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="700"
-        fill="#6c63ff" text-anchor="middle" dominant-baseline="central">N0</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NULLTAG">
+  <rect width="64" height="64" fill="#0a0a0a"/>
+  <g stroke="#e8e3da" stroke-width="2" opacity="0.4" fill="none">
+    <path d="M10 18 V10 H18"/><path d="M46 10 H54 V18"/>
+    <path d="M10 46 V54 H18"/><path d="M46 54 H54 V46"/>
+  </g>
+  <rect x="20" y="30" width="24" height="4" fill="#ff2a55"/>
 </svg>

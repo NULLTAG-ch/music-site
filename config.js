@@ -21,8 +21,8 @@ window.CONFIG = {
   latestRelease: {
     show: true,
     title: "Plastic Paradise EP",
-    subtitle: "EP",                        // TODO: add year, e.g. "EP · 2026"
-    artwork: "assets/cover-placeholder.svg", // TODO: replace with real cover art (square)
+    subtitle: "EP · 2026",
+    artwork: "assets/cover-placeholder.svg",
     ctaLabel: "Listen on Apple Music",
     listenUrl: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431"
   },
