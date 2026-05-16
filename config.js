@@ -58,13 +58,13 @@ window.CONFIG = {
     limit: 24
   },
 
-  // Where the music lives — every distributor, in display order.
+  // Where the music lives — prioritised: SoundCloud, Apple Music, Spotify.
   streaming: [
-    { label: "Spotify",       url: "https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" },
+    { label: "SoundCloud",    url: "https://soundcloud.com/nulltag" },
     { label: "Apple Music",   url: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" },
+    { label: "Spotify",       url: "https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" },
     { label: "YouTube Music", url: "https://music.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" },
     { label: "YouTube",       url: "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" },
-    { label: "SoundCloud",    url: "https://soundcloud.com/nulltag" },
     { label: "Deezer",        url: "https://www.deezer.com/artist/388775221" }
   ],
 
