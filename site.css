@@ -1157,3 +1157,17 @@ a.update-row:hover .update-arrow { color: var(--tiefrot); transform: translateX(
 @media (max-width: 560px) {
   .embed-wrap--apple iframe { height: 420px; }
 }
+
+/* Tag chips — descriptive metadata on the featured release */
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
+.tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
+}
+.tag:hover { color: var(--bone); border-color: var(--tiefrot); }

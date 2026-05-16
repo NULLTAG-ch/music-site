@@ -76,6 +76,38 @@
     var rail = byId("latest-railmeta"); if (rail) rail.textContent = (r.subtitle || "RELEASE").toUpperCase();
     var hl = byId("hero-latest"); if (hl) hl.textContent = (r.title || "—").toUpperCase();
 
+    // Technical meta strip — only fields that are actually set (no fakes).
+    var metaEl = byId("latest-meta");
+    if (metaEl) {
+      var m = r.meta || {};
+      var order = [
+        ["cat", "CAT"], ["bpm", "BPM"], ["key", "KEY"], ["duration", "DUR"],
+        ["format", "FMT"], ["isrc", "ISRC"], ["year", "YEAR"], ["schiene", "RAIL"]
+      ];
+      var shown = 0;
+      order.forEach(function (pair) {
+        var v = m[pair[0]];
+        if (!v) return;
+        var cell = el("div");
+        cell.appendChild(el("span", { class: "k" }, pair[1]));
+        cell.appendChild(el("span", { class: "v" },
+          pair[0] === "schiene" ? String(v).toUpperCase() : String(v)));
+        metaEl.appendChild(cell);
+        shown++;
+      });
+      if (!shown) metaEl.setAttribute("hidden", "");
+    }
+
+    // Tag chips.
+    var tagsEl = byId("latest-tags");
+    if (tagsEl) {
+      var tags = r.tags || [];
+      if (!tags.length) tagsEl.setAttribute("hidden", "");
+      else tags.forEach(function (tg) {
+        tagsEl.appendChild(el("span", { class: "tag" }, String(tg)));
+      });
+    }
+
     var actions = byId("latest-actions");
     if (actions) {
       if (!isPlaceholder(r.listenUrl)) {

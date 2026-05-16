@@ -19,6 +19,8 @@ window.CONFIG = {
 
   // Pinned hero release. Always shown — the dependable front door.
   // appleEmbed plays the EP in-page (official iframe, no key, no CORS).
+  // meta: any field left "" is skipped — never shows a fake number.
+  // tags: short descriptive chips (genre / format / rail).
   latestRelease: {
     show: true,
     title: "Plastic Paradise EP",
@@ -26,7 +28,18 @@ window.CONFIG = {
     artwork: "assets/cover-placeholder.svg",
     ctaLabel: "Listen on Apple Music",
     listenUrl: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431",
-    appleEmbed: "https://embed.music.apple.com/ch/album/plastic-paradise-ep/6769685431"
+    appleEmbed: "https://embed.music.apple.com/ch/album/plastic-paradise-ep/6769685431",
+    meta: {
+      cat: "",                 // e.g. "NULLTAG-01"
+      bpm: "",                 // e.g. "152"
+      key: "",                 // e.g. "F♯m"
+      duration: "",            // e.g. "18:24"
+      format: "WAV · MP3-320",
+      isrc: "",                // e.g. "CH-XXX-26-00001"
+      year: "2026",
+      schiene: ""              // e.g. "Echo"
+    },
+    tags: ["Electronic", "EP", "Independent"]
   },
 
   // Release overview. Enriched live from Deezer (no key) and/or a
