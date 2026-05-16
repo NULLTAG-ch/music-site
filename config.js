@@ -20,17 +20,17 @@ window.CONFIG = {
   // Featured latest release. Set show:false to hide the whole card.
   latestRelease: {
     show: true,
-    title: "Latest Release",               // TODO: release title
-    subtitle: "Single · 2026",             // TODO: e.g. "Album · 2026"
-    artwork: "assets/cover-placeholder.svg", // TODO: cover art (square)
-    ctaLabel: "Listen everywhere",
-    listenUrl: "#"                         // TODO: smart-link / pre-save URL
+    title: "Plastic Paradise EP",
+    subtitle: "EP",                        // TODO: add year, e.g. "EP · 2026"
+    artwork: "assets/cover-placeholder.svg", // TODO: replace with real cover art (square)
+    ctaLabel: "Listen on Apple Music",
+    listenUrl: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431"
   },
 
   // Streaming platforms — rendered in this order.
   streaming: [
     { label: "Spotify",      url: "#" },   // TODO
-    { label: "Apple Music",  url: "#" },   // TODO
+    { label: "Apple Music",  url: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" },
     { label: "YouTube Music", url: "#" },  // TODO
     { label: "YouTube",      url: "#" },   // TODO
     { label: "SoundCloud",   url: "#" },   // TODO
