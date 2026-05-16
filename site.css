@@ -968,3 +968,58 @@ body.player-open { padding-bottom: 86px; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* ============================================================
+   CIRCLE-CROP CHECK — canonical avatar across platform crops
+   (learned from identity/primitives.jsx · CircleCrop)
+   ============================================================ */
+.crop-check {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+  margin-top: 4px;
+}
+.crop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.crop::after { content: attr(data-p); }
+.crop-disc {
+  width: 74px;
+  height: 74px;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 52%, #14131a 0%, #0a0a0a 60%, #050505 100%);
+  box-shadow: 0 0 0 3px var(--ring), 0 1px 0 rgba(255,255,255,0.04) inset;
+}
+.crop-word {
+  font-family: var(--font-display);
+  font-size: 27px;
+  line-height: 0.82;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: var(--bone);
+}
+.crop-rule {
+  position: absolute;
+  left: 50%;
+  bottom: 13px;
+  transform: translateX(-50%);
+  width: 28%;
+  height: 3px;
+  background: var(--tiefrot);
+}
+.crop--xs .crop-disc { width: 42px; height: 42px; box-shadow: 0 0 0 2px var(--ring); }
+.crop--xs .crop-word { font-size: 15px; }
+.crop--xs .crop-rule { bottom: 7px; height: 2px; }
