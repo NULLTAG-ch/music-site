@@ -29,10 +29,10 @@ window.CONFIG = {
 
   // Streaming platforms — rendered in this order.
   streaming: [
-    { label: "Spotify",      url: "#" },   // TODO
+    { label: "Spotify",      url: "https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" },
     { label: "Apple Music",  url: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" },
-    { label: "YouTube Music", url: "#" },  // TODO
-    { label: "YouTube",      url: "#" },   // TODO
+    { label: "YouTube Music", url: "https://music.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" },
+    { label: "YouTube",      url: "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" },
     { label: "SoundCloud",   url: "#" },   // TODO
     { label: "Bandcamp",     url: "#" },   // TODO
     { label: "Deezer",       url: "#" },   // TODO
@@ -42,9 +42,9 @@ window.CONFIG = {
 
   // Social links — rendered as a compact row.
   social: [
-    { label: "Instagram", url: "#" },      // TODO
+    { label: "Instagram", url: "https://www.instagram.com/nulltag.ch/" },
     { label: "TikTok",    url: "#" },      // TODO
-    { label: "YouTube",   url: "#" },      // TODO
+    { label: "YouTube",   url: "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" },
     { label: "Facebook",  url: "#" },      // TODO
     { label: "X",         url: "#" }       // TODO
   ]
