@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NULLTAG — Listen everywhere</title>
-  <meta name="description" content="All NULLTAG music in one place — stream the latest release on every platform." />
+  <title>NULLTAG — Releases</title>
+  <meta name="description" content="The NULLTAG release feed — every drop, auto-updated, with one link to every platform." />
 
   <link rel="canonical" href="https://music.nulltag.ch" />
   <meta name="theme-color" content="#0a0a0a" />
@@ -35,15 +35,25 @@
         <p id="tagline" class="tagline"></p>
       </header>
 
-      <section id="release" class="release" aria-label="Latest release">
+      <section id="release" class="release" aria-label="Pinned release">
         <img class="release-art" src="assets/cover-placeholder.svg" alt="cover art" width="96" height="96" />
         <div class="release-body">
-          <span class="release-eyebrow">Latest release</span>
+          <span class="release-eyebrow">Pinned release</span>
           <h2 class="release-title"></h2>
           <p class="release-subtitle"></p>
           <a class="release-cta" href="#">Listen everywhere</a>
         </div>
       </section>
+
+    </div>
+
+    <section id="releases-section" class="releases" aria-label="All releases" hidden>
+      <h2 class="section-title">Releases</h2>
+      <div id="releases-grid" class="releases-grid"></div>
+      <p id="releases-status" class="releases-status" role="status">Loading the release feed…</p>
+    </section>
+
+    <div class="container">
 
       <section aria-label="Streaming platforms">
         <h2 class="section-title">Stream</h2>

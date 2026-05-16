@@ -67,6 +67,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 44px;
   padding: 56px 20px 40px;
 }
 
@@ -77,6 +78,8 @@ a { color: inherit; text-decoration: none; }
   flex-direction: column;
   gap: 32px;
 }
+
+[hidden] { display: none !important; }
 
 /* ---- Header — the wordmark IS the logo --------------------------------- */
 .profile { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
@@ -254,6 +257,79 @@ a { color: inherit; text-decoration: none; }
   transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
 }
 .social-link:hover { color: var(--brand-fg); border-color: var(--brand-accent); }
+
+/* ---- Releases band — auto-loaded feed ---------------------------------- */
+.releases {
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.releases .section-title { margin: 0; }
+
+.releases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.release-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--brand-bg-2);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--t-base) var(--ease),
+              transform var(--t-base) var(--ease);
+}
+.release-card:hover { border-color: var(--brand-accent); }
+.release-card:active { transform: translateY(1px); }
+
+.rc-art {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: var(--brand-bg);
+  border-bottom: 1px solid var(--brand-border);
+}
+
+.rc-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+}
+
+.rc-title {
+  font-family: var(--brand-font-head);
+  font-size: 1.3rem;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--brand-fg);
+  overflow-wrap: anywhere;
+}
+
+.rc-meta {
+  font-family: var(--brand-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brand-fg-muted);
+}
+
+.releases-status {
+  margin: 2px 0 0;
+  text-align: center;
+  font-family: var(--brand-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brand-fg-muted);
+}
 
 /* ---- Placeholder / disabled state -------------------------------------- */
 .is-placeholder {
