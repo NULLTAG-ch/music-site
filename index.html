@@ -1,55 +1,170 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NULLTAG — Releases</title>
-  <meta name="description" content="The NULLTAG release feed — every drop, auto-updated, with one link to every platform." />
+  <title>NULLTAG · music.nulltag.ch</title>
+  <meta name="description" content="NULLTAG — Swiss independent electronic music label. Cinematic techno · cosmic frenchcore · German underground from Buchs SG." />
 
   <link rel="canonical" href="https://music.nulltag.ch" />
   <meta name="theme-color" content="#0a0a0a" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" />
-
-  <!-- Open Graph / Twitter (replace og-image with a 1200x630 PNG for best results) -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="NULLTAG — Listen everywhere" />
-  <meta property="og:description" content="All NULLTAG music in one place — every platform, one link." />
+  <meta property="og:title" content="NULLTAG · music.nulltag.ch" />
+  <meta property="og:description" content="Swiss independent electronic music label — cinematic techno, cosmic frenchcore, German underground." />
   <meta property="og:url" content="https://music.nulltag.ch" />
   <meta property="og:image" content="https://music.nulltag.ch/assets/og-image.svg" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="colors_and_type.css" />
+  <link rel="stylesheet" href="site.css" />
 </head>
 <body>
-  <main class="page">
-    <div class="container">
 
-      <header class="profile">
-        <img id="logo" class="logo" src="assets/logo.svg" alt="logo" width="88" height="88" />
-        <h1 id="name" class="name"></h1>
-        <p id="tagline" class="tagline"></p>
-      </header>
+  <!-- ===== NULLTAG mark · bisect (single TIEFROT pin) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="mark-bisect" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="44" fill="none" stroke="var(--bone)" stroke-width="4" />
+      <path d="M50,6 A44,44 0 0,1 50,94 Z" fill="var(--bone)" />
+      <line x1="19" y1="81" x2="81" y2="19" stroke="var(--void)" stroke-width="4" stroke-linecap="square" />
+      <circle cx="65" cy="35" r="4.5" fill="var(--tiefrot)" />
+    </symbol>
+  </svg>
 
-      <section id="release" class="release" aria-label="Pinned release">
-        <img class="release-art" src="assets/cover-placeholder.svg" alt="cover art" width="96" height="96" />
-        <div class="release-body">
-          <span class="release-eyebrow">Pinned release</span>
-          <h2 class="release-title"></h2>
-          <p class="release-subtitle"></p>
-          <a class="release-cta" href="#">Listen everywhere</a>
-        </div>
-      </section>
-
+  <header class="nav" id="nav">
+    <a href="#top" class="nav-logo" aria-label="NULLTAG home">
+      <span class="lockup">
+        <svg class="mark" style="width:32px;height:32px"><use href="#mark-bisect" /></svg>
+        <span class="wordmark">NULLTAG</span>
+      </span>
+    </a>
+    <nav class="nav-links">
+      <a href="#latest">Latest</a>
+      <a href="#catalog">Catalog</a>
+      <a href="#schienen">Schienen</a>
+      <a href="#manifest">Manifest</a>
+      <a href="#listen">Listen</a>
+    </nav>
+    <div class="nav-right">
+      <div class="nav-status">
+        <span class="status-dot"></span>
+        <span>LIVE · 05 SCHIENEN</span>
+      </div>
+      <a class="btn btn--primary nav-cta" href="#listen">▶ LISTEN</a>
     </div>
+  </header>
 
-    <section id="releases-section" class="releases" aria-label="All releases" hidden>
-      <h2 class="section-title">Releases</h2>
-      <div id="releases-grid" class="releases-grid"></div>
+  <main class="page">
+
+    <!-- ===== HERO ===== -->
+    <section id="top" class="hero">
+      <svg id="hero-stars" class="starfield" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+
+      <div class="hero-top">
+        <div class="hero-stamp-left">
+          <span class="stamp">NULLTAG · RECORDINGS</span>
+          <span class="meta-sep">·</span>
+          <span class="stamp muted">BUCHS SG · CH · MMXXVI</span>
+        </div>
+        <div class="hero-stamp-right">
+          <span class="status-dot"></span>
+          <span class="stamp">LIVE · 05 SCHIENEN</span>
+        </div>
+      </div>
+
+      <div class="hero-main">
+        <div class="hero-lockup">
+          <svg class="mark" style="width:96px;height:96px"><use href="#mark-bisect" /></svg>
+        </div>
+        <h1 class="hero-title"><span>NULL</span><span>TAG</span></h1>
+        <div class="hero-rule"></div>
+        <p class="hero-tagline" id="hero-tagline">Cinematic techno · cosmic frenchcore · German underground from Buchs SG. Brutalist label voice, single TIEFROT mark, JetBrains Mono everywhere.</p>
+
+        <div class="hero-strip">
+          <div>
+            <div class="hero-k">CATALOG</div>
+            <div class="hero-v" id="hero-catalog">— REL.</div>
+          </div>
+          <div>
+            <div class="hero-k">SCHIENEN</div>
+            <div class="hero-v">05 RAILS</div>
+          </div>
+          <div>
+            <div class="hero-k">LATEST</div>
+            <div class="hero-v" id="hero-latest">—</div>
+          </div>
+          <div>
+            <div class="hero-k">ORIGIN</div>
+            <div class="hero-v">BUCHS SG · CH</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-bottom">
+        <div class="hero-scroll">
+          <span>SCROLL</span>
+          <span class="scroll-rule"></span>
+          <span>§01</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== §01 LATEST ===== -->
+    <section id="latest" class="section section--latest">
+      <div class="chapter">
+        <div class="chapter-left">
+          <span class="chapter-num">§01</span>
+          <span class="chapter-rule"></span>
+          <span class="chapter-label">LATEST RELEASE</span>
+        </div>
+        <div class="chapter-right">PINNED · T-0</div>
+      </div>
+
+      <div class="latest-grid">
+        <div class="latest-cover-wrap">
+          <div class="latest-cover">
+            <img id="latest-cover" src="assets/cover-placeholder.svg" alt="cover art" />
+          </div>
+          <div class="latest-cover-meta">
+            <span id="latest-cat">NULLTAG</span>
+            <span id="latest-railmeta">RELEASE</span>
+          </div>
+        </div>
+
+        <div class="latest-detail">
+          <div class="latest-eyebrow" id="latest-eyebrow">NULLTAG · RELEASE</div>
+          <h2 class="latest-title" id="latest-title">—</h2>
+          <div class="latest-sub" id="latest-sub"></div>
+          <div class="latest-rule"></div>
+          <p class="latest-blurb">
+            <span class="muted">Featured release. The full library auto-loads below — tap any cover to play 30-second previews directly in the page.</span>
+          </p>
+          <div class="latest-actions" id="latest-actions"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== §02 CATALOG (live releases library + player) ===== -->
+    <section id="catalog" class="section">
+      <div class="chapter">
+        <div class="chapter-left">
+          <span class="chapter-num">§02</span>
+          <span class="chapter-rule"></span>
+          <span class="chapter-label">CATALOG</span>
+        </div>
+        <div class="chapter-right" id="catalog-right">— RELEASES · MMXXVI</div>
+      </div>
+
+      <div class="filter-row">
+        <button class="chip chip--on" type="button" id="cat-all" disabled>ALL · —</button>
+      </div>
+
+      <div id="releases-grid" class="catalog-grid"></div>
 
       <div id="album-view" class="album-view" hidden>
         <button id="album-back" class="album-back" type="button">← All releases</button>
@@ -67,23 +182,225 @@
       <p id="releases-status" class="releases-status" role="status">Loading the release feed…</p>
     </section>
 
-    <div class="container">
+    <!-- ===== §03 SCHIENEN ===== -->
+    <section id="schienen" class="section section--schienen">
+      <div class="chapter">
+        <div class="chapter-left">
+          <span class="chapter-num">§03</span>
+          <span class="chapter-rule"></span>
+          <span class="chapter-label">SCHIENEN</span>
+        </div>
+        <div class="chapter-right">RELEASE RAILS · 05</div>
+      </div>
 
-      <section aria-label="Streaming platforms">
-        <h2 class="section-title">Stream</h2>
-        <ul id="streaming-list" class="link-list"></ul>
-      </section>
+      <div class="schienen-grid">
+        <div class="schiene-card" style="--accent:#e879c4;background:#1a0824">
+          <div class="schiene-top"><span class="schiene-cat">LJ—NN</span><span class="schiene-count">RAIL</span></div>
+          <div class="schiene-name">LICHTJAHRE</div>
+          <div class="schiene-sound">Cosmic frenchcore</div>
+          <div class="schiene-blurb">Uplifting frenchcore set to celestial-body imagery. Aeolian and Phrygian-Dom keys, kicks tuned to planetary motion.</div>
+          <div class="schiene-foot"><span>188–205 BPM</span><span class="meta-sep">·</span><span>EN</span></div>
+          <div class="schiene-mark"></div>
+        </div>
+        <div class="schiene-card" style="--accent:#c44a3a;background:#0e0c08">
+          <div class="schiene-top"><span class="schiene-cat">CT—NN</span><span class="schiene-count">RAIL</span></div>
+          <div class="schiene-name">CINETEKK</div>
+          <div class="schiene-sound">Cinematic techno</div>
+          <div class="schiene-blurb">Film ohne Bilder. Single light beam, one red dot, German vocals sparse. Minor key, slow build.</div>
+          <div class="schiene-foot"><span>144–157 BPM</span><span class="meta-sep">·</span><span>DE</span></div>
+          <div class="schiene-mark"></div>
+        </div>
+        <div class="schiene-card" style="--accent:#e8703a;background:#1a1815">
+          <div class="schiene-top"><span class="schiene-cat">NS—NN</span><span class="schiene-count">RAIL</span></div>
+          <div class="schiene-name">NACHTSTROM</div>
+          <div class="schiene-sound">German night-techno</div>
+          <div class="schiene-blurb">Asphalt-Schwarz und Natriumdampflicht. Architecture heroes, Sodium-Orange accent, Phrygian-Dom keys.</div>
+          <div class="schiene-foot"><span>145–160 BPM</span><span class="meta-sep">·</span><span>DE</span></div>
+          <div class="schiene-mark"></div>
+        </div>
+        <div class="schiene-card" style="--accent:#5fc8e0;background:#031024">
+          <div class="schiene-top"><span class="schiene-cat">NT—NN</span><span class="schiene-count">RAIL</span></div>
+          <div class="schiene-name">ECHO</div>
+          <div class="schiene-sound">Standalones</div>
+          <div class="schiene-blurb">Heterogeneous experiments. Drone, ambient, spoken word, broken tempos. No fixed system — each release its own statement.</div>
+          <div class="schiene-foot"><span>any BPM</span><span class="meta-sep">·</span><span>mixed</span></div>
+          <div class="schiene-mark"></div>
+        </div>
+        <div class="schiene-card" style="--accent:#d4c8a8;background:#1a1612">
+          <div class="schiene-top"><span class="schiene-cat">TB—NN</span><span class="schiene-count">RAIL</span></div>
+          <div class="schiene-name">TONBAND</div>
+          <div class="schiene-sound">Comedy hardtek</div>
+          <div class="schiene-blurb">Frenchcore lineage on Swiss-German tongue. Halftone-riso pop, Vögel Einsneunzig DNA, deadpan delivery.</div>
+          <div class="schiene-foot"><span>190 BPM</span><span class="meta-sep">·</span><span>CH-DE</span></div>
+          <div class="schiene-mark"></div>
+        </div>
+      </div>
+    </section>
 
-      <section aria-label="Social media">
-        <h2 class="section-title">Follow</h2>
-        <ul id="social-list" class="social-list"></ul>
-      </section>
+    <!-- ===== §04 MANIFEST ===== -->
+    <section id="manifest" class="section section--manifest">
+      <div class="chapter">
+        <div class="chapter-left">
+          <span class="chapter-num">§04</span>
+          <span class="chapter-rule"></span>
+          <span class="chapter-label">MANIFEST</span>
+        </div>
+        <div class="chapter-right">§4 · BILINGUAL</div>
+      </div>
 
-      <footer class="footer">
-        <span id="footer-name"></span> · <span id="year"></span> · Buchs SG, Switzerland
-      </footer>
+      <div class="manifest-grid">
+        <div class="manifest-side">
+          <div class="manifest-aside"><div class="aside-k">COMPOSER</div><div class="aside-v">IVAN STRICKER</div></div>
+          <div class="manifest-aside"><div class="aside-k">LOCATION</div><div class="aside-v">BUCHS SG · CH</div></div>
+          <div class="manifest-aside"><div class="aside-k">FOUNDED</div><div class="aside-v">MMXXVI</div></div>
+          <div class="manifest-aside"><div class="aside-k">METHOD</div><div class="aside-v">SUNO PRO · LIC.</div></div>
+        </div>
+        <div class="manifest-body">
+          <p><span class="manifest-lead">Kino ohne Bilder.</span> Filme entstehen im Kopf, nicht auf der Leinwand. <span class="muted">Cinematic techno · cosmic frenchcore · German underground.</span></p>
+          <p>NULLTAG is a one-person Swiss music label. Releases ship across five Schienen — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key, and ISRC are <em>treated as design</em>, not metadata to hide.</p>
+          <p class="muted">Brutalist verbal language, single TIEFROT mark per surface, JetBrains Mono everywhere. The label sees itself as a small operation that happens to spec releases like a research lab — physics-as-lyrics, BPM-as-tag, every track gets a style-block treated as a primary source.</p>
+          <div class="manifest-stamp">
+            <div>NULLTAG · MMXXVI · BUCHS SG, SWITZERLAND</div>
+            <div class="muted">Made with Suno Pro (commercial license).</div>
+            <div class="muted">Lyrics, concept and direction by NULLTAG.</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    </div>
+    <!-- ===== §05 LISTEN · CHANNELS ===== -->
+    <section id="listen" class="section section--listen">
+      <div class="chapter">
+        <div class="chapter-left">
+          <span class="chapter-num">§05</span>
+          <span class="chapter-rule"></span>
+          <span class="chapter-label">LISTEN · CHANNELS</span>
+        </div>
+        <div class="chapter-right" id="channels-right">PLATFORMS</div>
+      </div>
+      <div class="channels" id="channels"></div>
+    </section>
+
+    <!-- ===== §06 IDENTITY ===== -->
+    <section id="identity" class="section section--identity">
+      <div class="chapter">
+        <div class="chapter-left">
+          <span class="chapter-num">§06</span>
+          <span class="chapter-rule"></span>
+          <span class="chapter-label">IDENTITY</span>
+        </div>
+        <div class="chapter-right">AVATAR · HEADER</div>
+      </div>
+
+      <div class="identity-grid">
+        <div class="identity-card">
+          <div class="identity-card-k">PROFILE AVATAR · 1000×1000</div>
+          <div class="avatar-stage">
+            <div class="avatar-disc">
+              <svg id="avatar-stars" class="avatar-stars" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
+              <div class="avatar-mark">
+                <span class="lockup lockup--stacked">
+                  <svg class="mark" style="width:300px;height:300px"><use href="#mark-bisect" /></svg>
+                  <span class="wordmark wordmark--lg">NULLTAG</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="identity-card-meta"><span>CIRCLE-CROP SAFE</span><span class="meta-sep">·</span><span>CANONICAL · NULL/TAG STACKED</span></div>
+          <div class="crop-check" aria-label="Circle-crop check across platforms">
+            <div class="crop" data-p="Spotify" style="--ring:#1db954">
+              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
+            </div>
+            <div class="crop" data-p="SoundCloud" style="--ring:#ff5500">
+              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
+            </div>
+            <div class="crop" data-p="Apple" style="--ring:#fa233b">
+              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
+            </div>
+            <div class="crop" data-p="YouTube" style="--ring:#ff0000">
+              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
+            </div>
+            <div class="crop crop--xs" data-p="40px" style="--ring:#2a2a2a">
+              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="identity-card identity-card--header">
+          <div class="identity-card-k">HEADER · 2480×520</div>
+          <div class="banner-stage">
+            <div class="banner-inner">
+              <svg id="banner-stars" class="starfield" viewBox="0 0 2480 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+              <div class="banner-left">
+                <div class="banner-eyebrow stamp">NULLTAG · RECORDINGS</div>
+                <div class="banner-title">NULLTAG</div>
+                <div class="banner-rule"></div>
+              </div>
+              <div class="banner-right">
+                <div class="banner-tagline stamp">CINEMATIC TECHNO · COSMIC FRENCHCORE</div>
+                <div class="banner-stamp stamp">BUCHS SG · CH · MMXXVI</div>
+                <div class="banner-url">MUSIC.NULLTAG.CH</div>
+              </div>
+            </div>
+          </div>
+          <div class="identity-card-meta"><span>SAFE 70% INNER</span><span class="meta-sep">·</span><span>SC / YT / SPOTIFY / BC</span></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <a href="#top" class="nav-logo" aria-label="NULLTAG home">
+          <span class="lockup">
+            <svg class="mark" style="width:44px;height:44px"><use href="#mark-bisect" /></svg>
+            <span class="lockup-text">
+              <span class="wordmark">NULLTAG</span>
+              <span class="lockup-sub">MUSIC · MMXXVI</span>
+            </span>
+          </span>
+        </a>
+        <div class="footer-stamp">
+          <div>NULLTAG · MMXXVI · BUCHS SG · CH</div>
+          <div class="muted">music.nulltag.ch — Composer: Ivan Stricker</div>
+        </div>
+      </div>
+
+      <div class="footer-rule"></div>
+
+      <div class="footer-grid">
+        <div>
+          <div class="footer-k">NAV</div>
+          <a href="#latest">Latest</a>
+          <a href="#catalog">Catalog</a>
+          <a href="#schienen">Schienen</a>
+          <a href="#manifest">Manifest</a>
+          <a href="#listen">Listen</a>
+        </div>
+        <div>
+          <div class="footer-k">SCHIENEN</div>
+          <a href="#schienen">Lichtjahre</a>
+          <a href="#schienen">Cinetekk</a>
+          <a href="#schienen">Nachtstrom</a>
+          <a href="#schienen">Echo</a>
+          <a href="#schienen">Tonband</a>
+        </div>
+        <div>
+          <div class="footer-k">LISTEN</div>
+          <div id="footer-channels"></div>
+        </div>
+        <div>
+          <div class="footer-k">ISO</div>
+          <span class="muted">CH-9470 BUCHS SG</span>
+          <span class="muted">UTC+01:00 · CET</span>
+          <span class="muted">EN · DE · CH-DE</span>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="muted">© <span id="footer-name">NULLTAG</span> · <span id="year"></span>. All rights reserved.</span>
+        <span class="muted">Made with Suno Pro (commercial license).</span>
+      </div>
+    </footer>
   </main>
 
   <div id="player" class="player" role="region" aria-label="Audio player" hidden>

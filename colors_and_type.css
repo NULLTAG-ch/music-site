@@ -1,0 +1,505 @@
+/* ============================================================
+   NULLTAG · DESIGN SYSTEM · CORE TOKENS
+   ------------------------------------------------------------
+   Swiss independent electronic music label / artist project.
+   Buchs SG · MMXXVI · Ivan Stricker
+   ------------------------------------------------------------
+   Source-of-truth for type + color + spacing across all
+   NULLTAG surfaces (covers, release packs, web, prints).
+   ============================================================ */
+
+@font-face {
+  font-family: "Bebas Neue";
+  src: url("assets/fonts/BebasNeue-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Webfonts loaded from Google Fonts when this file is included
+   alongside an HTML `<link>` to the corresponding families:
+     Inter Tight (400–800), Space Grotesk (400–700),
+     JetBrains Mono (400–700), Bebas Neue (Regular).
+   ============================================================ */
+
+:root {
+
+  /* --------------------------------------------------------
+     CORE PALETTE — the void, the bone, the single red mark
+     -------------------------------------------------------- */
+
+  /* Backgrounds — voids and panels */
+  --void:          #0a0a0a;   /* primary background ("Asphalt-Schwarz") */
+  --void-deep:     #050505;   /* JPG-master void (LJ bg2) */
+  --panel:         #141414;   /* track-card / sidebar surface */
+  --code-bg:       #1a1a1a;   /* monospace blocks, suno prompts */
+  --border:        #2a2a2a;   /* hairline separators */
+  --border-warm:   #3a3a3a;   /* hover, focus rings */
+
+  /* Foreground — BONE on void, the only "white" we use */
+  --bone:          #e8e3da;   /* primary text — "Knochen-Weiss" */
+  --bone-dim:      #c9c4bc;   /* secondary copy */
+  --muted:         #8a8580;   /* muted / meta / labels */
+  --muted-deep:    #5a5550;   /* almost-disabled */
+
+  /* The single red mark — TIEFROT, used ONCE per surface */
+  --tiefrot:       #ff2a55;   /* lichtjahre accent (active) */
+  --tiefrot-dim:   #3a0000;   /* accent-dim, used for hover-bg of red ctrls */
+  --crimson:       #c44a3a;   /* warmer red (cinetekk panel accent) */
+  --crimson-deep:  #822818;   /* jupiter great-red-spot */
+
+  /* Cold counter-accent — used sparingly, mostly in meta tables */
+  --cold:          #4a8aaa;
+  --cold-blue:     #5fc8e0;   /* lichtjahre LJ-02 glow */
+  --good:          #4a8a4a;
+
+  /* --------------------------------------------------------
+     RELEASE-LINE COLOR SIGNATURES ("Schienen-Farben")
+     One palette per release rail. bg1 = inner radial,
+     bg2 = void edge, glow = hero glow, accent = always TIEFROT.
+     -------------------------------------------------------- */
+
+  /* COSMIC · Lichtjahre · uplifting · warm magenta */
+  --cosmic-bg1:    #1a0824;
+  --cosmic-bg2:    #0a0410;
+  --cosmic-glow:   #e879c4;
+  --cosmic-glow2:  #a445a0;
+
+  /* NACHTBLAU · introspective · cool ocean */
+  --nachtblau-bg1: #031024;
+  --nachtblau-bg2: #010614;
+  --nachtblau-glow:#3aa8ff;
+  --nachtblau-glow2:#1a5a90;
+
+  /* EISFLUG · cyan ice · fragile clarity */
+  --eisflug-bg1:   #0a1a1f;
+  --eisflug-bg2:   #04090c;
+  --eisflug-glow:  #7adfe8;
+  --eisflug-glow2: #3a8896;
+
+  /* GLUT · crimson fusion · burning */
+  --glut-bg1:      #1a0604;
+  --glut-bg2:      #0a0302;
+  --glut-glow:     #ff6a2a;
+  --glut-glow2:    #a83818;
+
+  /* KNOCHEN · bone parchment · ascetic */
+  --knochen-bg1:   #0e0c08;
+  --knochen-bg2:   #050402;
+  --knochen-glow:  #d4c8a8;
+  --knochen-glow2: #8a8068;
+
+  /* GIFTGRÜN · poison green · uncanny */
+  --giftgrun-bg1:  #06120a;
+  --giftgrun-bg2:  #020805;
+  --giftgrun-glow: #5ae082;
+  --giftgrun-glow2:#2a8048;
+
+  /* SODIUM · NACHTSTROM · swiss night highway · 589nm */
+  --sodium-bg1:    #1a1815;
+  --sodium-bg2:    #0a0907;
+  --sodium-glow:   #e8703a;
+  --sodium-glow2:  #8a4220;
+
+  /* --------------------------------------------------------
+     TYPOGRAPHY — three families do everything
+     -------------------------------------------------------- */
+
+  /* Bebas Neue — the cover title face. Only ever uppercase,
+     only ever stacked, only ever HUGE. Never body copy. */
+  --font-display:  "Bebas Neue", "Oswald", "Arial Narrow", sans-serif;
+
+  /* Inter Tight — the brutalist hero alternative.
+     800-weight uppercase poster type for editorial covers. */
+  --font-brutal:   "Inter Tight", "Helvetica Neue", system-ui, sans-serif;
+
+  /* Space Grotesk — soft hero + body alternative for less
+     aggressive surfaces (waveform covers, web). */
+  --font-grotesk:  "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  /* JetBrains Mono — the technical voice of the label.
+     Catalog numbers, BPM, key, ISRC, every meta string. */
+  --font-mono:     "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* Body sans — only used for long-form prose inside packs.
+     System stack so prose stays neutral, lets the mono pop. */
+  --font-body:     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+
+  /* --------------------------------------------------------
+     TYPE SCALE — mono-and-display dominant
+     -------------------------------------------------------- */
+
+  --fs-mono-xs:    10.5px;   /* tracked labels: NULLTAG / RECORDINGS */
+  --fs-mono-sm:    11px;     /* eyebrows, catalog numbers */
+  --fs-mono-md:    12.5px;   /* meta strips, table cells */
+  --fs-mono-lg:    14px;     /* section headers / mono h3 */
+  --fs-mono-xl:    18px;     /* track-card titles */
+  --fs-mono-2xl:   22px;     /* H2 headings inside packs */
+
+  --fs-body-sm:    13.5px;
+  --fs-body-md:    14px;
+  --fs-body-lg:    17px;     /* blockquote pull */
+
+  --fs-display-sm: 64px;     /* hero h1 in packs */
+  --fs-display-md: 92px;     /* cover title two-line stack */
+  --fs-display-lg: 128px;    /* cover title single line */
+  --fs-display-xl: 168px;    /* lichtjahre cover Bebas Neue */
+
+  --lh-tight:      0.86;
+  --lh-display:    0.92;
+  --lh-body:       1.6;
+  --lh-mono:       1.55;
+
+  /* Letter-spacing — extended tracking is core to the brand.
+     NULLTAG wordmark sits at 0.22em or wider. */
+  --ls-tight:      -0.04em;  /* Inter Tight 800 hero */
+  --ls-display:   -0.01em;   /* Bebas Neue title (already condensed) */
+  --ls-mono-tag:   0.06em;   /* mono inside tables */
+  --ls-mono-eye:   0.18em;   /* mono eyebrow labels */
+  --ls-mono-stamp: 0.28em;   /* "NULLTAG · MMXXVI · CINETEKK" */
+  --ls-mono-wide:  0.4em;    /* wordmark on covers */
+
+  /* --------------------------------------------------------
+     SPACING / RADII / BORDERS
+     The system is mostly square — radii are minimal.
+     -------------------------------------------------------- */
+
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  20px;
+  --s-6:  24px;
+  --s-7:  32px;
+  --s-8:  48px;
+  --s-9:  64px;
+  --s-10: 96px;
+
+  --r-0:  0px;      /* default — most surfaces are sharp */
+  --r-sm: 3px;      /* code badges */
+  --r-md: 4px;      /* buttons, copy-blocks */
+  --r-lg: 6px;      /* track cards */
+  --r-pill: 999px;  /* rare — tag chips only */
+
+  --bw:   1px;      /* hairline default */
+  --bw-2: 1.5px;    /* corner ticks on covers */
+  --bw-3: 2px;      /* tiefrot accent line */
+
+  /* --------------------------------------------------------
+     ELEVATION — almost flat. Light only sinks INTO the void.
+     -------------------------------------------------------- */
+
+  --shadow-card:   0 1px 0 rgba(255,255,255,0.04) inset;
+  --shadow-cover:  0 30px 60px -20px rgba(0,0,0,0.6),
+                   0 1px 0 rgba(255,255,255,0.04) inset;
+  --shadow-lift:   0 12px 32px -16px rgba(0,0,0,0.6);
+
+  /* --------------------------------------------------------
+     MOTION — short, linear, no bounces.
+     -------------------------------------------------------- */
+
+  --t-fast:   120ms;
+  --t-base:   150ms;
+  --t-slow:   240ms;
+  --ease:     cubic-bezier(0.2, 0.6, 0.2, 1);
+
+}
+
+/* ============================================================
+   SEMANTIC ELEMENT STYLES
+   Drop this stylesheet onto a page and these tags
+   look correct without any extra classes.
+   ============================================================ */
+
+html {
+  background: var(--void);
+  color: var(--bone);
+  font-family: var(--font-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--bone);
+}
+
+/* ---- HEADINGS ---- */
+
+h1, .h1 {
+  font-family: var(--font-mono);
+  font-size: var(--fs-display-sm);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--s-4);
+  color: var(--bone);
+}
+
+h2, .h2 {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-2xl);
+  letter-spacing: -0.005em;
+  margin: var(--s-9) 0 var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: var(--bw) solid var(--border);
+  color: var(--bone);
+}
+
+h3, .h3 {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-lg);
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: var(--s-7) 0 var(--s-3);
+}
+
+h4, .h4 {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: var(--s-5) 0 var(--s-2);
+}
+
+/* The cover title type — apply manually to release covers */
+.display, .cover-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-xl);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+.brutal-title {
+  font-family: var(--font-brutal);
+  font-weight: 800;
+  font-size: var(--fs-display-md);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-tight);
+  text-wrap: pretty;
+}
+
+/* ---- BODY ---- */
+
+p {
+  margin: 0 0 var(--s-3);
+  color: var(--bone);
+  font-size: var(--fs-body-md);
+}
+
+p.muted, .muted-copy {
+  color: var(--muted);
+  font-size: var(--fs-body-sm);
+}
+
+a {
+  color: var(--tiefrot);
+  text-decoration: none;
+  transition: color var(--t-base) var(--ease);
+}
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+blockquote {
+  margin: var(--s-6) 0;
+  padding: var(--s-4) var(--s-5);
+  border-left: var(--bw-3) solid var(--tiefrot);
+  background: var(--panel);
+  color: var(--bone);
+  font-size: var(--fs-body-lg);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ---- MONO + LABELS ---- */
+
+code, kbd, samp, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+code {
+  background: var(--code-bg);
+  padding: 1px 6px;
+  border-radius: var(--r-sm);
+  font-size: 12.5px;
+  color: var(--bone);
+}
+
+pre {
+  margin: 0;
+  padding: 18px 20px;
+  background: var(--code-bg);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--r-lg);
+  color: var(--bone);
+  font-size: 13.5px;
+  line-height: var(--lh-mono);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-stamp);
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 var(--s-3);
+}
+
+.eyebrow--accent { color: var(--tiefrot); }
+
+.stamp {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-wide);
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+/* The NULLTAG wordmark — top-tracked on every cover */
+.wordmark {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: var(--ls-mono-wide);
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+/* ---- TABLES ---- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--s-4) 0;
+  font-size: 13.5px;
+}
+th, td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: var(--bw) solid var(--border);
+}
+th {
+  color: var(--muted);
+  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+td.mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-md);
+  color: var(--muted);
+}
+
+/* ---- BUTTONS / CONTROLS ---- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--void);
+  color: var(--bone);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background var(--t-base) var(--ease),
+              border-color var(--t-base) var(--ease),
+              color var(--t-base) var(--ease);
+}
+.btn:hover {
+  background: var(--tiefrot-dim);
+  border-color: var(--tiefrot);
+  color: var(--bone);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn--primary {
+  background: var(--tiefrot);
+  border-color: var(--tiefrot);
+  color: var(--void);
+}
+.btn--primary:hover {
+  background: var(--bone);
+  border-color: var(--bone);
+  color: var(--void);
+}
+.btn--ghost {
+  background: transparent;
+}
+
+/* ---- CARDS / PANELS ---- */
+
+.card {
+  background: var(--panel);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-6) var(--s-7);
+  box-shadow: var(--shadow-card);
+}
+
+.callout {
+  border-radius: var(--r-lg);
+  padding: 14px 18px;
+  margin: var(--s-4) 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.callout--accent { background: var(--tiefrot-dim); border: var(--bw) solid var(--tiefrot); }
+.callout--accent strong { color: var(--tiefrot); }
+.callout--cold   { background: #0d1a26; border: var(--bw) solid var(--cold); }
+.callout--cold strong { color: var(--cold); }
+.callout--good   { background: #14201a; border: var(--bw) solid var(--good); }
+.callout--good strong { color: var(--good); }
+.callout--muted  { background: var(--panel); border: var(--bw) solid var(--border); color: var(--muted); }
+.callout--muted strong { color: var(--bone); }
+
+/* ---- COVER PRIMITIVES ----
+   Use on a 1:1 cover surface. Always combine with a
+   release-line palette + Bebas Neue title-stack. */
+
+.cover-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--void);
+  color: var(--bone);
+  font-family: var(--font-mono);
+}
+
+.corner-tick {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: var(--bone);
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.4;
+}
+.corner-tick--tl { top: 24px; left: 24px;  border-top-width: var(--bw-2); border-left-width: var(--bw-2); }
+.corner-tick--tr { top: 24px; right: 24px; border-top-width: var(--bw-2); border-right-width: var(--bw-2); }
+.corner-tick--bl { bottom: 24px; left: 24px;  border-bottom-width: var(--bw-2); border-left-width: var(--bw-2); }
+.corner-tick--br { bottom: 24px; right: 24px; border-bottom-width: var(--bw-2); border-right-width: var(--bw-2); }
+
+.accent-rule {
+  display: block;
+  height: var(--bw-3);
+  background: var(--tiefrot);
+  margin: var(--s-3) 0;
+}
