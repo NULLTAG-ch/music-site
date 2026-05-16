@@ -71,7 +71,8 @@ window.CONFIG = {
   // Social profiles.
   social: [
     { label: "Instagram", url: "https://www.instagram.com/nulltag.ch/" },
-    { label: "YouTube",   url: "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" }
+    { label: "YouTube",   url: "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" },
+    { label: "Groover",   url: "https://groover.co/de/band/profile/fd5c6b.nulltag/?tab=1" }
   ],
 
   // Updates / news — "what just dropped". Add a line, commit, it's live.

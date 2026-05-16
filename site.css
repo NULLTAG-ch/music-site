@@ -1171,3 +1171,70 @@ a.update-row:hover .update-arrow { color: var(--tiefrot); transform: translateX(
   transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
 }
 .tag:hover { color: var(--bone); border-color: var(--tiefrot); }
+
+/* ============================================================
+   Audit fixes — a11y, responsive hardening, embed resilience
+   ============================================================ */
+html { overflow-x: hidden; }
+
+/* Skip link */
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: var(--tiefrot);
+  color: var(--void);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 12px 18px;
+  text-decoration: none;
+}
+.skip:focus { left: 12px; top: 12px; }
+
+/* Section labels are now real <h2> — keep the chapter visual exactly */
+h2.chapter-label {
+  margin: 0;
+  font: inherit;
+  font-weight: inherit;
+  color: var(--bone);
+}
+
+/* Don't let the display type push the viewport on small screens,
+   even if Bebas hasn't loaded and a wider fallback is used */
+.hero-title {
+  font-size: clamp(84px, 19vw, 300px);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.latest-title { font-size: clamp(46px, 8vw, 128px); overflow-wrap: anywhere; }
+
+/* Embed resilience: branded fallback sits behind; the iframe (opaque)
+   covers it once loaded. If it never loads, the link stays usable. */
+.embed-wrap { position: relative; min-height: 120px; }
+.embed-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+  text-decoration: none;
+  background: radial-gradient(circle at 50% 45%, #15131c 0%, #0a0a0a 70%);
+}
+.embed-fallback:hover { color: var(--tiefrot); }
+.embed-wrap iframe { position: relative; z-index: 1; }
+
+/* Bigger touch targets on dense link clusters */
+.footer-grid a, .footer-grid span { padding: 5px 0; }
+.tag { padding: 8px 12px; }
+.album-link { padding: 4px 0; }
+.nav-links a { padding: 10px 0; }

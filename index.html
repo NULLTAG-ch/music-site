@@ -19,12 +19,33 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/ttf" href="assets/fonts/BebasNeue-Regular.ttf" crossorigin />
 
   <link rel="stylesheet" href="colors_and_type.css" />
   <link rel="stylesheet" href="site.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    "name": "NULLTAG",
+    "url": "https://music.nulltag.ch",
+    "foundingLocation": "Buchs SG, Switzerland",
+    "genre": ["Electronic", "Techno", "Frenchcore"],
+    "sameAs": [
+      "https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV",
+      "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431",
+      "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q",
+      "https://soundcloud.com/nulltag",
+      "https://www.instagram.com/nulltag.ch/",
+      "https://groover.co/de/band/profile/fd5c6b.nulltag/"
+    ]
+  }
+  </script>
 </head>
 <body>
+  <a class="skip" href="#top">Skip to content</a>
 
   <!-- ===== NULLTAG mark · bisect (single TIEFROT pin) ===== -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -120,7 +141,7 @@
         <div class="chapter-left">
           <span class="chapter-num">§01</span>
           <span class="chapter-rule"></span>
-          <span class="chapter-label">LATEST RELEASE</span>
+          <h2 class="chapter-label">LATEST RELEASE</h2>
         </div>
         <div class="chapter-right">PINNED · T-0</div>
       </div>
@@ -148,6 +169,7 @@
           </p>
           <div class="latest-actions" id="latest-actions"></div>
           <div class="embed-wrap embed-wrap--apple">
+            <a class="embed-fallback" href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" target="_blank" rel="noopener noreferrer">▶ Listen to Plastic Paradise EP on Apple Music ↗</a>
             <iframe id="latest-embed" title="Plastic Paradise EP — Apple Music"
               src="https://embed.music.apple.com/ch/album/plastic-paradise-ep/6769685431"
               loading="lazy" allow="autoplay *; encrypted-media *; clipboard-write"
@@ -164,12 +186,13 @@
         <div class="chapter-left">
           <span class="chapter-num">§02</span>
           <span class="chapter-rule"></span>
-          <span class="chapter-label">CATALOG</span>
+          <h2 class="chapter-label">CATALOG</h2>
         </div>
         <div class="chapter-right" id="catalog-right">EVERY RELEASE · PLAYABLE</div>
       </div>
 
       <div class="embed-wrap embed-wrap--spotify">
+        <a class="embed-fallback" href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener noreferrer">▶ Open NULLTAG — every release — on Spotify ↗</a>
         <iframe id="catalog-embed" title="NULLTAG on Spotify — every release"
           src="https://open.spotify.com/embed/artist/5V17xFUuN6H4jqZNChnrdV?utm_source=generator"
           loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -206,7 +229,7 @@
         <div class="chapter-left">
           <span class="chapter-num">§03</span>
           <span class="chapter-rule"></span>
-          <span class="chapter-label">UPDATES</span>
+          <h2 class="chapter-label">UPDATES</h2>
         </div>
         <div class="chapter-right" id="updates-right">LATEST · SOCIAL</div>
       </div>
@@ -219,7 +242,7 @@
         <div class="chapter-left">
           <span class="chapter-num">§04</span>
           <span class="chapter-rule"></span>
-          <span class="chapter-label">UPCOMING</span>
+          <h2 class="chapter-label">UPCOMING</h2>
         </div>
         <div class="chapter-right" id="upcoming-right">NEXT · PIPELINE</div>
       </div>
@@ -232,7 +255,7 @@
         <div class="chapter-left">
           <span class="chapter-num">§05</span>
           <span class="chapter-rule"></span>
-          <span class="chapter-label">SCHIENEN</span>
+          <h2 class="chapter-label">SCHIENEN</h2>
         </div>
         <div class="chapter-right">RELEASE RAILS · 05</div>
       </div>
@@ -287,7 +310,7 @@
         <div class="chapter-left">
           <span class="chapter-num">§06</span>
           <span class="chapter-rule"></span>
-          <span class="chapter-label">MANIFEST</span>
+          <h2 class="chapter-label">MANIFEST</h2>
         </div>
         <div class="chapter-right">§6 · BILINGUAL</div>
       </div>
@@ -318,7 +341,7 @@
         <div class="chapter-left">
           <span class="chapter-num">§07</span>
           <span class="chapter-rule"></span>
-          <span class="chapter-label">LISTEN · CHANNELS</span>
+          <h2 class="chapter-label">LISTEN · CHANNELS</h2>
         </div>
         <div class="chapter-right" id="channels-right">PLATFORMS</div>
       </div>
@@ -331,7 +354,7 @@
         <div class="chapter-left">
           <span class="chapter-num">§08</span>
           <span class="chapter-rule"></span>
-          <span class="chapter-label">IDENTITY</span>
+          <h2 class="chapter-label">IDENTITY</h2>
         </div>
         <div class="chapter-right">AVATAR · HEADER</div>
       </div>
