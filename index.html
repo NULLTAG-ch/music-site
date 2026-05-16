@@ -142,9 +142,16 @@
           <div class="latest-sub" id="latest-sub"></div>
           <div class="latest-rule"></div>
           <p class="latest-blurb">
-            <span class="muted">Featured release. The full library auto-loads below — tap any cover to play 30-second previews directly in the page.</span>
+            <span class="muted">Featured release — play it right here, or open it on any platform below.</span>
           </p>
           <div class="latest-actions" id="latest-actions"></div>
+          <div class="embed-wrap embed-wrap--apple">
+            <iframe id="latest-embed" title="Plastic Paradise EP — Apple Music"
+              src="https://embed.music.apple.com/ch/album/plastic-paradise-ep/6769685431"
+              loading="lazy" allow="autoplay *; encrypted-media *; clipboard-write"
+              sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+              frameborder="0"></iframe>
+          </div>
         </div>
       </div>
     </section>
@@ -157,10 +164,19 @@
           <span class="chapter-rule"></span>
           <span class="chapter-label">CATALOG</span>
         </div>
-        <div class="chapter-right" id="catalog-right">— RELEASES · MMXXVI</div>
+        <div class="chapter-right" id="catalog-right">EVERY RELEASE · PLAYABLE</div>
       </div>
 
-      <div class="filter-row">
+      <div class="embed-wrap embed-wrap--spotify">
+        <iframe id="catalog-embed" title="NULLTAG on Spotify — every release"
+          src="https://open.spotify.com/embed/artist/5V17xFUuN6H4jqZNChnrdV?utm_source=generator"
+          loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          frameborder="0"></iframe>
+      </div>
+
+      <p class="embed-note">Full discography &amp; previews above · open on every platform in <a href="#listen">Listen</a>.</p>
+
+      <div class="filter-row" id="filter-row" hidden>
         <button class="chip chip--on" type="button" id="cat-all" disabled>ALL · —</button>
       </div>
 

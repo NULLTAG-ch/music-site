@@ -18,21 +18,27 @@ window.CONFIG = {
   },
 
   // Pinned hero release. Always shown — the dependable front door.
+  // appleEmbed plays the EP in-page (official iframe, no key, no CORS).
   latestRelease: {
     show: true,
     title: "Plastic Paradise EP",
     subtitle: "EP · 2026",
     artwork: "assets/cover-placeholder.svg",
     ctaLabel: "Listen on Apple Music",
-    listenUrl: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431"
+    listenUrl: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431",
+    appleEmbed: "https://embed.music.apple.com/ch/album/plastic-paradise-ep/6769685431"
   },
 
   // Release overview. Enriched live from Deezer (no key) and/or a
   // releases.json baked by the feed Action. If neither is available the
   // catalog falls back to the streaming links below so fans can ALWAYS
   // get to the music.
+  // The catalog plays from the official Spotify artist embed (every
+  // release, real audio, no key, no CORS) — the dependable surface.
+  // Deezer is optional extra enrichment if the artist is ever on it.
   releases: {
     show: true,
+    spotifyEmbed: "https://open.spotify.com/embed/artist/5V17xFUuN6H4jqZNChnrdV?utm_source=generator",
     source: "deezer",
     deezerArtistId: "388775221",
     youtubeChannelId: "UCWl0DW85arbD6uHnD29HA_Q",

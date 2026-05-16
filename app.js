@@ -243,7 +243,9 @@
     var status = byId("releases-status");
     var albumView = byId("album-view");
     if (!grid || !albumView) return;
+    var hc0 = byId("hero-catalog"); if (hc0) hc0.textContent = "LIVE";
     if (cfg.show === false || cfg.source !== "deezer" || !cfg.deezerArtistId) {
+      grid.setAttribute("hidden", "");
       if (status) status.setAttribute("hidden", "");
       return;
     }
@@ -428,42 +430,24 @@
         grid.appendChild(card);
       });
 
+      grid.removeAttribute("hidden");
+      var fr = byId("filter-row"); if (fr) fr.removeAttribute("hidden");
       var n = list.length;
       var nn = (n < 10 ? "0" : "") + n;
-      if (status) status.textContent = n + " release" + (n === 1 ? "" : "s") + " · tap to play";
+      if (status) {
+        status.removeAttribute("hidden");
+        status.textContent = "+ " + n + " more on Deezer · tap to play";
+      }
       var hc = byId("hero-catalog"); if (hc) hc.textContent = nn + " REL.";
-      var cr = byId("catalog-right"); if (cr) cr.textContent = nn + " RELEASES · MMXXVI";
       var all = byId("cat-all"); if (all) all.textContent = "ALL · " + nn;
     }
 
-    // Never leave the catalog empty: if no live feed is available, show the
-    // distributor links so fans can always reach the music.
+    // The Spotify embed above is the dependable, always-present catalog.
+    // The Deezer grid is pure enrichment — if Deezer has nothing, just
+    // keep it hidden (no redundant fallback; Listen § covers platforms).
     function fallbackListen() {
-      grid.textContent = "";
-      var dist = (C.streaming || []).filter(function (s) { return s.url && s.url !== "#"; });
-      if (!dist.length) { if (status) status.setAttribute("hidden", ""); return; }
-      dist.forEach(function (s) {
-        var card = el("a", {
-          class: "release-card release-card--listen", href: s.url,
-          target: "_blank", rel: "noopener noreferrer",
-          "aria-label": "Open " + s.label
-        });
-        var cw = el("div", { class: "release-cover" });
-        cw.appendChild(el("span", { class: "rc-fallback" }, s.label.charAt(0)));
-        cw.appendChild(el("span", { class: "release-cover-stamp" }, "LISTEN"));
-        cw.appendChild(el("span", { class: "rc-play", "aria-hidden": "true" }, "↗"));
-        card.appendChild(cw);
-        var meta = el("div", { class: "release-card-meta" });
-        meta.appendChild(el("div", { class: "release-card-title" }, s.label));
-        meta.appendChild(el("div", { class: "release-card-sub" }, "OPEN ↗"));
-        card.appendChild(meta);
-        grid.appendChild(card);
-      });
-      if (status) status.textContent =
-        dist.length + " platforms · live catalog loads from Deezer when available";
-      var cr = byId("catalog-right"); if (cr) cr.textContent = "STREAMING · EVERYWHERE";
-      var all = byId("cat-all"); if (all) all.textContent = "LISTEN · " + dist.length;
-      var hc = byId("hero-catalog"); if (hc) hc.textContent = "LIVE";
+      grid.setAttribute("hidden", "");
+      if (status) status.setAttribute("hidden", "");
     }
 
     function liveJsonp() {

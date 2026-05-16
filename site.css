@@ -1128,3 +1128,32 @@ a.update-row:hover .update-arrow { color: var(--tiefrot); transform: translateX(
   text-decoration: none;
 }
 .upcoming-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ============================================================
+   Official platform embeds — the dependable play surface
+   (Apple Music album · Spotify artist · no key, no CORS)
+   ============================================================ */
+.embed-wrap {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
+}
+.embed-wrap iframe { display: block; width: 100%; border: 0; }
+.embed-wrap--apple { margin-top: 20px; max-width: 560px; }
+.embed-wrap--apple iframe { height: 450px; }
+.embed-wrap--spotify iframe { height: 352px; }
+.embed-note {
+  margin: 14px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.embed-note a { color: var(--tiefrot); text-decoration: none; }
+.embed-note a:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 560px) {
+  .embed-wrap--apple iframe { height: 420px; }
+}
