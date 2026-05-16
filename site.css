@@ -1238,3 +1238,44 @@ h2.chapter-label {
 .tag { padding: 8px 12px; }
 .album-link { padding: 4px 0; }
 .nav-links a { padding: 10px 0; }
+
+/* ============================================================
+   Embed consent gate (CH/EU) — no third-party until opt-in
+   ============================================================ */
+.embed-wrap { position: relative; min-height: 220px; }
+.embed-consent {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  background: radial-gradient(circle at 50% 45%, #15131c 0%, #0a0a0a 70%);
+}
+.embed-wrap--loaded .embed-consent { display: none; }
+.embed-consent-text {
+  margin: 0; max-width: 460px;
+  font-family: var(--font-mono);
+  font-size: 12px; line-height: 1.6; letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.embed-consent-text strong { color: var(--bone-dim); }
+.embed-load {
+  font-family: var(--font-mono);
+  font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--void); background: var(--tiefrot);
+  border: 1px solid var(--tiefrot); padding: 12px 22px; cursor: pointer;
+  transition: background var(--t-base) var(--ease), color var(--t-base) var(--ease);
+}
+.embed-load:hover { background: var(--bone); border-color: var(--bone); }
+.embed-open {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+}
+.embed-open:hover { color: var(--tiefrot); }
+.embed-wrap iframe { position: relative; z-index: 1; }

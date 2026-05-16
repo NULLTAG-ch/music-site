@@ -10,16 +10,18 @@
   <meta name="theme-color" content="#0a0a0a" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="NULLTAG · music.nulltag.ch" />
-  <meta property="og:description" content="Swiss independent electronic music label — cinematic techno, cosmic frenchcore, German underground." />
+  <meta property="og:type" content="music.album" />
+  <meta property="og:title" content="Plastic Paradise EP — NULLTAG" />
+  <meta property="og:description" content="NULLTAG — Plastic Paradise EP (2026). Listen on Spotify, Apple Music, SoundCloud & more. Swiss independent electronic music from Buchs SG." />
   <meta property="og:url" content="https://music.nulltag.ch" />
   <meta property="og:image" content="https://music.nulltag.ch/assets/og-image.svg" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Plastic Paradise EP — NULLTAG" />
+  <meta name="twitter:description" content="Listen on Spotify, Apple Music, SoundCloud & more — music.nulltag.ch" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- No third-party fonts: Bebas is self-hosted; mono/body use the OS
+       stack (SF Mono / ui-monospace / Consolas). Nothing loads off-site
+       until the visitor opts into an embed. -->
   <link rel="preload" as="font" type="font/ttf" href="assets/fonts/BebasNeue-Regular.ttf" crossorigin />
 
   <link rel="stylesheet" href="colors_and_type.css" />
@@ -169,9 +171,13 @@
           </p>
           <div class="latest-actions" id="latest-actions"></div>
           <div class="embed-wrap embed-wrap--apple">
-            <a class="embed-fallback" href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" target="_blank" rel="noopener noreferrer">▶ Listen to Plastic Paradise EP on Apple Music ↗</a>
-            <iframe id="latest-embed" title="Plastic Paradise EP — Apple Music"
-              src="https://embed.music.apple.com/ch/album/plastic-paradise-ep/6769685431"
+            <div class="embed-consent">
+              <p class="embed-consent-text">Plays from <strong>Apple Music</strong> — loading it sends data to Apple (cookies). Your choice is saved on this device.</p>
+              <button class="embed-load" type="button">▶ Load Apple Music player</button>
+              <a class="embed-open" href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" target="_blank" rel="noopener noreferrer">or open on Apple Music ↗</a>
+            </div>
+            <iframe title="Plastic Paradise EP — Apple Music"
+              data-src="https://embed.music.apple.com/ch/album/plastic-paradise-ep/6769685431"
               loading="lazy" allow="autoplay *; encrypted-media *; clipboard-write"
               sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
               frameborder="0"></iframe>
@@ -192,9 +198,13 @@
       </div>
 
       <div class="embed-wrap embed-wrap--spotify">
-        <a class="embed-fallback" href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener noreferrer">▶ Open NULLTAG — every release — on Spotify ↗</a>
-        <iframe id="catalog-embed" title="NULLTAG on Spotify — every release"
-          src="https://open.spotify.com/embed/artist/5V17xFUuN6H4jqZNChnrdV?utm_source=generator"
+        <div class="embed-consent">
+          <p class="embed-consent-text">Plays from <strong>Spotify</strong> — loading it sends data to Spotify (cookies). Your choice is saved on this device.</p>
+          <button class="embed-load" type="button">▶ Load Spotify player</button>
+          <a class="embed-open" href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener noreferrer">or open on Spotify ↗</a>
+        </div>
+        <iframe title="NULLTAG on Spotify — every release"
+          data-src="https://open.spotify.com/embed/artist/5V17xFUuN6H4jqZNChnrdV?utm_source=generator"
           loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           frameborder="0"></iframe>
       </div>

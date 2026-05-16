@@ -510,4 +510,31 @@
     }
   }
   loadCatalog();
+
+  // ---- Embed consent gate (CH/EU) -----------------------------------------
+  // No third-party request to Apple/Spotify until the visitor opts in.
+  // Choice is saved per device; returning visitors auto-load.
+  (function embeds() {
+    var KEY = "nt-embed-consent";
+    var consented = false;
+    try { consented = localStorage.getItem(KEY) === "1"; } catch (e) {}
+
+    function activate(wrap) {
+      var frame = wrap.querySelector("iframe[data-src]");
+      if (frame && !frame.getAttribute("src")) {
+        frame.setAttribute("src", frame.getAttribute("data-src"));
+      }
+      wrap.classList.add("embed-wrap--loaded");
+    }
+    function activateAll() {
+      Array.prototype.forEach.call(document.querySelectorAll(".embed-wrap"), activate);
+    }
+    if (consented) { activateAll(); return; }
+    Array.prototype.forEach.call(document.querySelectorAll(".embed-load"), function (btn) {
+      btn.addEventListener("click", function () {
+        try { localStorage.setItem(KEY, "1"); } catch (e) {}
+        activateAll();
+      });
+    });
+  })();
 })();
