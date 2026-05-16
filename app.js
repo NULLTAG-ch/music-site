@@ -423,6 +423,77 @@
         9000);
     }
 
+    // ── Schiene (release-rail) lookup — config-driven, nothing invented ──
+    var SCH = {};
+    (C.schienen || []).forEach(function (s) { SCH[s.id] = s; });
+    var SMAP = {};
+    Object.keys(C.schieneMap || {}).forEach(function (k) {
+      SMAP[String(k).trim().toLowerCase()] = String(C.schieneMap[k] || "").toLowerCase();
+    });
+    function schieneOf(title) {
+      var id = SMAP[String(title || "").trim().toLowerCase()];
+      return id && SCH[id] ? SCH[id] : null;
+    }
+
+    function applyFilter(id) {
+      Array.prototype.forEach.call(grid.querySelectorAll(".release-card"), function (c) {
+        c.style.display = (!id || c.getAttribute("data-schiene") === id) ? "" : "none";
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("#filter-row .chip"), function (ch) {
+        ch.classList.toggle("chip--on", ch.getAttribute("data-f") === (id || "all"));
+      });
+    }
+
+    function buildSchieneFilter(list) {
+      var fr = byId("filter-row");
+      if (!fr) return;
+      var present = (C.schienen || []).map(function (s) {
+        return { s: s, n: list.filter(function (a) {
+          var x = schieneOf(a.title); return x && x.id === s.id;
+        }).length };
+      }).filter(function (p) { return p.n > 0; });
+
+      var all = byId("cat-all");
+      if (all) {
+        all.removeAttribute("disabled");
+        all.setAttribute("data-f", "all");
+        all.textContent = "ALL · " + (list.length < 10 ? "0" : "") + list.length;
+        all.addEventListener("click", function () { applyFilter(null); });
+      }
+      if (!present.length) { fr.setAttribute("hidden", ""); return; }
+
+      present.forEach(function (p) {
+        var chip = el("button", {
+          class: "chip", type: "button", "data-f": p.s.id,
+          "aria-label": "Filter " + p.s.name
+        });
+        var dot = el("span", { class: "chip-dot" });
+        dot.style.background = p.s.accent;
+        chip.appendChild(dot);
+        chip.appendChild(document.createTextNode(
+          p.s.name + " · " + (p.n < 10 ? "0" : "") + p.n));
+        chip.addEventListener("click", function () { applyFilter(p.s.id); });
+        fr.appendChild(chip);
+      });
+      fr.removeAttribute("hidden");
+    }
+
+    function tagSchienenSection(list) {
+      Array.prototype.forEach.call(document.querySelectorAll(".schiene-card"), function (card) {
+        var nameEl = card.querySelector(".schiene-name");
+        var cntEl = card.querySelector(".schiene-count");
+        if (!nameEl || !cntEl) return;
+        var nm = nameEl.textContent.trim().toUpperCase();
+        var sid = null;
+        (C.schienen || []).forEach(function (s) { if (s.name.toUpperCase() === nm) sid = s.id; });
+        if (!sid) return;
+        var n = list.filter(function (a) {
+          var x = schieneOf(a.title); return x && x.id === sid;
+        }).length;
+        cntEl.textContent = n ? (n < 10 ? "0" : "") + n + " REL." : "RAIL";
+      });
+    }
+
     function renderGrid(albums) {
       var list = albums.slice().sort(function (a, b) {
         return String(b.release_date || "").localeCompare(String(a.release_date || ""));
@@ -433,11 +504,13 @@
         var cover = coverOf(al);
         var year = (al.release_date || "").slice(0, 4);
         var kind = (al.record_type || "release").toUpperCase();
+        var sc = schieneOf(al.title);
 
         var card = el("button", {
           class: "release-card", type: "button",
           "aria-label": "Play " + (al.title || "release")
         });
+        if (sc) card.setAttribute("data-schiene", sc.id);
         var cw = el("div", { class: "release-cover" });
         if (cover) cw.appendChild(el("img", {
           class: "rc-art", src: cover, alt: (al.title || "") + " cover art",
@@ -450,6 +523,15 @@
         var meta = el("div", { class: "release-card-meta" });
         meta.appendChild(el("div", { class: "release-card-title" }, al.title || "Untitled"));
         var sub = el("div", { class: "release-card-sub" });
+        if (sc) {
+          var st = el("span", { class: "rc-schiene" });
+          var d = el("span", { class: "rc-schiene-dot" });
+          d.style.background = sc.accent;
+          st.appendChild(d);
+          st.appendChild(document.createTextNode(sc.name));
+          sub.appendChild(st);
+          sub.appendChild(el("span", { class: "meta-sep" }, "·"));
+        }
         sub.appendChild(el("span", null, kind));
         if (year) {
           sub.appendChild(el("span", { class: "meta-sep" }, "·"));
@@ -463,7 +545,6 @@
       });
 
       grid.removeAttribute("hidden");
-      var fr = byId("filter-row"); if (fr) fr.removeAttribute("hidden");
       var n = list.length;
       var nn = (n < 10 ? "0" : "") + n;
       if (status) {
@@ -471,7 +552,8 @@
         status.textContent = "+ " + n + " more on Deezer · tap to play";
       }
       var hc = byId("hero-catalog"); if (hc) hc.textContent = nn + " REL.";
-      var all = byId("cat-all"); if (all) all.textContent = "ALL · " + nn;
+      buildSchieneFilter(list);
+      tagSchienenSection(list);
     }
 
     // The Spotify embed above is the dependable, always-present catalog.

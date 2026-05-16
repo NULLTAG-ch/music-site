@@ -1279,3 +1279,8 @@ h2.chapter-label {
 }
 .embed-open:hover { color: var(--tiefrot); }
 .embed-wrap iframe { position: relative; z-index: 1; }
+
+/* Schiene (release-rail) tag on catalog cards */
+.rc-schiene { display: inline-flex; align-items: center; gap: 6px; color: var(--bone-dim); }
+.rc-schiene-dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
+.filter-row .chip { cursor: pointer; }

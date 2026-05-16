@@ -58,6 +58,28 @@ window.CONFIG = {
     limit: 24
   },
 
+  // ── SCHIENEN ──────────────────────────────────────────────────────────
+  // A "Schiene" (rail) is the release LINE / sound-world a release belongs
+  // to (≠ the format EP/Single/Album). The 5 NULLTAG rails:
+  schienen: [
+    { id: "lichtjahre", name: "LICHTJAHRE", sound: "Cosmic frenchcore",    accent: "#e879c4" },
+    { id: "cinetekk",   name: "CINETEKK",   sound: "Cinematic techno",     accent: "#c44a3a" },
+    { id: "nachtstrom", name: "NACHTSTROM", sound: "German night-techno",  accent: "#e8703a" },
+    { id: "echo",       name: "ECHO",       sound: "Standalones",          accent: "#5fc8e0" },
+    { id: "tonband",    name: "TONBAND",    sound: "Comedy hardtek",       accent: "#d4c8a8" }
+  ],
+  // Map each release (by its exact Deezer title, case-insensitive) to a
+  // Schiene id above. Unmapped releases simply show no rail tag — nothing
+  // is invented. Current Deezer titles to assign (your call):
+  //   "PLASTIC PARADISE"  -> ""   (e.g. "echo")
+  //   "BLACKBOX"          -> ""   (e.g. "cinetekk")
+  //   "TEKKNO TRAIN"      -> ""   (e.g. "tonband")
+  //   "Tausend Stimmen / Thousand Voices" -> ""   (e.g. "echo")
+  //   "Lichtjahr"         -> "lichtjahre"   (assigned — clearly the LJ rail)
+  schieneMap: {
+    "lichtjahr": "lichtjahre"
+  },
+
   // Where the music lives — prioritised: SoundCloud, Apple Music, Spotify.
   streaming: [
     { label: "SoundCloud",    url: "https://soundcloud.com/nulltag" },
