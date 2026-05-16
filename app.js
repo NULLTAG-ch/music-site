@@ -187,7 +187,20 @@
       row.appendChild(el("span", { class: "upcoming-idx" }, (i + 1 < 10 ? "0" : "") + (i + 1)));
       var body = el("div", { class: "upcoming-body" });
       body.appendChild(el("div", { class: "upcoming-title" }, p.title || "Untitled"));
+
+      if (p.status || p.schiene) {
+        var meta = el("div", { class: "upcoming-meta" });
+        if (p.status) meta.appendChild(el("span", { class: "upcoming-status" }, p.status.toUpperCase()));
+        if (p.schiene) meta.appendChild(el("span", { class: "upcoming-schiene" }, p.schiene.toUpperCase()));
+        body.appendChild(meta);
+      }
       if (p.note) body.appendChild(el("div", { class: "upcoming-note" }, p.note));
+      if (p.link && p.link !== "#") {
+        body.appendChild(el("a", {
+          class: "upcoming-link", href: p.link,
+          target: "_blank", rel: "noopener noreferrer"
+        }, "More info ↗"));
+      }
       row.appendChild(body);
       row.appendChild(el("span", { class: "upcoming-eta" }, (p.eta || "TBA").toUpperCase()));
       wrap.appendChild(row);

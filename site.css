@@ -1092,3 +1092,39 @@ a.update-row:hover .update-arrow { color: var(--tiefrot); transform: translateX(
   background: radial-gradient(circle at 50% 45%, #15131c 0%, #0a0a0a 70%);
 }
 .release-card--listen .release-card-sub { color: var(--tiefrot); }
+
+/* Upcoming — richer project info */
+.upcoming-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.upcoming-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--void);
+  background: var(--tiefrot);
+  padding: 4px 9px;
+}
+.upcoming-schiene {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.upcoming-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tiefrot);
+  text-decoration: none;
+}
+.upcoming-link:hover { text-decoration: underline; text-underline-offset: 3px; }

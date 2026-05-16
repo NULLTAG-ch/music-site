@@ -63,9 +63,25 @@ window.CONFIG = {
     { date: "2026-05-16", platform: "Instagram", text: "New visuals + behind-the-scenes on Instagram.",            url: "https://www.instagram.com/nulltag.ch/" }
   ],
 
-  // Upcoming projects — what's next. eta is free text (e.g. "Q3 2026").
+  // Upcoming projects — what's next. Fields: title, schiene, status
+  // (Concept · Writing · In mix · Mastering · Scheduled), eta (free text),
+  // note (1–2 sentences), link (optional "more info ↗" url, "" to hide).
   upcoming: [
-    { title: "LICHTJAHRE Vol.1", eta: "2026", note: "Cosmic frenchcore — 8-track rail. In mix." },
-    { title: "NACHTSTROM NS-01", eta: "2026", note: "German night-techno — first single. Writing." }
+    {
+      title: "NACHTSTROM NS-01",
+      schiene: "Nachtstrom",
+      status: "Writing",
+      eta: "2026",
+      note: "First single of the asphalt-black rail — German night-techno, Sodium-Orange palette, Phrygian-Dom keys. Architecture heroes, single light source.",
+      link: ""
+    },
+    {
+      title: "LICHTJAHRE Vol.2",
+      schiene: "Lichtjahre",
+      status: "Concept",
+      eta: "2026",
+      note: "Second cosmic-frenchcore volume. Brief locked, cover system in design — successor to the released Vol.1.",
+      link: ""
+    }
   ]
 };
