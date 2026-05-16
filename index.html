@@ -50,6 +50,20 @@
     <section id="releases-section" class="releases" aria-label="All releases" hidden>
       <h2 class="section-title">Releases</h2>
       <div id="releases-grid" class="releases-grid"></div>
+
+      <div id="album-view" class="album-view" hidden>
+        <button id="album-back" class="album-back" type="button">← All releases</button>
+        <div class="album-head">
+          <img id="album-cover" class="album-cover" alt="" width="120" height="120" />
+          <div class="album-headtext">
+            <h3 id="album-title" class="album-title"></h3>
+            <p id="album-meta" class="album-meta"></p>
+            <a id="album-link" class="album-link" target="_blank" rel="noopener noreferrer">Open on Deezer ↗</a>
+          </div>
+        </div>
+        <ol id="tracklist" class="tracklist"></ol>
+      </div>
+
       <p id="releases-status" class="releases-status" role="status">Loading the release feed…</p>
     </section>
 
@@ -71,6 +85,21 @@
 
     </div>
   </main>
+
+  <div id="player" class="player" role="region" aria-label="Audio player" hidden>
+    <img id="pl-cover" class="pl-cover" alt="" width="48" height="48" />
+    <div class="pl-meta">
+      <span id="pl-title" class="pl-title">—</span>
+      <span id="pl-album" class="pl-album"></span>
+    </div>
+    <div class="pl-controls">
+      <button id="pl-prev" class="pl-btn" type="button" aria-label="Previous track">⏮</button>
+      <button id="pl-toggle" class="pl-btn pl-toggle" type="button" aria-label="Play">▶</button>
+      <button id="pl-next" class="pl-btn" type="button" aria-label="Next track">⏭</button>
+    </div>
+    <input id="pl-seek" class="pl-seek" type="range" min="0" max="1000" value="0" aria-label="Seek" />
+    <span id="pl-time" class="pl-time">0:00</span>
+  </div>
 
   <script src="config.js"></script>
   <script src="app.js"></script>
