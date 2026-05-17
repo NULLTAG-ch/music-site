@@ -72,7 +72,6 @@
       <a href="#updates">Updates</a>
       <a href="#upcoming">Upcoming</a>
       <a href="#listen">Listen</a>
-      <a href="presets.html">CD Presets →</a>
     </nav>
     <div class="nav-right">
       <div class="nav-status">
@@ -88,8 +87,17 @@
     <!-- ===== HERO ===== -->
     <section id="top" class="hero">
       <div class="hero-bg" aria-hidden="true">
-        <canvas id="hero-stars" class="starfield"></canvas>
-        <div class="hero-scan"></div>
+        <svg id="hero-stars" class="starfield" viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice"></svg>
+        <div class="hero-disc">
+          <svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <circle cx="50" cy="50" r="44" fill="none" stroke="var(--bone)" stroke-width="0.6" />
+            <path d="M50,6 A44,44 0 0,1 50,94 Z" fill="var(--bone)" />
+            <line x1="19" y1="81" x2="81" y2="19" stroke="var(--void)" stroke-width="0.6" stroke-linecap="square" />
+          </svg>
+        </div>
+        <div class="hero-orbit"><span class="hero-pin"></span></div>
+        <div class="hero-shock"></div>
+        <div class="hero-shock hero-shock--b"></div>
       </div>
 
       <div class="hero-top">
@@ -384,71 +392,6 @@
       <div class="channels" id="channels"></div>
     </section>
 
-    <!-- ===== §08 IDENTITY ===== -->
-    <section id="identity" class="section section--identity">
-      <div class="chapter">
-        <div class="chapter-left">
-          <span class="chapter-num">§08</span>
-          <span class="chapter-rule"></span>
-          <h2 class="chapter-label">IDENTITY</h2>
-        </div>
-        <div class="chapter-right">AVATAR · HEADER</div>
-      </div>
-
-      <div class="identity-grid">
-        <div class="identity-card">
-          <div class="identity-card-k">PROFILE AVATAR · 1000×1000</div>
-          <div class="avatar-stage">
-            <div class="avatar-disc">
-              <svg id="avatar-stars" class="avatar-stars" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
-              <div class="avatar-mark avatar-mark--canon">
-                <span class="av-stack">NULL<br />TAG</span>
-                <span class="av-rule"></span>
-              </div>
-            </div>
-          </div>
-          <div class="identity-card-meta"><span>CIRCLE-CROP SAFE</span><span class="meta-sep">·</span><span>CANONICAL · NULL/TAG STACKED</span></div>
-          <div class="crop-check" aria-label="Circle-crop check across platforms">
-            <div class="crop" data-p="Spotify" style="--ring:#1db954">
-              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
-            </div>
-            <div class="crop" data-p="SoundCloud" style="--ring:#ff5500">
-              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
-            </div>
-            <div class="crop" data-p="Apple" style="--ring:#fa233b">
-              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
-            </div>
-            <div class="crop" data-p="YouTube" style="--ring:#ff0000">
-              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
-            </div>
-            <div class="crop crop--xs" data-p="40px" style="--ring:#2a2a2a">
-              <span class="crop-disc"><span class="crop-word">NULL<br />TAG</span><span class="crop-rule"></span></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="identity-card identity-card--header">
-          <div class="identity-card-k">HEADER · 2480×520</div>
-          <div class="banner-stage">
-            <div class="banner-inner">
-              <svg id="banner-stars" class="starfield" viewBox="0 0 2480 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
-              <div class="banner-left">
-                <div class="banner-eyebrow stamp">NULLTAG · RECORDINGS</div>
-                <div class="banner-title">NULLTAG</div>
-                <div class="banner-rule"></div>
-              </div>
-              <div class="banner-right">
-                <div class="banner-tagline stamp">CINEMATIC TECHNO · COSMIC FRENCHCORE</div>
-                <div class="banner-stamp stamp">BUCHS SG · CH · MMXXVI</div>
-                <div class="banner-url">MUSIC.NULLTAG.CH</div>
-              </div>
-            </div>
-          </div>
-          <div class="identity-card-meta"><span>SAFE 70% INNER</span><span class="meta-sep">·</span><span>SC / YT / SPOTIFY / BC</span></div>
-        </div>
-      </div>
-    </section>
-
     <footer class="footer">
       <div class="footer-top">
         <a href="#top" class="nav-logo" aria-label="NULLTAG home">
@@ -476,7 +419,6 @@
           <a href="#schienen">Schienen</a>
           <a href="#manifest">Manifest</a>
           <a href="#listen">Listen</a>
-          <a href="presets.html">CD Presets</a>
         </div>
         <div>
           <div class="footer-k">SCHIENEN</div>

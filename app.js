@@ -50,68 +50,10 @@
       svg.appendChild(c);
     }
   }
-  starfield(byId("avatar-stars"), 77, 40, 1000, 1000, true);
-  starfield(byId("banner-stars"), 31, 46, 2480, 520, false);
-
-  // ---- Hero · DRIFT animation (parallax starfield, canvas) ----------------
-  // Replaces the static SVG starfield. Respects reduced-motion (one static
-  // frame, no rAF) and pauses while the tab is hidden.
-  (function driftHero() {
-    var canvas = byId("hero-stars");
-    if (!canvas || !canvas.getContext) return;
-    var ctx = canvas.getContext("2d");
-    var W = (canvas.width = 1600), H = (canvas.height = 900);
-    var seed = 2026 >>> 0;
-    function rng() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 0xffffffff; }
-    function mk(n, speed, rmin, rmax, omin, omax) {
-      var a = [];
-      for (var i = 0; i < n; i++) a.push({
-        x: rng() * W, y: rng() * H,
-        r: rmin + rng() * (rmax - rmin),
-        op: omin + rng() * (omax - omin),
-        tw: rng() * Math.PI * 2, twS: 0.4 + rng() * 1.2, speed: speed
-      });
-      return a;
-    }
-    var layers = [
-      mk(90, 0.06, 0.5, 1.1, 0.10, 0.32),
-      mk(60, 0.18, 0.8, 1.7, 0.20, 0.52),
-      mk(20, 0.45, 1.2, 2.6, 0.32, 0.80)
-    ];
-    function draw(dt) {
-      ctx.fillStyle = "#0a0a0a";
-      ctx.fillRect(0, 0, W, H);
-      var g = ctx.createRadialGradient(W / 2, H * 0.48, 0, W / 2, H * 0.48, W * 0.55);
-      g.addColorStop(0, "rgba(28,22,30,0.55)");
-      g.addColorStop(1, "rgba(10,10,10,0)");
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, W, H);
-      for (var l = 0; l < layers.length; l++) {
-        var layer = layers[l];
-        for (var i = 0; i < layer.length; i++) {
-          var s = layer[i];
-          var x = (((s.x - dt * s.speed * 30) % W) + W) % W;
-          var tw = 0.6 + 0.4 * Math.sin(s.tw + dt * s.twS);
-          ctx.globalAlpha = s.op * tw;
-          ctx.fillStyle = "#f8e8d4";
-          ctx.beginPath();
-          ctx.arc(x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      ctx.globalAlpha = 1;
-    }
-    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) { draw(0); return; }
-    var raf, t0 = performance.now();
-    function frame(t) { draw((t - t0) / 1000); raf = requestAnimationFrame(frame); }
-    function start() { if (!raf) { t0 = performance.now() - 0; raf = requestAnimationFrame(frame); } }
-    function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) stop(); else start();
-    });
-    start();
-  })();
+  // ---- Hero · BISECT background --------------------------------------------
+  // Faint deterministic star dust (SVG); the rotating bisect disc, orbital
+  // TIEFROT pin and shockwave rings are pure CSS (frozen under reduced-motion).
+  starfield(byId("hero-stars"), 31, 70, 1440, 810, true);
 
   // ---- Hero · background SoundCloud player --------------------------------
   // Nothing loads from SoundCloud until the visitor interacts (browser
