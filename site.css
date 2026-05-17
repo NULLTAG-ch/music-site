@@ -1144,6 +1144,7 @@ a.update-row:hover .update-arrow { color: var(--tiefrot); transform: translateX(
 .embed-wrap--apple { margin-top: 20px; max-width: 560px; }
 .embed-wrap--apple iframe { height: 450px; }
 .embed-wrap--spotify iframe { height: 352px; }
+.embed-wrap--soundcloud iframe { height: 360px; }
 .embed-note {
   margin: 14px 0 0;
   font-family: var(--font-mono);

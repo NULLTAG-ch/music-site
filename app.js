@@ -117,13 +117,18 @@
       sc.onerror = function () { setState("OPEN ON SOUNDCLOUD ↗", false); };
       document.head.appendChild(sc);
     }
-    function firstGesture() {
-      document.removeEventListener("pointerdown", firstGesture, true);
-      document.removeEventListener("keydown", firstGesture, true);
-      load();
+    function kick() {
+      document.removeEventListener("pointerdown", kick, true);
+      document.removeEventListener("keydown", kick, true);
+      if (widget) { try { widget.play(); } catch (e) {} }
+      else load();
     }
-    document.addEventListener("pointerdown", firstGesture, true);
-    document.addEventListener("keydown", firstGesture, true);
+    // Autostart: load the widget + attempt playback immediately. Browsers
+    // that block autoplay-with-sound will start on the visitor's first
+    // interaction (the strip shows the state meanwhile).
+    load();
+    document.addEventListener("pointerdown", kick, true);
+    document.addEventListener("keydown", kick, true);
     if (tg) tg.addEventListener("click", function (e) {
       e.stopPropagation();
       if (!loaded) { load(); return; }

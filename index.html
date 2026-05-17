@@ -226,8 +226,8 @@
       <div class="player-pick" role="tablist" aria-label="Choose how to listen">
         <button class="pp-btn pp-on" type="button" data-pick="deezer">▶ Previews · in-page</button>
         <button class="pp-btn" type="button" data-pick="spotify">Spotify</button>
-        <a class="pp-btn pp-link" href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" target="_blank" rel="noopener noreferrer">Apple Music ↗</a>
-        <a class="pp-btn pp-link" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener noreferrer">SoundCloud ↗</a>
+        <button class="pp-btn" type="button" data-pick="apple">Apple Music</button>
+        <button class="pp-btn" type="button" data-pick="soundcloud">SoundCloud</button>
       </div>
 
       <div id="pick-deezer" class="player-panel">
@@ -261,6 +261,34 @@
             data-src="https://open.spotify.com/embed/artist/5V17xFUuN6H4jqZNChnrdV?utm_source=generator"
             loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             frameborder="0"></iframe>
+        </div>
+      </div>
+
+      <div id="pick-apple" class="player-panel" hidden>
+        <div class="embed-wrap embed-wrap--apple">
+          <div class="embed-consent">
+            <p class="embed-consent-text">Plays from <strong>Apple Music</strong> — loading it sends data to Apple (cookies). Your choice is saved on this device.</p>
+            <button class="embed-load" type="button">▶ Load Apple Music player</button>
+            <a class="embed-open" href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" target="_blank" rel="noopener noreferrer">or open on Apple Music ↗</a>
+          </div>
+          <iframe title="NULLTAG on Apple Music"
+            data-src="https://embed.music.apple.com/ch/album/plastic-paradise-ep/6769685431"
+            loading="lazy" allow="autoplay *; encrypted-media *; clipboard-write"
+            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+            frameborder="0"></iframe>
+        </div>
+      </div>
+
+      <div id="pick-soundcloud" class="player-panel" hidden>
+        <div class="embed-wrap embed-wrap--soundcloud">
+          <div class="embed-consent">
+            <p class="embed-consent-text">Plays from <strong>SoundCloud</strong> — loading it sends data to SoundCloud (cookies). Your choice is saved on this device.</p>
+            <button class="embed-load" type="button">▶ Load SoundCloud player</button>
+            <a class="embed-open" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener noreferrer">or open on SoundCloud ↗</a>
+          </div>
+          <iframe title="NULLTAG on SoundCloud"
+            data-src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fnulltag&color=%23ff2a55&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=true"
+            loading="lazy" allow="autoplay" frameborder="0"></iframe>
         </div>
       </div>
 
