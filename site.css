@@ -1324,3 +1324,79 @@ h2.chapter-label {
   margin-top: 18px;
   width: 84px; height: 5px; background: var(--tiefrot);
 }
+
+/* ============================================================
+   Hero · DRIFT animation + readability + SoundCloud strip
+   ============================================================ */
+.hero-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.hero-bg #hero-stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero-scan {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 3px);
+  mix-blend-mode: overlay;
+  animation: drift-scan 8s linear infinite;
+}
+@keyframes drift-scan { from { transform: translateY(0); } to { transform: translateY(3px); } }
+
+/* keep copy legible over the moving background */
+.hero-title { text-shadow: 0 4px 32px rgba(10,10,10,0.6); }
+.hero-tagline { text-shadow: 0 0 18px rgba(10,10,10,0.95), 0 0 6px rgba(10,10,10,0.95); }
+.hero-v, .hero-k { text-shadow: 0 0 12px rgba(10,10,10,0.92); }
+
+.hero-sc {
+  position: relative; z-index: 2;
+  margin: 26px auto 4px;
+  width: min(640px, 92%);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.hero-sc-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 14px;
+  background: rgba(10,10,10,0.55);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+}
+.hero-sc-toggle {
+  width: 28px; height: 28px; flex-shrink: 0;
+  background: var(--tiefrot); border: 0;
+  color: var(--bone);
+  font-family: var(--font-mono); font-size: 11px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: filter var(--t-base) var(--ease);
+}
+.hero-sc-toggle:hover { filter: brightness(1.12); }
+.hero-sc-status {
+  flex: 1; min-width: 0;
+  display: inline-flex; align-items: center; gap: 8px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.hero-sc-status .accent { color: var(--tiefrot); }
+.hero-sc-status .sep { color: var(--muted); opacity: 0.6; }
+.hero-sc-status .track-name {
+  color: var(--bone); letter-spacing: 0.16em;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.hero-sc-status .pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--tiefrot); display: inline-block; flex-shrink: 0;
+}
+.hero-sc-status .pulse[data-on="1"] { animation: pulse 2.2s var(--ease) infinite; }
+.hero-sc-open {
+  color: var(--muted); text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
+}
+.hero-sc-open:hover { color: var(--bone); border-bottom-color: var(--tiefrot); }
+.hero-sc-progress { height: 1px; background: var(--border); position: relative; overflow: hidden; }
+.hero-sc-progress-fill {
+  position: absolute; top: 0; left: 0; bottom: 0; width: 0;
+  background: var(--tiefrot);
+  transition: width 200ms linear;
+}

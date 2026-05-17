@@ -50,9 +50,145 @@
       svg.appendChild(c);
     }
   }
-  starfield(byId("hero-stars"), 2026, 90, 1600, 900, true);
   starfield(byId("avatar-stars"), 77, 40, 1000, 1000, true);
   starfield(byId("banner-stars"), 31, 46, 2480, 520, false);
+
+  // ---- Hero · DRIFT animation (parallax starfield, canvas) ----------------
+  // Replaces the static SVG starfield. Respects reduced-motion (one static
+  // frame, no rAF) and pauses while the tab is hidden.
+  (function driftHero() {
+    var canvas = byId("hero-stars");
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+    var W = (canvas.width = 1600), H = (canvas.height = 900);
+    var seed = 2026 >>> 0;
+    function rng() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 0xffffffff; }
+    function mk(n, speed, rmin, rmax, omin, omax) {
+      var a = [];
+      for (var i = 0; i < n; i++) a.push({
+        x: rng() * W, y: rng() * H,
+        r: rmin + rng() * (rmax - rmin),
+        op: omin + rng() * (omax - omin),
+        tw: rng() * Math.PI * 2, twS: 0.4 + rng() * 1.2, speed: speed
+      });
+      return a;
+    }
+    var layers = [
+      mk(90, 0.06, 0.5, 1.1, 0.10, 0.32),
+      mk(60, 0.18, 0.8, 1.7, 0.20, 0.52),
+      mk(20, 0.45, 1.2, 2.6, 0.32, 0.80)
+    ];
+    function draw(dt) {
+      ctx.fillStyle = "#0a0a0a";
+      ctx.fillRect(0, 0, W, H);
+      var g = ctx.createRadialGradient(W / 2, H * 0.48, 0, W / 2, H * 0.48, W * 0.55);
+      g.addColorStop(0, "rgba(28,22,30,0.55)");
+      g.addColorStop(1, "rgba(10,10,10,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+      for (var l = 0; l < layers.length; l++) {
+        var layer = layers[l];
+        for (var i = 0; i < layer.length; i++) {
+          var s = layer[i];
+          var x = (((s.x - dt * s.speed * 30) % W) + W) % W;
+          var tw = 0.6 + 0.4 * Math.sin(s.tw + dt * s.twS);
+          ctx.globalAlpha = s.op * tw;
+          ctx.fillStyle = "#f8e8d4";
+          ctx.beginPath();
+          ctx.arc(x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) { draw(0); return; }
+    var raf, t0 = performance.now();
+    function frame(t) { draw((t - t0) / 1000); raf = requestAnimationFrame(frame); }
+    function start() { if (!raf) { t0 = performance.now() - 0; raf = requestAnimationFrame(frame); } }
+    function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) stop(); else start();
+    });
+    start();
+  })();
+
+  // ---- Hero · background SoundCloud player --------------------------------
+  // Nothing loads from SoundCloud until the visitor interacts (browser
+  // autoplay policy + our no-third-party-before-consent posture). First
+  // gesture (or the ▶ button) loads a hidden widget; a slim NOW PLAYING
+  // strip reflects state.
+  (function scPlayer() {
+    var wrap = byId("hero-sc");
+    if (!wrap) return;
+    var stEl = byId("sc-state"), trEl = byId("sc-track"), tg = byId("sc-toggle"),
+        pulse = byId("sc-pulse"), fill = byId("sc-fill");
+    var scUrl = "https://soundcloud.com/nulltag";
+    (C.streaming || []).concat(C.social || []).forEach(function (i) {
+      if (/soundcloud/i.test(i.label || "") && i.url && i.url !== "#") scUrl = i.url;
+    });
+    var widget = null, loaded = false, playing = false;
+
+    function setState(txt, on) {
+      if (stEl) stEl.textContent = txt;
+      if (pulse) pulse.setAttribute("data-on", on ? "1" : "0");
+      if (tg) { tg.textContent = on ? "❚❚" : "▶"; tg.setAttribute("aria-label", on ? "Pause" : "Play"); }
+    }
+    function bind() {
+      if (!window.SC || !window.SC.Widget) return;
+      var ifr = byId("sc-frame");
+      widget = window.SC.Widget(ifr);
+      var E = window.SC.Widget.Events, tick = false;
+      function sound() {
+        widget.getCurrentSound(function (s) { if (s && trEl) trEl.textContent = s.title || "NULLTAG · SOUNDCLOUD"; });
+      }
+      widget.bind(E.READY, function () { sound(); widget.play(); setState("CUED", false); });
+      widget.bind(E.PLAY, function () { playing = true; setState("NOW PLAYING", true); sound(); });
+      widget.bind(E.PAUSE, function () { playing = false; setState("PAUSED", false); });
+      widget.bind(E.FINISH, function () { playing = false; setState("PAUSED", false); });
+      widget.bind(E.PLAY_PROGRESS, function (e) {
+        if (tick) return; tick = true;
+        requestAnimationFrame(function () {
+          if (fill) fill.style.width = ((e.relativePosition || 0) * 100).toFixed(2) + "%";
+          tick = false;
+        });
+      });
+    }
+    function load() {
+      if (loaded) return;
+      loaded = true;
+      setState("LOADING", false);
+      var u = encodeURIComponent(scUrl);
+      var ifr = el("iframe", {
+        id: "sc-frame", title: "NULLTAG audio (hidden)", allow: "autoplay",
+        tabindex: "-1", "aria-hidden": "true",
+        src: "https://w.soundcloud.com/player/?url=" + u +
+          "&auto_play=true&hide_related=true&show_comments=false&show_user=false" +
+          "&show_reposts=false&show_teaser=false&visual=false&buying=false" +
+          "&liking=false&sharing=false&download=false&single_active=true"
+      });
+      ifr.style.cssText = "position:absolute;width:1px;height:1px;opacity:0;border:0;left:-9999px;top:-9999px;pointer-events:none";
+      wrap.appendChild(ifr);
+      if (window.SC && window.SC.Widget) { bind(); return; }
+      var sc = el("script", { src: "https://w.soundcloud.com/player/api.js" });
+      sc.onload = bind;
+      sc.onerror = function () { setState("OPEN ON SOUNDCLOUD ↗", false); };
+      document.head.appendChild(sc);
+    }
+    function firstGesture() {
+      document.removeEventListener("pointerdown", firstGesture, true);
+      document.removeEventListener("keydown", firstGesture, true);
+      load();
+    }
+    document.addEventListener("pointerdown", firstGesture, true);
+    document.addEventListener("keydown", firstGesture, true);
+    if (tg) tg.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (!loaded) { load(); return; }
+      if (!widget) return;
+      if (playing) widget.pause(); else widget.play();
+    });
+  })();
 
   // ---- Hero + footer copy --------------------------------------------------
   if (profile.tagline) {
