@@ -1,15 +1,15 @@
 name: Deploy to GitHub Pages
 
 # Pages must be enabled once: repo Settings → Pages → Source = "GitHub Actions".
-# The `build` job runs on any branch (keeps PR CI green); the `deploy` job only
-# runs on `main`, because the auto-created `github-pages` environment is branch
-# protected to the default branch.
+# SOLE owner of push-to-main Pages deploys. Triggers on `main` only — a
+# second ref (or feed.yml) in the shared `pages` concurrency group makes
+# GitHub cancel runs ("higher priority waiting request for pages exists")
+# so nothing ever publishes. feed.yml deploys on its own schedule instead.
 
 on:
   push:
     branches:
       - main
-      - claude/music-landing-page-KcIPo
   workflow_dispatch:
 
 permissions:

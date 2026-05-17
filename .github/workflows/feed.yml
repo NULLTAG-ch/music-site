@@ -1,17 +1,13 @@
 name: Refresh release feed
 
-# Regenerates releases.json from Deezer's REST API on every push to main,
-# every 6 hours, and on demand; commits it if it changed, then redeploys
-# Pages. Runs on the default branch only — push/schedule/manual dispatch
-# all target main, which is what the github-pages environment is locked to.
-# paths-ignore stops the bot's own releases.json commit from re-triggering
-# (belt-and-suspenders: GITHUB_TOKEN pushes don't trigger workflows anyway).
+# Regenerates releases.json from Deezer's REST API every 6 hours (and on
+# demand), commits it, then deploys Pages — in its OWN run. It deliberately
+# does NOT trigger on push: deploy.yml owns push-to-main deploys, and two
+# Pages workflows on the same push fight over the `pages` concurrency group
+# ("Canceling since a higher priority waiting request for pages exists")
+# which previously meant no deploy ever finished.
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - "releases.json"
   schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch:
