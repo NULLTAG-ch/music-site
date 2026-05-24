@@ -39,6 +39,17 @@ jobs:
       - name: Build releases.json
         run: node tools/build-feed.mjs
 
+      # Postet Release-Änderungen nach Telegram. Läuft hier — nach dem Build,
+      # vor dem Commit —, weil dann HEAD = alte committete releases.json und der
+      # Working-Tree = neu gebaute Version ist (sauberer Diff). continue-on-error,
+      # damit ein Telegram-Ausfall niemals den Site-Deploy blockiert.
+      - name: Notify Telegram of release changes
+        continue-on-error: true
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 .github/scripts/notify_release.py
+
       - name: Commit feed if it changed
         run: |
           if git diff --quiet -- releases.json; then
