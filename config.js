@@ -55,6 +55,8 @@ window.CONFIG = {
     source: "deezer",
     deezerArtistId: "388775221",
     youtubeChannelId: "UCWl0DW85arbD6uHnD29HA_Q",
+    soundcloudUserId: "1464141647",
+    spotifyArtistId: "5V17xFUuN6H4jqZNChnrdV",
     limit: 24
   },
 

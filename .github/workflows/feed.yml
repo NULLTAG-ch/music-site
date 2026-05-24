@@ -1,15 +1,19 @@
 name: Refresh release feed
 
-# Regenerates releases.json from Deezer's REST API every 6 hours (and on
-# demand), commits it, then deploys Pages — in its OWN run. It deliberately
-# does NOT trigger on push: deploy.yml owns push-to-main deploys, and two
-# Pages workflows on the same push fight over the `pages` concurrency group
-# ("Canceling since a higher priority waiting request for pages exists")
-# which previously meant no deploy ever finished.
+# Regenerates releases.json from Deezer + YouTube + SoundCloud + Spotify
+# every 15 minutes (and on demand), commits it, then deploys Pages — in its
+# OWN run. It deliberately does NOT trigger on push: deploy.yml owns
+# push-to-main deploys, and two Pages workflows on the same push fight over
+# the `pages` concurrency group ("Canceling since a higher priority waiting
+# request for pages exists") which previously meant no deploy ever finished.
+#
+# Cadence note: GitHub schedules are best-effort and often delayed under load,
+# so "*/15" is effectively ~15-30 min, not exact. True instant would need a
+# webhook/poller (Cloudflare Worker) — see DJIS tools/telegram dropin notes.
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -37,6 +41,11 @@ jobs:
           node-version: 20
 
       - name: Build releases.json
+        env:
+          SC_CLIENT_ID: ${{ secrets.SC_CLIENT_ID }}
+          SC_CLIENT_SECRET: ${{ secrets.SC_CLIENT_SECRET }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: node tools/build-feed.mjs
 
       # Postet Release-Änderungen nach Telegram. Läuft hier — nach dem Build,

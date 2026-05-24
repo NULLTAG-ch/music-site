@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
-"""Postet Release-Änderungen aus releases.json in Echtzeit nach Telegram.
+"""Postet Release- & Update-Änderungen aus releases.json nach Telegram.
 
-Läuft als GitHub-Action-Step (siehe ../workflows/telegram-notify.yml). Vergleicht
-die aktuelle releases.json mit der Version vor dem Push und postet pro Änderung
-eine Nachricht in den NULLTAG-Telegram-Channel.
+Läuft als Step in feed.yml — NACH dem Deezer-Build, VOR dem Commit. Dann gilt:
+HEAD:releases.json = alter committeter Stand, ./releases.json = neu gebaut.
+Vergleicht beide und postet pro Änderung eine Nachricht in den NULLTAG-Channel.
+
+releases.json-Struktur (Objekt):
+  { "generated": ISO, "artist": id, "count": int,
+    "albums":  [ {id, title, link, cover, record_type, release_date, tracks[]} ],
+    "updates": [ {date, platform, text, url} ] }
+
+Diffing läuft pro albums-`id` bzw. pro update-Key — NICHT über die ganze Datei
+(das `generated`-Feld wechselt bei jedem Build und würde sonst Falschalarm geben).
 
 stdlib-only (urllib/json/subprocess) — keine Dependencies, kein pip-Step nötig.
 """
@@ -19,7 +27,7 @@ from html import escape
 RELEASES_FILE = "releases.json"
 API = "https://api.telegram.org/bot{token}/{method}"
 
-# Felder, deren Änderung einen "✏️ geändert"-Post auslöst.
+# Album-Felder, deren Änderung einen "✏️ geändert"-Post auslöst.
 TRACKED_FIELDS = ("title", "record_type", "release_date")
 
 
@@ -29,11 +37,10 @@ def load_current():
 
 
 def load_previous():
-    """Holt die alte releases.json (committet) zum Diffen gegen den Working-Tree.
+    """Holt den alten (committeten) releases.json-Stand zum Diffen. None = kein Baseline.
 
-    Im feed.yml-Kontext läuft das Skript NACH dem Build, aber VOR dem Commit:
-    HEAD = alte committete Version, ./releases.json = neu gebaute Version.
-    BASELINE_REF überschreibbar (Default HEAD). None = kein Baseline.
+    Im feed.yml-Kontext (vor dem Commit) ist HEAD der alte Stand. BASELINE_REF
+    überschreibbar (Default HEAD).
     """
     candidates = [os.environ.get("BASELINE_REF", "").strip(), "HEAD", "HEAD~1"]
     for ref in candidates:
@@ -50,8 +57,22 @@ def load_previous():
     return None
 
 
-def by_id(releases):
-    return {str(r.get("id")): r for r in releases if r.get("id") is not None}
+def extract_albums(data):
+    if isinstance(data, dict):
+        return data.get("albums") or []
+    return data if isinstance(data, list) else []  # Backward-Compat: Top-Level-Array
+
+
+def extract_updates(data):
+    return data.get("updates") or [] if isinstance(data, dict) else []
+
+
+def albums_by_id(albums):
+    return {str(a.get("id")): a for a in albums if a.get("id") is not None}
+
+
+def update_key(u):
+    return u.get("url") or f"{u.get('date')}|{u.get('platform')}|{u.get('text')}"
 
 
 def fmt_date(iso):
@@ -107,14 +128,13 @@ def send_new(chat, rel):
                                "caption": cap, "parse_mode": "HTML"})
     else:
         telegram("sendMessage", {"chat_id": chat, "text": cap,
-                                 "parse_mode": "HTML",
-                                 "disable_web_page_preview": "false"})
+                                 "parse_mode": "HTML"})
 
 
 def send_changed(chat, old, new, diffs):
     names = {"title": "Titel", "record_type": "Typ",
              "release_date": "Datum", "tracks": "Track-Anzahl"}
-    lines = [f"✏️ <b>Release aktualisiert</b>", f"<b>{escape(str(new.get('title','')))}</b>"]
+    lines = ["✏️ <b>Release aktualisiert</b>", f"<b>{escape(str(new.get('title','')))}</b>"]
     for f, o, n in diffs:
         ov = fmt_date(o) if f == "release_date" else o
         nv = fmt_date(n) if f == "release_date" else n
@@ -132,53 +152,65 @@ def send_removed(chat, rel):
     telegram("sendMessage", {"chat_id": chat, "text": text, "parse_mode": "HTML"})
 
 
+def send_update(chat, u):
+    platform = escape(str(u.get("platform", "")))
+    text = escape(str(u.get("text", "")))
+    lines = [f"🔔 <b>Update — {platform}</b>", text, fmt_date(u.get("date"))]
+    url = u.get("url")
+    if url:
+        lines.append(f'🔗 <a href="{escape(url, quote=True)}">Ansehen</a>')
+    telegram("sendMessage", {"chat_id": chat, "text": "\n".join(lines),
+                             "parse_mode": "HTML"})
+
+
 def main():
     chat = os.environ.get("TELEGRAM_CHAT_ID")
     if not chat or not os.environ.get("TELEGRAM_TOKEN"):
         print("::error::TELEGRAM_TOKEN / TELEGRAM_CHAT_ID fehlen.")
         return 1
 
-    current = by_id(load_current())
+    current = load_current()
     previous = load_previous()
     if previous is None:
-        print("::notice::Kein Baseline-Stand (erster Lauf / Dispatch) — kein Post.")
+        print("::notice::Kein Baseline-Stand (erster Lauf) — kein Post.")
         return 0
-    previous = by_id(previous)
 
-    added = [current[i] for i in current if i not in previous]
-    removed = [previous[i] for i in previous if i not in current]
-    modified = [(previous[i], current[i]) for i in current if i in previous]
+    cur_albums = albums_by_id(extract_albums(current))
+    prev_albums = albums_by_id(extract_albums(previous))
+    cur_updates = {update_key(u): u for u in extract_updates(current)}
+    prev_update_keys = {update_key(u) for u in extract_updates(previous)}
+
+    added = [cur_albums[i] for i in cur_albums if i not in prev_albums]
+    removed = [prev_albums[i] for i in prev_albums if i not in cur_albums]
+    modified = [(prev_albums[i], cur_albums[i]) for i in cur_albums if i in prev_albums]
+    new_updates = [cur_updates[k] for k in cur_updates if k not in prev_update_keys]
 
     errors = 0
-    for rel in added:
+    posted = 0
+
+    def attempt(fn, what, *args):
+        nonlocal errors, posted
         try:
-            send_new(chat, rel)
-            print(f"[neu] {rel.get('title')}")
+            fn(chat, *args)
+            posted += 1
+            print(f"[{what}]")
         except Exception as e:  # noqa: BLE001 — eine Nachricht darf den Rest nicht killen
             errors += 1
-            print(f"::error::Post (neu) fehlgeschlagen für {rel.get('title')}: {e}")
+            print(f"::error::Post ({what}) fehlgeschlagen: {e}")
 
+    for rel in added:
+        attempt(send_new, f"neu: {rel.get('title')}", rel)
     for old, new in modified:
         diffs = changed_fields(old, new)
-        if not diffs:
-            continue
-        try:
-            send_changed(chat, old, new, diffs)
-            print(f"[geändert] {new.get('title')}: {[d[0] for d in diffs]}")
-        except Exception as e:  # noqa: BLE001
-            errors += 1
-            print(f"::error::Post (geändert) fehlgeschlagen für {new.get('title')}: {e}")
-
+        if diffs:
+            attempt(send_changed, f"geändert: {new.get('title')}", old, new, diffs)
     for rel in removed:
-        try:
-            send_removed(chat, rel)
-            print(f"[entfernt] {rel.get('title')}")
-        except Exception as e:  # noqa: BLE001
-            errors += 1
-            print(f"::error::Post (entfernt) fehlgeschlagen für {rel.get('title')}: {e}")
+        attempt(send_removed, f"entfernt: {rel.get('title')}", rel)
+    for u in new_updates:
+        attempt(send_update, f"update: {u.get('text')}", u)
 
-    if not (added or removed or any(changed_fields(o, n) for o, n in modified)):
-        print("::notice::releases.json geändert, aber keine relevante Release-Diff — kein Post.")
+    if posted == 0 and errors == 0:
+        print("::notice::releases.json geändert, aber keine relevante Diff — kein Post.")
 
     return 1 if errors else 0
 
