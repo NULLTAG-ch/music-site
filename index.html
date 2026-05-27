@@ -890,7 +890,7 @@
 <!-- ==================== HERO ==================== -->
 <header class="hero" data-screen-label="01 Hero">
   <img class="hero__video" src="assets/logo-poster.png" alt="NULLTAG · smoke wave collapses into a wordmark eclipse" />
-  <video class="hero__video hero__video--lazy" muted loop playsinline preload="none" poster="assets/logo-poster.png" hidden>
+  <video class="hero__video hero__video--lazy" autoplay muted loop playsinline preload="auto" poster="assets/logo-poster.png" hidden>
     <source src="assets/logo.mp4" type="video/mp4" />
   </video>
   <button class="hero__playbtn" type="button" aria-label="Play hero motion" data-hero-play>
@@ -1365,18 +1365,65 @@
     });
   });
 
-  // hero motion — opt-in, no autoplay
+  // hero motion — autoplay (muted); manual fallback if the browser blocks it
   const heroBtn = document.querySelector("[data-hero-play]");
   const heroPoster = document.querySelector(".hero__video:not(.hero__video--lazy)");
   const heroVideo = document.querySelector(".hero__video--lazy");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (heroBtn && heroVideo && heroPoster) {
-    heroBtn.addEventListener("click", () => {
+    const showMotion = () => {
       heroPoster.style.display = "none";
       heroVideo.hidden = false;
-      heroVideo.play().catch(() => {});
       heroBtn.hidden = true;
-    });
+      return heroVideo.play();
+    };
+    const restorePoster = () => {
+      heroVideo.hidden = true;
+      heroPoster.style.display = "";
+      heroBtn.hidden = false;
+    };
+    heroBtn.addEventListener("click", () => { showMotion().catch(() => {}); });
+    if (!reduceMotion) showMotion().catch(restorePoster);
   }
+
+  // SoundCloud — autostart. Browsers gate audio-with-sound until the first
+  // user gesture, so we attempt playback on READY and again on first input.
+  (function scAutoplay() {
+    const SC_URL = "https://soundcloud.com/nulltag";
+    let widget = null, loaded = false;
+    function bind(ifr) {
+      if (!window.SC || !window.SC.Widget) return;
+      widget = window.SC.Widget(ifr);
+      widget.bind(window.SC.Widget.Events.READY, () => { try { widget.play(); } catch (e) {} });
+    }
+    function load() {
+      if (loaded) return; loaded = true;
+      const ifr = document.createElement("iframe");
+      ifr.id = "sc-frame";
+      ifr.title = "NULLTAG audio";
+      ifr.allow = "autoplay";
+      ifr.tabIndex = -1;
+      ifr.setAttribute("aria-hidden", "true");
+      ifr.src = "https://w.soundcloud.com/player/?url=" + encodeURIComponent(SC_URL) +
+        "&auto_play=true&hide_related=true&show_comments=false&show_user=false" +
+        "&show_reposts=false&show_teaser=false&visual=false&single_active=true";
+      ifr.style.cssText = "position:absolute;width:1px;height:1px;opacity:0;border:0;left:-9999px;top:-9999px;pointer-events:none";
+      document.body.appendChild(ifr);
+      if (window.SC && window.SC.Widget) { bind(ifr); return; }
+      const s = document.createElement("script");
+      s.src = "https://w.soundcloud.com/player/api.js";
+      s.onload = () => bind(ifr);
+      document.head.appendChild(s);
+    }
+    function kick() {
+      document.removeEventListener("pointerdown", kick, true);
+      document.removeEventListener("keydown", kick, true);
+      if (widget) { try { widget.play(); } catch (e) {} } else { load(); }
+    }
+    load();
+    document.addEventListener("pointerdown", kick, true);
+    document.addEventListener("keydown", kick, true);
+  })();
 
   // smooth scroll fallback (small browsers)
   document.querySelectorAll('a[href^="#"]').forEach(a => {
