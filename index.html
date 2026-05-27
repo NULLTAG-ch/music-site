@@ -256,6 +256,51 @@
   }
   .btn-hero--ghost:hover { background: rgba(255,255,255,0.04); border-color: var(--bone); color: var(--bone); }
 
+  .hero__sc {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: var(--s-5);
+    padding: 10px 14px;
+    max-width: 620px;
+    background: rgba(10,10,10,0.6);
+    border: 1px solid var(--border-warm);
+    font-family: var(--font-mono);
+    font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--bone-dim);
+  }
+  .hero__sc-btn {
+    flex: none; width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--tiefrot); color: var(--void);
+    border: 0; cursor: pointer; font-size: 12px; line-height: 1;
+    transition: all 150ms var(--ease);
+  }
+  .hero__sc-btn:hover { background: var(--bone); }
+  .hero__sc-dot {
+    flex: none; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--muted);
+  }
+  .hero__sc-dot[data-on="1"] {
+    background: var(--tiefrot);
+    animation: scpulse 2.2s var(--ease) infinite;
+  }
+  @keyframes scpulse {
+    0%   { box-shadow: 0 0 0 0   rgba(255,42,85,0.5); }
+    70%  { box-shadow: 0 0 0 7px rgba(255,42,85,0); }
+    100% { box-shadow: 0 0 0 0   rgba(255,42,85,0); }
+  }
+  .hero__sc-state { color: var(--bone); white-space: nowrap; }
+  .hero__sc-sep { color: var(--muted); }
+  .hero__sc-track {
+    color: var(--bone-dim);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    flex: 1 1 auto; min-width: 0; text-transform: none; letter-spacing: 0.04em;
+  }
+  .hero__sc-open {
+    flex: none; color: var(--muted); text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .hero__sc-open:hover { color: var(--bone); border-bottom-color: var(--tiefrot); }
+
   .hero__meta {
     display: grid;
     grid-template-columns: repeat(4, minmax(0,1fr));
@@ -922,6 +967,15 @@
         <a href="#latest" class="btn-hero">▶ Play latest release</a>
         <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 13</a>
       </div>
+
+      <div class="hero__sc" id="sc-strip" aria-label="NULLTAG on SoundCloud">
+        <button class="hero__sc-btn" id="sc-toggle" type="button" aria-label="Play">▶</button>
+        <span class="hero__sc-dot" id="sc-dot" data-on="0" aria-hidden="true"></span>
+        <span class="hero__sc-state" id="sc-state">TAP TO PLAY</span>
+        <span class="hero__sc-sep" aria-hidden="true">·</span>
+        <span class="hero__sc-track" id="sc-track">NULLTAG · SOUNDCLOUD</span>
+        <a class="hero__sc-open" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener">OPEN ↗</a>
+      </div>
     </div>
 
     <div class="hero__meta">
@@ -1388,18 +1442,38 @@
     if (!reduceMotion) showMotion().catch(restorePoster);
   }
 
-  // SoundCloud — autostart. Browsers gate audio-with-sound until the first
-  // user gesture, so we attempt playback on READY and again on first input.
+  // SoundCloud — autostart with a visible NOW PLAYING strip. Browsers gate
+  // audio-with-sound until the first user gesture, so we attempt playback on
+  // READY and again on the first input; the strip reflects the state.
   (function scAutoplay() {
     const SC_URL = "https://soundcloud.com/nulltag";
-    let widget = null, loaded = false;
+    const tg = document.getElementById("sc-toggle"),
+          stEl = document.getElementById("sc-state"),
+          trEl = document.getElementById("sc-track"),
+          dot = document.getElementById("sc-dot");
+    let widget = null, loaded = false, playing = false;
+
+    function setState(txt, on) {
+      if (stEl) stEl.textContent = txt;
+      if (dot) dot.setAttribute("data-on", on ? "1" : "0");
+      if (tg) { tg.textContent = on ? "❚❚" : "▶"; tg.setAttribute("aria-label", on ? "Pause" : "Play"); }
+    }
+    function trackName() {
+      if (!widget) return;
+      widget.getCurrentSound(s => { if (s && trEl) trEl.textContent = s.title || "NULLTAG · SOUNDCLOUD"; });
+    }
     function bind(ifr) {
       if (!window.SC || !window.SC.Widget) return;
       widget = window.SC.Widget(ifr);
-      widget.bind(window.SC.Widget.Events.READY, () => { try { widget.play(); } catch (e) {} });
+      const E = window.SC.Widget.Events;
+      widget.bind(E.READY, () => { setState("CUED", false); trackName(); try { widget.play(); } catch (e) {} });
+      widget.bind(E.PLAY, () => { playing = true; setState("NOW PLAYING", true); trackName(); });
+      widget.bind(E.PAUSE, () => { playing = false; setState("PAUSED", false); });
+      widget.bind(E.FINISH, () => { playing = false; setState("PAUSED", false); });
     }
     function load() {
       if (loaded) return; loaded = true;
+      setState("LOADING", false);
       const ifr = document.createElement("iframe");
       ifr.id = "sc-frame";
       ifr.title = "NULLTAG audio";
@@ -1415,6 +1489,7 @@
       const s = document.createElement("script");
       s.src = "https://w.soundcloud.com/player/api.js";
       s.onload = () => bind(ifr);
+      s.onerror = () => setState("OPEN ON SOUNDCLOUD ↗", false);
       document.head.appendChild(s);
     }
     function kick() {
@@ -1422,6 +1497,12 @@
       document.removeEventListener("keydown", kick, true);
       if (widget) { try { widget.play(); } catch (e) {} } else { load(); }
     }
+    if (tg) tg.addEventListener("click", e => {
+      e.stopPropagation();
+      if (!loaded) { load(); return; }
+      if (!widget) return;
+      if (playing) widget.pause(); else widget.play();
+    });
     load();
     document.addEventListener("pointerdown", kick, true);
     document.addEventListener("keydown", kick, true);
