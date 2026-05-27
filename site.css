@@ -115,12 +115,10 @@ a:hover { color: var(--tiefrot); text-decoration: none; }
   padding: 24px 0;
 }
 .hero-lockup { margin-bottom: 28px; }
-.hero-title--video { display: block; margin: 0 auto; line-height: 0; }
-.hero-logo-video {
-  display: block;
-  width: min(86vw, 760px);
-  height: auto;
-  margin: 0 auto;
+.hero-sr {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 .hero-title {
   font-family: var(--font-display);
@@ -1337,7 +1335,18 @@ h2.chapter-label {
    Hero · starfield backdrop + readability + SoundCloud strip
    ============================================================ */
 .hero-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.hero-bg #hero-stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero-bg-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.hero-bg::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(ellipse 75% 65% at 50% 45%,
+    rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.72) 68%, rgba(5,5,5,0.92) 100%);
+}
+.hero-bg #hero-stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 2; }
 
 /* keep copy legible over the moving background */
 .hero-tagline { text-shadow: 0 0 18px rgba(10,10,10,0.95), 0 0 6px rgba(10,10,10,0.95); }
