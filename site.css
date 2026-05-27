@@ -115,6 +115,7 @@ a:hover { color: var(--tiefrot); text-decoration: none; }
   padding: 24px 0;
 }
 .hero-lockup { margin-bottom: 28px; }
+.hero-logo-video { display: block; width: 96px; height: 96px; object-fit: contain; }
 .hero-title {
   font-family: var(--font-display);
   font-size: clamp(140px, 22vw, 320px);
