@@ -16,6 +16,7 @@
  *    Tokens, darum werden sie bei einem Rebuild frisch geholt, nie reused.
  */
 import { readFileSync, writeFileSync } from "node:fs";
+import { dedupeUpdates } from "./feed-merge.mjs";
 
 const OUT = new URL("../releases.json", import.meta.url);
 const cfgSrc = readFileSync(new URL("../config.js", import.meta.url), "utf8");
@@ -50,28 +51,49 @@ try {
     String(b.release_date || "").localeCompare(String(a.release_date || "")));
 } catch (e) { console.warn("Deezer (meta) skipped:", String(e)); }
 
-const knownTitles = new Set(albMeta.map((a) => String(a.title || "").toLowerCase().trim()));
+// ---- Updates: YouTube + SoundCloud + Spotify ----------------------------
+// Jede Quelle ist unabhängig und failure-guarded. WICHTIG: schlägt eine Quelle
+// fehl ODER liefert sie (transient) 0 Einträge, übernehmen wir ihre Einträge
+// aus dem vorigen Stand ("carry-forward"). Das verhindert das Flattern der
+// updates-Liste (12→6→12 …), das sonst dazu führte, dass dieselben Tracks bei
+// jedem Wiederauftauchen erneut nach Telegram announced wurden.
+const prevUpdates = prev && Array.isArray(prev.updates) ? prev.updates : [];
 
-// ---- Updates: YouTube + SoundCloud + Spotify (alle guarded) -------------
-let updates = [];
+async function source(platform, fn) {
+  let items = null;
+  try { items = await fn(); }
+  catch (e) { console.warn(`${platform} failed: ${String(e)}`); }
+  if (!items || items.length === 0) {
+    const carried = prevUpdates.filter((u) => u.platform === platform);
+    if (carried.length) {
+      console.warn(`${platform}: carrying over ${carried.length} previous item(s).`);
+      return carried;
+    }
+    return [];
+  }
+  console.log(`${platform}: ${items.length} item(s).`);
+  return items;
+}
 
 // YouTube uploads (RSS, kein Key)
-try {
+const ytUpdates = await source("YouTube", async () => {
   if (!YT) throw new Error("no youtubeChannelId");
   const res = await fetch("https://www.youtube.com/feeds/videos.xml?channel_id=" + YT);
   if (!res.ok) throw new Error("YT RSS HTTP " + res.status);
   const xml = await res.text();
+  const out = [];
   for (const e of xml.split("<entry>").slice(1, 7)) {
     const title = (e.match(/<title>([^<]*)<\/title>/) || [])[1] || "";
     const link = (e.match(/<link rel="alternate" href="([^"]+)"/) || [])[1] || "";
     const pub = (e.match(/<published>([^<]+)<\/published>/) || [])[1] || "";
     const text = title.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
-    if (text && link) updates.push({ date: pub.slice(0, 10), platform: "YouTube", text, url: link });
+    if (text && link) out.push({ date: pub.slice(0, 10), platform: "YouTube", text, url: link });
   }
-} catch (e) { console.warn("YouTube skipped:", String(e)); }
+  return out;
+});
 
 // SoundCloud uploads (OAuth client_credentials — stateless app token)
-try {
+const scUpdates = await source("SoundCloud", async () => {
   const cid = process.env.SC_CLIENT_ID, csec = process.env.SC_CLIENT_SECRET;
   if (!SC_USER) throw new Error("no soundcloudUserId");
   if (!cid || !csec) throw new Error("no SC creds (SC_CLIENT_ID/SECRET)");
@@ -88,23 +110,21 @@ try {
   if (!res.ok) throw new Error("SC tracks HTTP " + res.status);
   const body = await res.json();
   const coll = body.collection || (Array.isArray(body) ? body : []);
-  let added = 0;
+  const out = [];
   for (const t of coll.slice(0, 8)) {
     const url = String(t.permalink_url || "").split("?")[0];
     const name = t.title || "";
     if (!name || !url) continue;
-    if (knownTitles.has(name.toLowerCase().trim())) continue; // schon als Deezer-Release erfasst
-    updates.push({
+    out.push({
       date: String(t.created_at || "").slice(0, 10).replace(/\//g, "-"),
       platform: "SoundCloud", text: name, url
     });
-    added++;
   }
-  console.log(`SoundCloud: ${added} tracks.`);
-} catch (e) { console.warn("SoundCloud skipped:", String(e)); }
+  return out;
+});
 
 // Spotify releases (client_credentials — braucht Premium-Account, sonst 403)
-try {
+const spUpdates = await source("Spotify", async () => {
   const cid = process.env.SPOTIFY_CLIENT_ID, csec = process.env.SPOTIFY_CLIENT_SECRET;
   if (!SP_ARTIST) throw new Error("no spotifyArtistId");
   if (!cid || !csec) throw new Error("no Spotify creds (SPOTIFY_CLIENT_ID/SECRET)");
@@ -123,21 +143,19 @@ try {
     { headers: { Authorization: "Bearer " + token } });
   if (!res.ok) throw new Error("Spotify albums HTTP " + res.status);
   const items = (await res.json()).items || [];
-  let added = 0;
+  const out = [];
   for (const al of items) {
     const url = al.external_urls?.spotify || "";
     const name = al.name || "";
     if (!name || !url) continue;
-    if (knownTitles.has(name.toLowerCase().trim())) continue; // schon als Deezer-Release erfasst
-    updates.push({ date: (al.release_date || "").slice(0, 10), platform: "Spotify", text: name, url });
-    added++;
+    out.push({ date: (al.release_date || "").slice(0, 10), platform: "Spotify", text: name, url });
   }
-  console.log(`Spotify: ${added} new (nicht-Deezer) releases.`);
-} catch (e) { console.warn("Spotify skipped:", String(e)); }
+  return out;
+});
 
-// Updates: neueste zuerst, auf 20 begrenzt (deterministisch für den Fingerprint).
-updates.sort((a, b) => String(b.date).localeCompare(String(a.date)));
-updates = updates.slice(0, 20);
+// Cross-Source-Dedup + Album-Filter + neueste-zuerst, auf 20 begrenzt
+// (deterministisch für den Fingerprint). Siehe tools/feed-merge.mjs.
+const updates = dedupeUpdates([ytUpdates, scUpdates, spUpdates], albMeta.map((a) => a.title), 20);
 
 // ---- Fingerprint aus stabilen Feldern, die der billige Pass kennt --------
 // Nur Felder aus /artist/{id}/albums (KEIN nb_tracks — das gibt's nur im

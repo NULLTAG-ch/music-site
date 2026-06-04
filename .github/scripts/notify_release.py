@@ -18,13 +18,19 @@ stdlib-only (urllib/json/subprocess) — keine Dependencies, kein pip-Step nöti
 
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.parse
 import urllib.request
 from html import escape
 
-RELEASES_FILE = "releases.json"
+RELEASES_FILE = os.environ.get("RELEASES_FILE", "releases.json")
+# Persistenter "schon angekündigt"-Ledger. Sobald eine Album-id oder ein
+# Update-Key hier steht, wird er NIE wieder gepostet — selbst wenn das Item
+# aus releases.json verschwindet und später wieder auftaucht (Quellen flattern).
+# Genau dieses Flattern war der Grund für Mehrfach-Posts desselben Releases.
+LEDGER_FILE = os.environ.get("LEDGER_FILE", "announced.json")
 API = "https://api.telegram.org/bot{token}/{method}"
 
 # Album-Felder, deren Änderung einen "✏️ geändert"-Post auslöst.
@@ -75,6 +81,26 @@ def update_key(u):
     return u.get("url") or f"{u.get('date')}|{u.get('platform')}|{u.get('text')}"
 
 
+_PAREN = re.compile(r"\([^)]*\)|\[[^\]]*\]")
+_FEAT = re.compile(r"\bfeat\.?\b.*$")
+_NONALNUM = re.compile(r"[^a-z0-9]+")
+
+
+def norm_title(s):
+    """Mirror of normTitle() in tools/feed-merge.mjs."""
+    s = (s or "").lower()
+    s = _PAREN.sub(" ", s)
+    s = _FEAT.sub(" ", s)
+    s = _NONALNUM.sub(" ", s)
+    return s.strip()
+
+
+def update_ledger_key(u):
+    """Dedup key for the announce-ledger: normalised title (so the SAME song on
+    YouTube AND SoundCloud is announced once), falling back to the url."""
+    return norm_title(u.get("text")) or update_key(u)
+
+
 def fmt_date(iso):
     parts = (iso or "").split("-")
     return f"{parts[2]}.{parts[1]}.{parts[0]}" if len(parts) == 3 else (iso or "")
@@ -109,7 +135,31 @@ def changed_fields(old, new):
     return diffs
 
 
+def load_ledger():
+    """(ledger, existed). ledger = {'albums': set, 'updates': set}."""
+    try:
+        with open(LEDGER_FILE, encoding="utf-8") as fh:
+            d = json.load(fh)
+        return {"albums": set(d.get("albums") or []),
+                "updates": set(d.get("updates") or [])}, True
+    except FileNotFoundError:
+        return {"albums": set(), "updates": set()}, False
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"::warning::Ledger unlesbar ({e}) — behandle als leer.")
+        return {"albums": set(), "updates": set()}, False
+
+
+def save_ledger(led):
+    data = {"albums": sorted(led["albums"]), "updates": sorted(led["updates"])}
+    with open(LEDGER_FILE, "w", encoding="utf-8") as fh:
+        json.dump(data, fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
+
+
 def telegram(method, params):
+    if os.environ.get("DRY_RUN"):
+        print(f"DRY {method}: {params.get('caption') or params.get('text')}")
+        return
     token = os.environ["TELEGRAM_TOKEN"]
     data = urllib.parse.urlencode(params).encode()
     url = API.format(token=token, method=method)
@@ -164,34 +214,55 @@ def send_update(chat, u):
 
 
 def main():
-    chat = os.environ.get("TELEGRAM_CHAT_ID")
-    if not chat or not os.environ.get("TELEGRAM_TOKEN"):
-        print("::error::TELEGRAM_TOKEN / TELEGRAM_CHAT_ID fehlen.")
-        return 1
-
     current = load_current()
-    previous = load_previous()
-    if previous is None:
-        print("::notice::Kein Baseline-Stand (erster Lauf) — kein Post.")
+    cur_albums = albums_by_id(extract_albums(current))
+    # Keyed by normalised title → same song across platforms collapses to one.
+    cur_updates = {}
+    for u in extract_updates(current):
+        cur_updates.setdefault(update_ledger_key(u), u)
+
+    ledger, ledger_existed = load_ledger()
+
+    # Erstlauf ohne Ledger: aktuellen Katalog als "bereits bekannt" einlesen und
+    # NICHTS posten — sonst würde der gesamte Backlog auf einmal gespammt.
+    if not ledger_existed:
+        ledger["albums"].update(cur_albums)
+        ledger["updates"].update(cur_updates)
+        save_ledger(ledger)
+        print(f"::notice::Announce-Ledger initialisiert "
+              f"({len(cur_albums)} Alben, {len(cur_updates)} Updates) — kein Post.")
         return 0
 
-    cur_albums = albums_by_id(extract_albums(current))
-    prev_albums = albums_by_id(extract_albums(previous))
-    cur_updates = {update_key(u): u for u in extract_updates(current)}
-    prev_update_keys = {update_key(u) for u in extract_updates(previous)}
+    chat = os.environ.get("TELEGRAM_CHAT_ID")
+    if not chat or not os.environ.get("TELEGRAM_TOKEN"):
+        if os.environ.get("DRY_RUN"):
+            chat = chat or "DRY"
+        else:
+            print("::error::TELEGRAM_TOKEN / TELEGRAM_CHAT_ID fehlen.")
+            return 1
 
-    added = [cur_albums[i] for i in cur_albums if i not in prev_albums]
-    removed = [prev_albums[i] for i in prev_albums if i not in cur_albums]
+    # Neu/Update wird gegen den persistenten Ledger geprüft (nicht nur gegen den
+    # letzten Commit) — Wiederauftauchen löst daher keinen erneuten Post aus.
+    added = [cur_albums[i] for i in cur_albums if i not in ledger["albums"]]
+    new_updates = {k: cur_updates[k] for k in cur_updates if k not in ledger["updates"]}
+
+    # Geändert/entfernt bleibt ein Diff gegen den letzten committeten Stand
+    # (HEAD): das sind echte Übergänge, kein Flatter-Problem.
+    previous = load_previous()
+    prev_albums = albums_by_id(extract_albums(previous)) if previous else {}
     modified = [(prev_albums[i], cur_albums[i]) for i in cur_albums if i in prev_albums]
-    new_updates = [cur_updates[k] for k in cur_updates if k not in prev_update_keys]
+    removed = [prev_albums[i] for i in prev_albums if i not in cur_albums]
 
     errors = 0
     posted = 0
 
-    def attempt(fn, what, *args):
+    def attempt(fn, what, remember, *args):
+        """remember = (bucket, key) das bei Erfolg in den Ledger wandert, oder None."""
         nonlocal errors, posted
         try:
             fn(chat, *args)
+            if remember:
+                ledger[remember[0]].add(remember[1])
             posted += 1
             print(f"[{what}]")
         except Exception as e:  # noqa: BLE001 — eine Nachricht darf den Rest nicht killen
@@ -199,18 +270,20 @@ def main():
             print(f"::error::Post ({what}) fehlgeschlagen: {e}")
 
     for rel in added:
-        attempt(send_new, f"neu: {rel.get('title')}", rel)
+        attempt(send_new, f"neu: {rel.get('title')}", ("albums", str(rel.get("id"))), rel)
     for old, new in modified:
         diffs = changed_fields(old, new)
         if diffs:
-            attempt(send_changed, f"geändert: {new.get('title')}", old, new, diffs)
+            attempt(send_changed, f"geändert: {new.get('title')}", None, old, new, diffs)
     for rel in removed:
-        attempt(send_removed, f"entfernt: {rel.get('title')}", rel)
-    for u in new_updates:
-        attempt(send_update, f"update: {u.get('text')}", u)
+        attempt(send_removed, f"entfernt: {rel.get('title')}", None, rel)
+    for k, u in new_updates.items():
+        attempt(send_update, f"update: {u.get('text')}", ("updates", k), u)
+
+    save_ledger(ledger)
 
     if posted == 0 and errors == 0:
-        print("::notice::releases.json geändert, aber keine relevante Diff — kein Post.")
+        print("::notice::Keine neuen Releases/Updates — kein Post.")
 
     return 1 if errors else 0
 
