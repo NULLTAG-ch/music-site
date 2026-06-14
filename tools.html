@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NULLTAG · Tools &amp; Gadgets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="colors_and_type.css" />
+<style>
+  body { overflow-x: hidden; }
+  *, *::before, *::after { box-sizing: border-box; }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: var(--s-8) var(--s-7) var(--s-10); }
+
+  /* page head */
+  .phead { border-bottom: 1px solid var(--border); padding-bottom: var(--s-6); margin-bottom: var(--s-8); }
+  .phead .eye { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--tiefrot); margin-bottom: var(--s-3); }
+  .phead h1 { font-family: var(--font-brutal); font-weight: 800; font-size: clamp(40px, 7vw, 84px); line-height: 0.9; letter-spacing: -0.03em; text-transform: uppercase; margin: 0; color: var(--bone); }
+  .phead p { font-family: var(--font-grotesk); font-size: 16px; line-height: 1.6; color: var(--bone-dim); max-width: 62ch; margin: var(--s-5) 0 0; }
+
+  /* gadget shell */
+  .gadgets { display: grid; gap: var(--s-7); }
+  .gadget { border: 1px solid var(--border); }
+  .gadget__bar { display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--panel); }
+  .gadget__id { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); display: flex; gap: 10px; align-items: center; }
+  .gadget__id b { color: var(--bone); font-weight: 500; }
+  .gadget__id .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tiefrot); box-shadow: 0 0 8px var(--tiefrot); }
+  .gadget__embed { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-deep); background: var(--void); border: 1px solid var(--border-warm); border-radius: var(--r-md); padding: 5px 10px; cursor: pointer; transition: all var(--t-base) var(--ease); }
+  .gadget__embed:hover { color: var(--bone); border-color: var(--tiefrot); }
+  .gadget__note { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--muted); padding: 12px 16px; border-top: 1px solid var(--border); background: var(--void-deep); }
+  .gadget__note code { font-size: 11px; }
+
+  /* ===== G-01 COUNTDOWN ===== */
+  .cd { display: grid; grid-template-columns: 220px 1fr; gap: 0; background: radial-gradient(ellipse at 80% 30%, #1a0e02 0%, var(--void) 60%); }
+  .cd__cover { position: relative; aspect-ratio: 1/1; overflow: hidden; border-right: 1px solid var(--border); }
+  .cd__cover img { width: 100%; height: 100%; object-fit: cover; }
+  .cd__cover .tag { position: absolute; top: 12px; left: 12px; background: var(--tiefrot); color: var(--void); font-family: var(--font-mono); font-size: 9.5px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 4px 8px; }
+  .cd__body { padding: var(--s-7); display: flex; flex-direction: column; justify-content: center; }
+  .cd__eye { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: var(--s-2); }
+  .cd__title { font-family: var(--font-display); font-size: 52px; line-height: 0.86; text-transform: uppercase; color: var(--bone); margin: 0 0 var(--s-2); }
+  .cd__sub { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--cosmic-glow); margin-bottom: var(--s-5); }
+  .cd__clock { display: flex; gap: var(--s-4); }
+  .cd__unit { display: flex; flex-direction: column; gap: 6px; }
+  .cd__num { font-family: var(--font-mono); font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: -0.02em; color: var(--bone); font-variant-numeric: tabular-nums; }
+  .cd__lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-deep); }
+  .cd__when { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-top: var(--s-5); }
+  @media (max-width: 640px){ .cd { grid-template-columns: 1fr; } .cd__cover { border-right: 0; border-bottom: 1px solid var(--border); max-height: 200px; aspect-ratio: auto; } .cd__num { font-size: 34px; } }
+
+  /* ===== G-02 SMART LINK ===== */
+  .sl { display: grid; grid-template-columns: 200px 1fr; gap: var(--s-7); padding: var(--s-7); align-items: center; }
+  .sl__cover { aspect-ratio: 1/1; border: 1px solid var(--border); box-shadow: var(--shadow-cover); overflow: hidden; }
+  .sl__cover img { width: 100%; height: 100%; object-fit: cover; }
+  .sl__eye { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tiefrot); margin-bottom: var(--s-2); }
+  .sl__title { font-family: var(--font-display); font-size: 40px; line-height: 0.9; text-transform: uppercase; color: var(--bone); margin: 0 0 var(--s-2); }
+  .sl__meta { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--muted); margin-bottom: var(--s-5); }
+  .sl__platforms { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .sl__platforms a { display: flex; align-items: center; justify-content: space-between; background: var(--void); color: var(--bone); text-decoration: none; padding: 12px 14px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; transition: all var(--t-base) var(--ease); }
+  .sl__platforms a:hover { background: var(--panel); color: var(--tiefrot); }
+  .sl__copy { margin-top: var(--s-5); display: flex; gap: var(--s-3); align-items: center; }
+  @media (max-width: 640px){ .sl { grid-template-columns: 1fr; } }
+
+  /* ===== G-03 SCHIENE FINDER ===== */
+  .sf { padding: var(--s-7); }
+  .sf__q { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: var(--s-4); }
+  .sf__prompt { font-family: var(--font-brutal); font-weight: 800; font-size: 26px; line-height: 1.05; letter-spacing: -0.02em; text-transform: uppercase; color: var(--bone); margin: 0 0 var(--s-5); }
+  .sf__opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: var(--s-3); }
+  .sf__opt { text-align: left; background: var(--void); border: 1px solid var(--border); color: var(--bone-dim); font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; padding: 16px; cursor: pointer; transition: all var(--t-base) var(--ease); }
+  .sf__opt:hover { border-color: var(--tiefrot); background: var(--tiefrot-dim); color: var(--bone); }
+  .sf__progress { display: flex; gap: 6px; margin-top: var(--s-6); }
+  .sf__progress span { flex: 1; height: 3px; background: var(--border); }
+  .sf__progress span.on { background: var(--tiefrot); }
+  /* result */
+  .sf__res { display: none; grid-template-columns: 200px 1fr; gap: var(--s-7); align-items: center; }
+  .sf__res.show { display: grid; }
+  .sf__rescover { aspect-ratio: 1/1; border: 1px solid var(--border); box-shadow: var(--shadow-cover); overflow: hidden; }
+  .sf__rescover img { width: 100%; height: 100%; object-fit: cover; }
+  .sf__reseye { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: var(--s-2); }
+  .sf__resname { font-family: var(--font-display); font-size: 56px; line-height: 0.86; text-transform: uppercase; margin: 0 0 var(--s-3); }
+  .sf__resdesc { font-family: var(--font-grotesk); font-size: 15px; line-height: 1.6; color: var(--bone-dim); margin: 0 0 var(--s-5); max-width: 50ch; }
+  .sf__restrack { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: var(--muted); margin-bottom: var(--s-5); }
+  .sf__restrack b { color: var(--bone); font-weight: 500; }
+  @media (max-width: 640px){ .sf__res.show { grid-template-columns: 1fr; } }
+
+  .btn-x { display:inline-flex; align-items:center; gap:8px; background: var(--void); color: var(--bone); border: 1px solid var(--border-warm); border-radius: var(--r-md); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 9px 14px; cursor: pointer; text-decoration:none; transition: all var(--t-base) var(--ease); }
+  .btn-x:hover { border-color: var(--tiefrot); background: var(--tiefrot-dim); }
+  .btn-x--primary { background: var(--tiefrot); border-color: var(--tiefrot); color: var(--void); font-weight:700; }
+  .btn-x--primary:hover { background: var(--bone); border-color: var(--bone); color: var(--void); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="phead">
+    <div class="eye">§ TOOLS · GADGETS · EMBEDDABLE</div>
+    <h1>Tools</h1>
+    <p>Kleine, einbettbare Marketing-Module — gebaut auf dem NULLTAG-System (void · bone · ein TIEFROT-Mark · JetBrains Mono). Jedes Gadget läuft framework-frei und lässt sich per <code>&lt;iframe&gt;</code> in Linkfire, Notion, Reddit-Posts oder direkt auf <b>music.nulltag.ch</b> einbinden.</p>
+  </div>
+
+  <div class="gadgets">
+
+    <!-- G-01 · DROP COUNTDOWN -->
+    <section class="gadget" data-w="countdown">
+      <div class="gadget__bar">
+        <div class="gadget__id"><span class="dot"></span><b>G-01</b> · Drop-Countdown</div>
+        <button class="gadget__embed" data-embed="countdown">&lt;/&gt; Embed</button>
+      </div>
+      <div class="cd">
+        <div class="cd__cover"><span class="tag">● NEXT DROP</span><img id="cd-cover" src="covers/microwave.jpg" alt="Next drop cover" /></div>
+        <div class="cd__body">
+          <div class="cd__eye" id="cd-cat">LJ-11 · LICHTJAHRE</div>
+          <h3 class="cd__title" id="cd-title">Microwave</h3>
+          <div class="cd__sub" id="cd-sub">Cosmic Frenchcore · 190 BPM · Lichtjahr Vol.2</div>
+          <div class="cd__clock">
+            <div class="cd__unit"><div class="cd__num" id="cd-d">00</div><div class="cd__lbl">Tage</div></div>
+            <div class="cd__unit"><div class="cd__num" id="cd-h">00</div><div class="cd__lbl">Std</div></div>
+            <div class="cd__unit"><div class="cd__num" id="cd-m">00</div><div class="cd__lbl">Min</div></div>
+            <div class="cd__unit"><div class="cd__num" id="cd-s">00</div><div class="cd__lbl">Sek</div></div>
+          </div>
+          <div class="cd__when" id="cd-when">Freitag, 20. Juni 2026 · 10:00 CEST</div>
+        </div>
+      </div>
+      <div class="gadget__note">Zählt automatisch zum nächsten Single-Drop (freitags 10:00 CEST) und springt nach dem Release zum nächsten Track. <code>&lt;iframe src="tools.html?w=countdown" width="640" height="280"&gt;</code></div>
+    </section>
+
+    <!-- G-02 · SMART LINK -->
+    <section class="gadget" data-w="smartlink">
+      <div class="gadget__bar">
+        <div class="gadget__id"><span class="dot"></span><b>G-02</b> · Smart-Link · „Hör überall"</div>
+        <button class="gadget__embed" data-embed="smartlink">&lt;/&gt; Embed</button>
+      </div>
+      <div class="sl">
+        <div class="sl__cover"><img src="covers/supernova.jpg" alt="Supernova cover" /></div>
+        <div>
+          <div class="sl__eye">LJ-10 · LICHTJAHRE · SINGLE</div>
+          <h3 class="sl__title">Supernova</h3>
+          <div class="sl__meta">200 BPM · A♭m · 03:48 · WAV · MP3-320</div>
+          <div class="sl__platforms">
+            <a href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span>SoundCloud</span><span>↗</span></a>
+            <a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><span>Spotify</span><span>↗</span></a>
+            <a href="https://music.apple.com/ch/artist/nulltag" target="_blank" rel="noopener"><span>Apple Music</span><span>↗</span></a>
+            <a href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" target="_blank" rel="noopener"><span>YouTube</span><span>↗</span></a>
+            <a href="https://www.deezer.com/artist/388775221" target="_blank" rel="noopener"><span>Deezer</span><span>↗</span></a>
+          </div>
+          <div class="sl__copy">
+            <button class="btn-x btn-x--primary" id="sl-copy">⧉ Link kopieren</button>
+            <span class="sl__meta" style="margin:0">music.nulltag.ch/s/supernova</span>
+          </div>
+        </div>
+      </div>
+      <div class="gadget__note">Ein Link, alle Plattformen — Pre-Save-/Linkfire-Ersatz, direkt gebrandet. Reihenfolge der Buttons = Streaming-Priorität aus <code>config.js</code>.</div>
+    </section>
+
+    <!-- G-03 · SCHIENE FINDER -->
+    <section class="gadget" data-w="finder">
+      <div class="gadget__bar">
+        <div class="gadget__id"><span class="dot"></span><b>G-03</b> · Schiene-Finder</div>
+        <button class="gadget__embed" data-embed="finder">&lt;/&gt; Embed</button>
+      </div>
+      <div class="sf">
+        <div id="sf-quiz">
+          <div class="sf__q" id="sf-qnum">Frage 01 / 03</div>
+          <h3 class="sf__prompt" id="sf-prompt">Wann hörst du am liebsten?</h3>
+          <div class="sf__opts" id="sf-opts"></div>
+          <div class="sf__progress" id="sf-prog"><span class="on"></span><span></span><span></span></div>
+        </div>
+        <div class="sf__res" id="sf-res">
+          <div class="sf__rescover"><img id="sf-rescover" src="" alt="Empfohlenes Cover" /></div>
+          <div>
+            <div class="sf__reseye">DEINE SCHIENE</div>
+            <h3 class="sf__resname" id="sf-resname"></h3>
+            <p class="sf__resdesc" id="sf-resdesc"></p>
+            <div class="sf__restrack" id="sf-restrack"></div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <a class="btn-x btn-x--primary" id="sf-listen" href="#" target="_blank" rel="noopener">▶ Track hören</a>
+              <button class="btn-x" id="sf-restart">↻ Nochmal</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="gadget__note">Spielerischer Einstieg → leitet Fans auf die passende Schiene + einen Track. Gut für Stories/Reels mit „Swipe up".</div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  // ===== widget mode: ?w=countdown|smartlink|finder isolates one gadget =====
+  (function(){
+    var w = new URLSearchParams(location.search).get("w");
+    if (!w) return;
+    document.body.classList.add("embed");
+    var ph = document.querySelector(".phead"); if (ph) ph.style.display = "none";
+    [].forEach.call(document.querySelectorAll(".gadget"), function(g){
+      if (g.dataset.w !== w) g.style.display = "none";
+      else { var bar = g.querySelector(".gadget__bar"), note = g.querySelector(".gadget__note"); if (bar) bar.style.display="none"; if (note) note.style.display="none"; }
+    });
+    var wrap = document.querySelector(".wrap"); if (wrap) wrap.style.padding = "0";
+  })();
+
+  // ===== G-01 · COUNTDOWN =====
+  // Upcoming drops (UTC instants; 10:00 CEST = 08:00 UTC). Auto-advances.
+  var DROPS = [
+    { cat:"LJ-11 · LICHTJAHRE", title:"Microwave",   sub:"Cosmic Frenchcore · 190 BPM · Lichtjahr Vol.2", cover:"covers/microwave.jpg",   when:"Freitag, 20. Juni 2026 · 10:00 CEST", t:Date.UTC(2026,5,20,8,0,0) },
+    { cat:"LJ-12 · LICHTJAHRE", title:"Last Light",   sub:"Atmospheric Closer · 185 BPM · Lichtjahr Vol.2", cover:"covers/last_light.jpg", when:"Donnerstag, 2. Juli 2026 · 10:00 CEST", t:Date.UTC(2026,6,2,8,0,0) },
+    { cat:"EP · LICHTJAHR VOL.2", title:"Vol.2 EP",    sub:"Full EP + Playlist · 6 Tracks",                  cover:"covers/lichtjahr_vol2.jpg",              when:"Donnerstag, 2. Juli 2026 · 10:00 CEST", t:Date.UTC(2026,6,2,8,0,0) }
+  ];
+  function activeDrop(){ var now=Date.now(); for (var i=0;i<DROPS.length;i++){ if (DROPS[i].t > now) return DROPS[i]; } return DROPS[DROPS.length-1]; }
+  function pad(n){ return (n<10?"0":"")+n; }
+  function tickCountdown(){
+    var d = activeDrop();
+    document.getElementById("cd-cat").textContent = d.cat;
+    document.getElementById("cd-title").textContent = d.title;
+    document.getElementById("cd-sub").textContent = d.sub;
+    document.getElementById("cd-when").textContent = d.when;
+    document.getElementById("cd-cover").src = d.cover;
+    var diff = Math.max(0, d.t - Date.now());
+    var s = Math.floor(diff/1000);
+    document.getElementById("cd-d").textContent = pad(Math.floor(s/86400));
+    document.getElementById("cd-h").textContent = pad(Math.floor((s%86400)/3600));
+    document.getElementById("cd-m").textContent = pad(Math.floor((s%3600)/60));
+    document.getElementById("cd-s").textContent = pad(s%60);
+  }
+  tickCountdown(); setInterval(tickCountdown, 1000);
+
+  // ===== G-02 · SMART LINK copy =====
+  document.getElementById("sl-copy").addEventListener("click", function(){
+    var url = "https://music.nulltag.ch/s/supernova";
+    if (navigator.clipboard) navigator.clipboard.writeText(url);
+    var b = this; var t = b.textContent; b.textContent = "✓ Kopiert"; setTimeout(function(){ b.textContent = t; }, 1400);
+  });
+
+  // ===== G-03 · SCHIENE FINDER =====
+  var QUESTIONS = [
+    { q:"Wann hörst du am liebsten?", opts:[
+      {t:"Peak-Time, Hände hoch", s:"dome"},
+      {t:"Hymnisch, Sterne über dir", s:"lichtjahr"},
+      {t:"Kino im Kopf, allein", s:"cinetekk"},
+      {t:"Egal — Hauptsache speziell", s:"standalone"} ]},
+    { q:"Welches Tempo?", opts:[
+      {t:"Schnell & euphorisch (190+)", s:"lichtjahr"},
+      {t:"Festival-Mainstage (188–200)", s:"dome"},
+      {t:"Langsam, cineastisch (150)", s:"cinetekk"},
+      {t:"Treibend, Hands-Up (110–175)", s:"dist"} ]},
+    { q:"Sprache & Stimmung?", opts:[
+      {t:"Englisch, kosmisch", s:"lichtjahr"},
+      {t:"Deutsch, sparsam & dunkel", s:"cinetekk"},
+      {t:"Deutsch, Hardtek/Hands-Up", s:"dist"},
+      {t:"Egal — Single-Statement", s:"standalone"} ]}
+  ];
+  var RESULT = {
+    lichtjahr:{ name:"Lichtjahr", color:"var(--cosmic-glow)", desc:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Aeolian/Phrygian-Dom, Kicks auf Planetenbewegung getunt. Vol.1 komplett, Vol.2 im Rollout.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg" },
+    cinetekk:{ name:"Cinetekk", color:"var(--crimson)", desc:"Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. Album 9/9 live.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg" },
+    dome:{ name:"Dome EP", color:"var(--glut-glow)", desc:"Festival-Frenchcore, euphoric Peaktime-Mainstage-Anthem als Story-Arc: Arrival → Communion → Intimacy → Surrender. 4/4 live.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg" },
+    dist:{ name:"Distribution", color:"var(--knochen-glow)", desc:"Trance, Hard Techno und Hands-Up für die Distribution — Tausend Stimmen, BLACKBOX EP, Tonband-Singles (DE Hardtek). 16 Tracks live.", track:"BLACKBOX · BB-01 · 130 BPM", cover:"assets/avatar.svg" },
+    standalone:{ name:"Standalones", color:"var(--cold-blue)", desc:"Reine NULLTAG-Singles mit eigenem Catalog — Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music.", track:"Peace Remains · NULLTAG-10 · 190 BPM", cover:"covers/peace_remains.jpg" }
+  };
+  var sfStep = 0, sfScore = {};
+  function renderQ(){
+    var Q = QUESTIONS[sfStep];
+    document.getElementById("sf-qnum").textContent = "Frage " + (sfStep+1<10?"0":"") + (sfStep+1) + " / 03";
+    document.getElementById("sf-prompt").textContent = Q.q;
+    var box = document.getElementById("sf-opts"); box.innerHTML = "";
+    Q.opts.forEach(function(o){
+      var b = document.createElement("button"); b.className = "sf__opt"; b.textContent = o.t;
+      b.addEventListener("click", function(){ sfScore[o.s] = (sfScore[o.s]||0)+1; sfStep++; advance(); });
+      box.appendChild(b);
+    });
+    var prog = document.getElementById("sf-prog").children;
+    for (var i=0;i<prog.length;i++) prog[i].className = i<=sfStep ? "on" : "";
+  }
+  function advance(){
+    if (sfStep < QUESTIONS.length) { renderQ(); return; }
+    // pick top-scored schiene
+    var best=null, bestN=-1; for (var k in sfScore){ if (sfScore[k]>bestN){ bestN=sfScore[k]; best=k; } }
+    var r = RESULT[best] || RESULT.lichtjahre;
+    document.getElementById("sf-quiz").style.display = "none";
+    var res = document.getElementById("sf-res"); res.classList.add("show");
+    var nm = document.getElementById("sf-resname"); nm.textContent = r.name; nm.style.color = r.color;
+    document.getElementById("sf-resdesc").textContent = r.desc;
+    document.getElementById("sf-restrack").innerHTML = "Empfehlung: <b>" + r.track + "</b>";
+    document.getElementById("sf-rescover").src = r.cover;
+    document.getElementById("sf-listen").href = "https://soundcloud.com/nulltag";
+  }
+  document.getElementById("sf-restart").addEventListener("click", function(){
+    sfStep = 0; sfScore = {}; document.getElementById("sf-res").classList.remove("show");
+    document.getElementById("sf-quiz").style.display = "block"; renderQ();
+  });
+  renderQ();
+
+  // embed buttons (demo) — copy an iframe snippet
+  [].forEach.call(document.querySelectorAll(".gadget__embed"), function(btn){
+    btn.addEventListener("click", function(){
+      var w = btn.dataset.embed;
+      var snip = '<iframe src="https://music.nulltag.ch/tools.html?w='+w+'" width="640" height="320" style="border:0" loading="lazy"></iframe>';
+      if (navigator.clipboard) navigator.clipboard.writeText(snip);
+      var t = btn.textContent; btn.textContent = "✓ Snippet kopiert"; setTimeout(function(){ btn.textContent = t; }, 1400);
+    });
+  });
+</script>
+</body>
+</html>

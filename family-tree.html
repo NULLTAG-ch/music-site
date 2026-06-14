@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NULLTAG · Family Tree of Techno / EDM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="colors_and_type.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { overflow-x: hidden; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: var(--s-8) var(--s-7) var(--s-9); }
+
+  .phead { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--s-6); border-bottom: 1px solid var(--border); padding-bottom: var(--s-5); margin-bottom: var(--s-6); flex-wrap: wrap; }
+  .phead .eye { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--tiefrot); margin-bottom: var(--s-3); }
+  .phead h1 { font-family: var(--font-brutal); font-weight: 800; font-size: clamp(34px, 5.5vw, 64px); line-height: 0.9; letter-spacing: -0.03em; text-transform: uppercase; margin: 0; color: var(--bone); }
+  .phead p { font-family: var(--font-grotesk); font-size: 14.5px; line-height: 1.6; color: var(--bone-dim); max-width: 46ch; margin: 0; }
+
+  .legend { display: flex; gap: var(--s-6); flex-wrap: wrap; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: var(--s-5); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend i { width: 14px; height: 14px; display: inline-block; }
+  .legend .lg-gen { border: 1px solid var(--border-warm); background: var(--panel); }
+  .legend .lg-nt { border: 1px solid var(--tiefrot); background: var(--tiefrot-dim); box-shadow: 0 0 8px rgba(255,42,85,0.4); }
+  .legend .lg-hint { color: var(--muted-deep); }
+
+  /* scroll frame */
+  .scroller { overflow-x: auto; border: 1px solid var(--border); background:
+      radial-gradient(ellipse at 85% 20%, rgba(232,121,196,0.05) 0%, transparent 55%),
+      var(--void); }
+  .tree { position: relative; margin: 0 auto; }
+  .tree svg { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+  .edge { fill: none; stroke: var(--border-warm); stroke-width: 1.2; transition: stroke 200ms var(--ease), stroke-width 200ms var(--ease), opacity 200ms var(--ease); }
+  .edge.lit { stroke: var(--tiefrot); stroke-width: 2; opacity: 1; }
+  .edge.dim { opacity: 0.12; }
+
+  .col-head { position: absolute; z-index: 2; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); text-align: center; }
+  .col-head b { display: block; color: var(--bone-dim); font-weight: 500; margin-bottom: 3px; }
+
+  .node { position: absolute; z-index: 3; background: var(--panel); border: 1px solid var(--border-warm); padding: 10px 12px; cursor: pointer; overflow: hidden; transition: border-color 180ms var(--ease), background 180ms var(--ease), opacity 180ms var(--ease), transform 180ms var(--ease); }
+  .node:hover { border-color: var(--bone-dim); }
+  .node .n-label { font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.02em; color: var(--bone); line-height: 1.15; }
+  .node .n-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; color: var(--muted); margin-top: 3px; text-transform: uppercase; }
+  .node .n-year { position: absolute; top: 8px; right: 10px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted-deep); }
+  .node.nt { background: linear-gradient(180deg, rgba(255,42,85,0.07), var(--panel)); border-color: var(--tiefrot); }
+  .node.nt .n-label { color: var(--bone); }
+  .node.nt::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--tiefrot); }
+  .node.dim { opacity: 0.22; }
+  .node.lit { border-color: var(--bone); background: var(--code-bg); }
+  .node.lit.nt { border-color: var(--tiefrot); box-shadow: 0 0 16px rgba(255,42,85,0.35); }
+  .node.sel { border-color: var(--tiefrot); box-shadow: 0 0 0 1px var(--tiefrot); }
+
+  /* info panel */
+  .info { margin-top: var(--s-6); border: 1px solid var(--border); background: var(--panel); padding: var(--s-6) var(--s-7); display: grid; grid-template-columns: 1fr auto; gap: var(--s-5); align-items: start; min-height: 120px; }
+  .info__eye { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tiefrot); margin-bottom: var(--s-2); }
+  .info__title { font-family: var(--font-brutal); font-weight: 800; font-size: 28px; line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; color: var(--bone); margin: 0 0 var(--s-2); }
+  .info__sub { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; color: var(--bone-dim); margin-bottom: var(--s-3); }
+  .info__desc { font-family: var(--font-grotesk); font-size: 14.5px; line-height: 1.6; color: var(--bone-dim); max-width: 64ch; margin: 0; }
+  .info__lineage { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--muted); margin-top: var(--s-4); }
+  .info__lineage b { color: var(--bone); font-weight: 500; }
+  .info__reset { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); background: var(--void); border: 1px solid var(--border-warm); padding: 8px 12px; cursor: pointer; white-space: nowrap; transition: all 150ms var(--ease); }
+  .info__reset:hover { border-color: var(--tiefrot); color: var(--bone); }
+  @media (max-width: 640px){ .info { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="phead">
+    <div>
+      <div class="eye">§ LINEAGE · TECHNO / EDM · FAMILY TREE</div>
+      <h1>Family Tree</h1>
+    </div>
+    <p>Von Kraftwerk &amp; Disco bis zu NULLTAGs fünf Schienen. Klick einen Knoten — die Abstammungslinie leuchtet auf. <b style="color:var(--bone)">Rot = NULLTAG</b>.</p>
+  </div>
+
+  <div class="legend">
+    <span><i class="lg-gen"></i> Genre / Era</span>
+    <span><i class="lg-nt"></i> NULLTAG-Schiene</span>
+    <span class="lg-hint">→ Knoten klicken für Lineage &amp; Details · horizontal scrollen</span>
+  </div>
+
+  <div class="scroller">
+    <div class="tree" id="tree">
+      <svg id="edges"></svg>
+    </div>
+  </div>
+
+  <div class="info" id="info">
+    <div>
+      <div class="info__eye" id="info-eye">START</div>
+      <h2 class="info__title" id="info-title">Wähle einen Knoten</h2>
+      <div class="info__sub" id="info-sub">Der Stammbaum elektronischer Tanzmusik — vereinfacht auf die Hauptlinien.</div>
+      <p class="info__desc" id="info-desc">Jede NULLTAG-Schiene sitzt am Ende einer echten Genre-Linie: LICHTJAHR &amp; DOME aus dem Frenchcore, CINETEKK aus dem Techno, Distribution aus Trance / Hard&nbsp;Techno / Hands-Up. Klick eine Schiene, um ihre Herkunft zu sehen — oder ein Wurzel-Genre, um zu sehen, was daraus wurde.</p>
+      <div class="info__lineage" id="info-lineage"></div>
+    </div>
+    <button class="info__reset" id="info-reset">↻ Reset</button>
+  </div>
+</div>
+
+<script>
+  var NODES = [
+    { id:"kraftwerk", col:0, label:"Kraftwerk · Electro", year:"’74", origin:"Düsseldorf, DE", desc:"Maschinen-Funk, Sequencer, Vocoder — der Urknall elektronischer Tanzmusik." },
+    { id:"disco",     col:0, label:"Disco · Italo",       year:"’77", origin:"NYC · Italien", desc:"Four-on-the-floor, Synth-Bass, 12-Inch-Kultur — das rhythmische Fundament von House." },
+
+    { id:"chicago",   col:1, label:"Chicago House",       year:"’84", origin:"Chicago, US", desc:"Drum-Machine + Disco-Edits, 120–130 BPM. Mutter aller 4/4-Dance-Genres." },
+    { id:"detroit",   col:1, label:"Detroit Techno",      year:"’85", origin:"Detroit, US", desc:"Kraftwerk × Funk — futuristisch & maschinell. Hier beginnt der Techno-Stammbaum." },
+    { id:"acid",      col:1, label:"Acid House",          year:"’87", origin:"Chicago, US", desc:"Die TB-303 quietscht. Treibstoff für Rave, Trance und Hardcore." },
+
+    { id:"trance",    col:2, label:"Trance",              year:"’92", origin:"Frankfurt, DE", desc:"Hypnotisch, melodisch, Build-ups & Breakdowns. 130–145 BPM." },
+    { id:"techno",    col:2, label:"Hard / Indus. Techno",year:"’91", origin:"DE · NL", desc:"Härter, schneller, dunkler als Detroit. 140–160 BPM, Moll, cineastisch." },
+    { id:"hardcore",  col:2, label:"Hardcore · Gabber",   year:"’91", origin:"Rotterdam, NL", desc:"Verzerrte Kicks, 160–200 BPM. Wurzel von Frenchcore & Hardstyle." },
+    { id:"handsup",   col:2, label:"Hands-Up · Jumpstyle",year:"’98", origin:"DE · BE", desc:"Euphorische Vocal-Trance trifft harten Kick. Festival, Hände hoch." },
+
+    { id:"frenchcore",col:3, label:"Frenchcore",          year:"’02", origin:"FR", desc:"Rollender, gepitchter Kick, 190–210 BPM. Schnell & euphorisch." },
+    { id:"hardstyle", col:3, label:"Hardstyle · Raw",     year:"’02", origin:"NL", desc:"Reverse-Bass, Euphoric Leads, Mainstage-Drama. 150–160 BPM." },
+
+    { id:"lichtjahr",   col:4, nt:true, label:"LICHTJAHR",    sub:"Cosmic Frenchcore",            desc:"Uplifting-to-symphonic Frenchcore zu Himmelskörper-Bildern. Aeolian / Phrygian-Dom. 188–205 BPM · EN. Vol.1 komplett, Vol.2 im Rollout." },
+    { id:"dome",        col:4, nt:true, label:"DOME EP",      sub:"Festival Frenchcore",          desc:"Euphoric Peaktime-Mainstage-Anthem als Story-Arc: Arrival → Communion → Intimacy → Surrender. 188–200 BPM · EN. 4/4 live." },
+    { id:"cinetekk",    col:4, nt:true, label:"CINETEKK",     sub:"Cinematic Techno · Album",     desc:"Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. 144–160 BPM · DE. Album 9/9 live." },
+    { id:"dist",        col:4, nt:true, label:"DISTRIBUTION", sub:"Trance · Hard Techno · Hands-Up", desc:"Tausend Stimmen, BLACKBOX EP, Tonband-Singles (DE Hardtek / Hands-Up). 110–175 BPM. 16 Tracks live." },
+    { id:"standalones", col:4, nt:true, label:"STANDALONES",  sub:"Singles, heterogen",           desc:"Reine NULLTAG-Singles: Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music. 147–220 BPM." }
+  ];
+
+  var EDGES = [
+    ["kraftwerk","detroit"], ["disco","chicago"], ["disco","detroit"],
+    ["chicago","acid"], ["chicago","trance"], ["detroit","techno"], ["detroit","trance"],
+    ["acid","trance"], ["acid","hardcore"], ["detroit","hardcore"],
+    ["trance","handsup"], ["hardcore","handsup"],
+    ["hardcore","frenchcore"], ["hardcore","hardstyle"],
+    ["frenchcore","lichtjahr"], ["frenchcore","dome"], ["hardstyle","dome"],
+    ["techno","cinetekk"],
+    ["trance","dist"], ["techno","dist"], ["handsup","dist"],
+    ["frenchcore","standalones"], ["trance","standalones"], ["techno","standalones"]
+  ];
+
+  var COLHEAD = [
+    { t:"Roots", s:"1970er" },
+    { t:"Foundations", s:"1980er" },
+    { t:"Genres", s:"1990er" },
+    { t:"Styles", s:"2000er" },
+    { t:"NULLTAG", s:"2026" }
+  ];
+
+  var NODE_W = 188, NODE_H = 62, COL_GAP = 58, V_GAP = 18, HEAD_H = 46, PAD = 26;
+  var byId = {}; NODES.forEach(function(n){ byId[n.id] = n; });
+
+  // layout
+  var cols = [[],[],[],[],[]];
+  NODES.forEach(function(n){ cols[n.col].push(n); });
+  var maxN = Math.max.apply(null, cols.map(function(c){ return c.length; }));
+  var CANVAS_H = maxN * NODE_H + (maxN - 1) * V_GAP;
+  var TOTAL_W = 5 * NODE_W + 4 * COL_GAP + PAD * 2;
+  var TOTAL_H = HEAD_H + CANVAS_H + PAD * 2;
+
+  cols.forEach(function(list, ci){
+    var n = list.length;
+    var totalH = n * NODE_H + (n - 1) * V_GAP;
+    var startY = HEAD_H + PAD + (CANVAS_H - totalH) / 2;
+    list.forEach(function(node, k){
+      node.x = PAD + ci * (NODE_W + COL_GAP);
+      node.y = startY + k * (NODE_H + V_GAP);
+    });
+  });
+
+  var tree = document.getElementById("tree");
+  tree.style.width = TOTAL_W + "px";
+  tree.style.height = TOTAL_H + "px";
+  var svg = document.getElementById("edges");
+  svg.setAttribute("width", TOTAL_W);
+  svg.setAttribute("height", TOTAL_H);
+  svg.setAttribute("viewBox", "0 0 " + TOTAL_W + " " + TOTAL_H);
+
+  // column headers
+  COLHEAD.forEach(function(h, ci){
+    var el = document.createElement("div");
+    el.className = "col-head";
+    el.style.left = (PAD + ci * (NODE_W + COL_GAP)) + "px";
+    el.style.top = PAD + "px";
+    el.style.width = NODE_W + "px";
+    el.innerHTML = "<b>" + h.t + "</b>" + h.s;
+    tree.appendChild(el);
+  });
+
+  // edges
+  EDGES.forEach(function(e, i){
+    var p = byId[e[0]], c = byId[e[1]];
+    var x1 = p.x + NODE_W, y1 = p.y + NODE_H / 2;
+    var x2 = c.x, y2 = c.y + NODE_H / 2;
+    var mx = (x1 + x2) / 2;
+    var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M " + x1 + " " + y1 + " C " + mx + " " + y1 + ", " + mx + " " + y2 + ", " + x2 + " " + y2);
+    path.setAttribute("class", "edge");
+    path.dataset.p = e[0]; path.dataset.c = e[1];
+    svg.appendChild(path);
+  });
+
+  // nodes
+  NODES.forEach(function(n){
+    var el = document.createElement("div");
+    el.className = "node" + (n.nt ? " nt" : "");
+    el.style.left = n.x + "px"; el.style.top = n.y + "px";
+    el.style.width = NODE_W + "px"; el.style.height = NODE_H + "px";
+    el.dataset.id = n.id;
+    el.innerHTML =
+      (n.year ? '<span class="n-year">' + n.year + '</span>' : '') +
+      '<div class="n-label">' + n.label + '</div>' +
+      (n.sub ? '<div class="n-sub">' + n.sub + '</div>' : (n.origin ? '<div class="n-sub">' + n.origin + '</div>' : ''));
+    el.addEventListener("click", function(ev){ ev.stopPropagation(); selectNode(n.id); });
+    tree.appendChild(el);
+  });
+
+  // lineage helpers
+  function ancestors(id, acc){ acc = acc || {}; EDGES.forEach(function(e){ if (e[1] === id && !acc[e[0]]) { acc[e[0]] = 1; ancestors(e[0], acc); } }); return acc; }
+  function descendants(id, acc){ acc = acc || {}; EDGES.forEach(function(e){ if (e[0] === id && !acc[e[1]]) { acc[e[1]] = 1; descendants(e[1], acc); } }); return acc; }
+
+  function selectNode(id){
+    var node = byId[id];
+    var anc = ancestors(id), des = descendants(id);
+    var conn = {}; conn[id] = 1;
+    Object.keys(anc).forEach(function(k){ conn[k] = 1; });
+    Object.keys(des).forEach(function(k){ conn[k] = 1; });
+
+    document.querySelectorAll(".node").forEach(function(el){
+      var nid = el.dataset.id;
+      el.classList.toggle("dim", !conn[nid]);
+      el.classList.toggle("lit", !!conn[nid] && nid !== id);
+      el.classList.toggle("sel", nid === id);
+    });
+    document.querySelectorAll(".edge").forEach(function(el){
+      var on = conn[el.dataset.p] && conn[el.dataset.c];
+      el.classList.toggle("lit", on);
+      el.classList.toggle("dim", !on);
+    });
+
+    // info
+    document.getElementById("info-eye").textContent = node.nt ? "NULLTAG-SCHIENE" : "GENRE · " + (node.origin || "");
+    document.getElementById("info-title").textContent = node.label.replace(/ ·.*$/, "");
+    document.getElementById("info-sub").textContent = node.sub ? node.sub : (node.origin + (node.year ? " · " + node.year : ""));
+    document.getElementById("info-desc").innerHTML = node.desc;
+
+    var lin = "";
+    if (node.nt) {
+      var roots = Object.keys(anc).map(function(k){ return byId[k].label.replace(/ ·.*$/, ""); });
+      lin = "Herkunft: <b>" + roots.reverse().join(" → ") + "</b>";
+    } else {
+      var rails = Object.keys(des).filter(function(k){ return byId[k].nt; }).map(function(k){ return byId[k].label; });
+      lin = rails.length ? "Führt zu: <b>" + rails.join(" · ") + "</b>" : "Wurzel-Genre — Basis späterer Stile.";
+    }
+    document.getElementById("info-lineage").innerHTML = lin;
+  }
+
+  function reset(){
+    document.querySelectorAll(".node").forEach(function(el){ el.classList.remove("dim","lit","sel"); });
+    document.querySelectorAll(".edge").forEach(function(el){ el.classList.remove("dim","lit"); });
+    document.getElementById("info-eye").textContent = "START";
+    document.getElementById("info-title").textContent = "Wähle einen Knoten";
+    document.getElementById("info-sub").textContent = "Der Stammbaum elektronischer Tanzmusik — vereinfacht auf die Hauptlinien.";
+    document.getElementById("info-desc").innerHTML = "Jede NULLTAG-Schiene sitzt am Ende einer echten Genre-Linie: LICHTJAHR &amp; DOME aus dem Frenchcore, CINETEKK aus dem Techno, Distribution aus Trance / Hard&nbsp;Techno / Hands-Up. Klick eine Schiene, um ihre Herkunft zu sehen — oder ein Wurzel-Genre, um zu sehen, was daraus wurde.";
+    document.getElementById("info-lineage").innerHTML = "";
+  }
+  document.getElementById("info-reset").addEventListener("click", reset);
+
+  // default: gently spotlight LICHTJAHR's lineage
+  selectNode("lichtjahr");
+</script>
+</body>
+</html>

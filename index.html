@@ -42,907 +42,214 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="colors_and_type.css" />
-
 <style>
-  /* ===== page chrome ===== */
   html { scroll-behavior: smooth; }
   body { overflow-x: hidden; }
   *, *::before, *::after { box-sizing: border-box; }
   img { display: block; max-width: 100%; }
 
-  .container {
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 var(--s-7);
-  }
-
-  @media (max-width: 720px) {
-    .container { padding: 0 var(--s-5); }
-  }
-
-  .skiplink {
-    position: absolute; left: -9999px; top: 0;
-    background: var(--tiefrot); color: var(--void);
-    padding: 8px 12px; font-family: var(--font-mono);
-    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  }
-  .skiplink:focus { left: 12px; top: 12px; z-index: 1000; }
+  .container { width: 100%; max-width: var(--site-max); margin: 0 auto; padding: 0 var(--s-7); }
+  @media (max-width: 720px) { .container { padding: 0 var(--s-5); } }
 
   /* ===== top nav ===== */
-  .nav {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(10,10,10,0.85);
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-  .nav__inner {
-    display: flex; align-items: center; justify-content: space-between;
-    height: 56px;
-  }
-  .nav__mark {
-    display: inline-flex; align-items: center; gap: 10px;
-    color: var(--bone); text-decoration: none;
-    font-family: var(--font-mono); font-size: 13px;
-    letter-spacing: var(--ls-mono-wide); text-transform: uppercase;
-  }
-  .nav__dot {
-    width: 7px; height: 7px; border-radius: 999px; background: var(--tiefrot);
-    box-shadow: 0 0 0 1px var(--tiefrot), 0 0 8px var(--tiefrot);
-    animation: pulse 2.4s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.35; }
-  }
-  .nav__menu {
-    display: flex; align-items: center; gap: var(--s-6);
-  }
-  .nav__menu a {
-    color: var(--bone-dim);
-    font-family: var(--font-mono); font-size: 11px;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    text-decoration: none;
-  }
-  .nav__menu a:hover { color: var(--bone); }
-  .nav__menu .nav__cta {
-    padding: 8px 14px;
-    border: 1px solid var(--border);
-    color: var(--bone);
-    transition: all 150ms var(--ease);
-  }
-  .nav__menu .nav__cta:hover {
-    border-color: var(--tiefrot);
-    background: var(--tiefrot-dim);
-    color: var(--bone);
-    text-decoration: none;
-  }
-  @media (max-width: 720px) {
-    .nav__menu a:not(.nav__cta) { display: none; }
-  }
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,0.85); border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .nav__mark { display: inline-flex; align-items: center; gap: 10px; color: var(--bone); text-decoration: none; font-family: var(--font-mono); font-size: 13px; letter-spacing: var(--ls-mono-wide); text-transform: uppercase; }
+  .nav__dot { width: 7px; height: 7px; border-radius: 999px; background: var(--tiefrot); box-shadow: 0 0 0 1px var(--tiefrot), 0 0 8px var(--tiefrot); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .nav__menu { display: flex; align-items: center; gap: var(--s-6); }
+  .nav__menu a { color: var(--bone-dim); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; }
+  .nav__menu a:hover { color: var(--bone); text-decoration: none; }
+  .nav__menu .nav__cta { padding: 8px 14px; border: 1px solid var(--border); color: var(--bone); transition: all 150ms var(--ease); }
+  .nav__menu .nav__cta:hover { border-color: var(--tiefrot); background: var(--tiefrot-dim); color: var(--bone); }
+  @media (max-width: 720px) { .nav__menu a:not(.nav__cta) { display: none; } }
 
   /* ===== hero ===== */
-  .hero {
-    position: relative;
-    min-height: 92vh;
-    overflow: hidden;
-    border-bottom: 1px solid var(--border);
-    background: radial-gradient(ellipse at 78% 50%, #1a0e02 0%, #050505 55%, #020202 100%);
-  }
-  .hero__video {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: 70% 50%;
-    opacity: 0.95;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .hero__video--lazy[hidden] { display: none; }
-  .hero__playbtn {
-    position: absolute;
-    z-index: 3;
-    right: var(--s-7);
-    bottom: 50%;
-    transform: translateY(50%);
-    appearance: none;
-    background: rgba(10,10,10,0.7);
-    color: var(--bone);
-    border: 1px solid var(--border-warm);
-    padding: 10px 14px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    transition: all 150ms var(--ease);
-    display: inline-flex; align-items: center; gap: 8px;
-  }
-  .hero__playbtn:hover { border-color: var(--tiefrot); color: var(--tiefrot); background: rgba(10,10,10,0.85); }
-  .hero__playbtn[hidden] { display: none; }
-  @media (max-width: 720px) {
-    .hero__playbtn { right: var(--s-5); bottom: var(--s-7); transform: none; }
-  }
-  .hero__vignette {
-    position: absolute; inset: 0;
-    background:
-      linear-gradient(180deg, rgba(10,10,10,0.7) 0%, transparent 18%, transparent 75%, rgba(10,10,10,0.95) 100%),
-      linear-gradient(90deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 35%, transparent 65%);
-    z-index: 1;
-    pointer-events: none;
-  }
-  .hero__grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 80px 80px;
-    background-position: -1px -1px;
-    z-index: 1; pointer-events: none;
-    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-  }
-  .hero__inner {
-    position: relative; z-index: 2;
-    min-height: 92vh;
-    display: grid;
-    grid-template-rows: 1fr auto auto;
-    padding: 96px 0 var(--s-8);
-    gap: var(--s-6);
-  }
-  .hero__top {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    color: var(--muted);
-    font-family: var(--font-mono); font-size: 11px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-  }
+  .hero { position: relative; min-height: 88vh; overflow: hidden; border-bottom: 1px solid var(--border); background: radial-gradient(ellipse at 78% 50%, #1a0e02 0%, #050505 55%, #020202 100%); }
+  .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; opacity: 0.95; pointer-events: none; z-index: 0; }
+  .hero__vignette { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(10,10,10,0.7) 0%, transparent 18%, transparent 75%, rgba(10,10,10,0.95) 100%), linear-gradient(90deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 35%, transparent 65%); }
+  .hero__grid { position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%); }
+  .hero__inner { position: relative; z-index: 2; min-height: 88vh; display: grid; grid-template-rows: 1fr auto auto; padding: 96px 0 var(--s-8); gap: var(--s-6); }
+  .hero__top { display: flex; justify-content: space-between; align-items: flex-start; color: var(--muted); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; }
   .hero__top .corners { display: flex; gap: var(--s-6); }
-
-  .hero__title {
-    font-family: var(--font-display);
-    font-size: clamp(64px, 14vw, 220px);
-    line-height: 0.82;
-    letter-spacing: -0.01em;
-    color: var(--bone);
-    margin: 0;
-    text-shadow: 0 0 80px rgba(0,0,0,0.5);
-  }
-  .hero__title em {
-    font-style: normal;
-    color: var(--bone);
-    position: relative;
-  }
-  .hero__title em::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 25%;
-    bottom: -0.14em;
-    height: 4px;
-    background: var(--tiefrot);
-  }
-  .hero__sub {
-    max-width: 620px;
-    color: var(--bone-dim);
-    font-family: var(--font-grotesk);
-    font-size: 17px;
-    line-height: 1.55;
-    margin: var(--s-5) 0 0;
-  }
+  .hero__title { font-family: var(--font-display); font-size: clamp(64px, 14vw, 220px); line-height: 0.82; letter-spacing: -0.01em; color: var(--bone); margin: 0; text-shadow: 0 0 80px rgba(0,0,0,0.5); }
+  .hero__title em { font-style: normal; position: relative; }
+  .hero__title em::after { content: ""; position: absolute; left: 0; right: 25%; bottom: -0.14em; height: 4px; background: var(--tiefrot); }
+  .hero__sub { max-width: 620px; color: var(--bone-dim); font-family: var(--font-grotesk); font-size: 17px; line-height: 1.55; margin: var(--s-5) 0 0; }
   .hero__sub b { color: var(--bone); font-weight: 600; }
-
-  .hero__cta {
-    display: flex; align-items: center; gap: var(--s-4);
-    flex-wrap: wrap;
-    margin-top: var(--s-7);
-  }
-  .btn-hero {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 14px 22px;
-    background: var(--tiefrot);
-    color: var(--void);
-    border: 1px solid var(--tiefrot);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-weight: 700;
-    transition: all 150ms var(--ease);
-  }
+  .hero__cta { display: flex; align-items: center; gap: var(--s-4); flex-wrap: wrap; margin-top: var(--s-7); }
+  .btn-hero { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; background: var(--tiefrot); color: var(--void); border: 1px solid var(--tiefrot); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; font-weight: 700; transition: all 150ms var(--ease); }
   .btn-hero:hover { background: var(--bone); border-color: var(--bone); color: var(--void); text-decoration: none; }
-  .btn-hero--ghost {
-    background: transparent; color: var(--bone); border-color: var(--border-warm);
-  }
+  .btn-hero--ghost { background: transparent; color: var(--bone); border-color: var(--border-warm); }
   .btn-hero--ghost:hover { background: rgba(255,255,255,0.04); border-color: var(--bone); color: var(--bone); }
-
-  .hero__sc {
-    display: flex; align-items: center; gap: 12px;
-    margin-top: var(--s-5);
-    padding: 10px 14px;
-    max-width: 620px;
-    background: rgba(10,10,10,0.6);
-    border: 1px solid var(--border-warm);
-    font-family: var(--font-mono);
-    font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--bone-dim);
-  }
-  .hero__sc-btn {
-    flex: none; width: 30px; height: 30px;
-    display: inline-flex; align-items: center; justify-content: center;
-    background: var(--tiefrot); color: var(--void);
-    border: 0; cursor: pointer; font-size: 12px; line-height: 1;
-    transition: all 150ms var(--ease);
-  }
-  .hero__sc-btn:hover { background: var(--bone); }
-  .hero__sc-dot {
-    flex: none; width: 7px; height: 7px; border-radius: 50%;
-    background: var(--muted);
-  }
-  .hero__sc-dot[data-on="1"] {
-    background: var(--tiefrot);
-    animation: scpulse 2.2s var(--ease) infinite;
-  }
-  @keyframes scpulse {
-    0%   { box-shadow: 0 0 0 0   rgba(255,42,85,0.5); }
-    70%  { box-shadow: 0 0 0 7px rgba(255,42,85,0); }
-    100% { box-shadow: 0 0 0 0   rgba(255,42,85,0); }
-  }
-  .hero__sc-state { color: var(--bone); white-space: nowrap; }
-  .hero__sc-sep { color: var(--muted); }
-  .hero__sc-track {
-    color: var(--bone-dim);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    flex: 1 1 auto; min-width: 0; text-transform: none; letter-spacing: 0.04em;
-  }
-  .hero__sc-open {
-    flex: none; color: var(--muted); text-decoration: none;
-    border-bottom: 1px solid transparent;
-  }
-  .hero__sc-open:hover { color: var(--bone); border-bottom-color: var(--tiefrot); }
-
-  .hero__meta {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0,1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-  .hero__meta .cell {
-    background: rgba(10,10,10,0.85);
-    padding: var(--s-5) var(--s-5);
-  }
-  .hero__meta .k {
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  .hero__meta .v {
-    color: var(--bone);
-    font-family: var(--font-mono);
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-  }
-  .hero__meta .v small {
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    margin-left: 6px;
-    font-weight: 400;
-  }
-  @media (max-width: 720px) {
-    .hero__meta { grid-template-columns: 1fr 1fr; }
-    .hero__video { object-position: 90% 50%; }
-    .hero__inner { padding-top: 80px; }
-  }
+  .hero__meta { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .hero__meta .cell { background: rgba(10,10,10,0.85); padding: var(--s-5); }
+  .hero__meta .k { color: var(--muted); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 6px; }
+  .hero__meta .v { color: var(--bone); font-family: var(--font-mono); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; }
+  .hero__meta .v small { color: var(--muted); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; margin-left: 6px; font-weight: 400; }
+  @media (max-width: 720px) { .hero__meta { grid-template-columns: 1fr 1fr; } .hero__inner { padding-top: 80px; } }
 
   /* ===== sections ===== */
-  section.s {
-    padding: var(--s-10) 0;
-    border-bottom: 1px solid var(--border);
-    position: relative;
-  }
-  .s__head {
-    display: grid;
-    grid-template-columns: minmax(0,1fr) auto;
-    align-items: end;
-    gap: var(--s-5);
-    margin-bottom: var(--s-8);
-  }
-  .s__num {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--tiefrot);
-    margin-bottom: var(--s-3);
-  }
-  .s__title {
-    font-family: var(--font-brutal);
-    font-weight: 800;
-    font-size: clamp(40px, 6.5vw, 88px);
-    line-height: 0.9;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
-    margin: 0;
-    color: var(--bone);
-  }
-  .s__meta {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: right;
-  }
-  @media (max-width: 720px) {
-    section.s { padding: var(--s-9) 0; }
-    .s__head { grid-template-columns: 1fr; align-items: start; }
-    .s__meta { text-align: left; }
-  }
+  section.s { padding: var(--s-10) 0; border-bottom: 1px solid var(--border); position: relative; }
+  .s__head { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: end; gap: var(--s-5); margin-bottom: var(--s-8); }
+  .s__num { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--tiefrot); margin-bottom: var(--s-3); }
+  .s__title { font-family: var(--font-brutal); font-weight: 800; font-size: clamp(40px, 6.5vw, 88px); line-height: 0.9; letter-spacing: -0.03em; text-transform: uppercase; margin: 0; color: var(--bone); }
+  .s__meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); text-align: right; }
+  @media (max-width: 720px) { section.s { padding: var(--s-9) 0; } .s__head { grid-template-columns: 1fr; align-items: start; } .s__meta { text-align: left; } }
 
-  /* ===== LATEST RELEASE ===== */
-  .latest {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    gap: var(--s-8);
-    align-items: start;
-  }
-  .latest__cover {
-    position: relative;
-    aspect-ratio: 1/1;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-cover);
-    overflow: hidden;
-    background: var(--code-bg);
-  }
-  .latest__cover img {
-    width: 100%; height: 100%; object-fit: cover;
-  }
-  .latest__cover .ticks { position: absolute; inset: 16px; pointer-events: none; }
-  .latest__cover .ticks::before,
-  .latest__cover .ticks::after,
-  .latest__cover .ticks > i:nth-child(1),
-  .latest__cover .ticks > i:nth-child(2) {
-    content: "";
-    position: absolute; width: 18px; height: 18px;
-    border-color: rgba(232,227,218,0.6); border-style: solid; border-width: 0;
-  }
-  .latest__cover .ticks::before { top: 0; left: 0; border-top-width: 1.5px; border-left-width: 1.5px; }
-  .latest__cover .ticks::after  { top: 0; right: 0; border-top-width: 1.5px; border-right-width: 1.5px; }
-  .latest__cover .ticks > i:nth-child(1) { bottom: 0; left: 0; border-bottom-width: 1.5px; border-left-width: 1.5px; }
-  .latest__cover .ticks > i:nth-child(2) { bottom: 0; right: 0; border-bottom-width: 1.5px; border-right-width: 1.5px; }
-  .latest__cover .pin {
-    position: absolute; top: 16px; left: 16px;
-    background: var(--tiefrot); color: var(--void);
-    padding: 5px 9px;
-    font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700;
-  }
-  .latest__body { padding-top: 6px; }
-  .latest__cat {
-    color: var(--tiefrot);
-    font-family: var(--font-mono); font-size: 11px;
-    letter-spacing: 0.28em; text-transform: uppercase;
-    margin-bottom: var(--s-3);
-  }
-  .latest__title {
-    font-family: var(--font-display);
-    font-size: clamp(48px, 7vw, 108px);
-    line-height: 0.9;
-    letter-spacing: -0.005em;
-    margin: 0 0 var(--s-4);
-    color: var(--bone);
-  }
-  .latest__meta {
-    display: flex; flex-wrap: wrap; gap: 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    margin: var(--s-5) 0;
-  }
-  .latest__meta > div {
-    flex: 1 1 calc(50% - 1px);
-    padding: 12px 16px 12px 0;
-    border-right: 1px solid var(--border);
-  }
+  /* ===== latest ===== */
+  .latest { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--s-8); align-items: start; }
+  .latest__cover { position: relative; aspect-ratio: 1/1; border: 1px solid var(--border); box-shadow: var(--shadow-cover); overflow: hidden; background: var(--code-bg); }
+  .latest__cover img { width: 100%; height: 100%; object-fit: cover; }
+  .latest__cover .pin { position: absolute; top: 16px; left: 16px; background: var(--tiefrot); color: var(--void); padding: 5px 9px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; }
+  .latest__cat { color: var(--tiefrot); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; margin-bottom: var(--s-3); }
+  .latest__title { font-family: var(--font-display); font-size: clamp(48px, 7vw, 108px); line-height: 0.9; letter-spacing: -0.005em; margin: 0 0 var(--s-4); color: var(--bone); text-transform: uppercase; }
+  .latest__meta { display: flex; flex-wrap: wrap; gap: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: var(--s-5) 0; }
+  .latest__meta > div { flex: 1 1 calc(50% - 1px); padding: 12px 16px 12px 0; border-right: 1px solid var(--border); }
   .latest__meta > div:last-child { border-right: 0; }
-  .latest__meta .k {
-    font-family: var(--font-mono); font-size: 10px;
-    color: var(--muted); letter-spacing: 0.22em; text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-  .latest__meta .v {
-    font-family: var(--font-mono); font-size: 14px;
-    color: var(--bone); letter-spacing: 0.04em;
-  }
-  .latest__desc {
-    font-family: var(--font-grotesk); font-size: 15.5px; line-height: 1.65;
-    color: var(--bone-dim);
-    max-width: 56ch;
-    margin: var(--s-5) 0;
-  }
-  .latest__platforms {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-top: var(--s-5);
-  }
-  .latest__platforms a {
-    background: var(--void);
-    color: var(--bone);
-    padding: 14px 16px;
-    text-decoration: none;
-    font-family: var(--font-mono); font-size: 12px;
-    letter-spacing: 0.16em; text-transform: uppercase;
-    display: flex; align-items: center; justify-content: space-between;
-    transition: all 150ms var(--ease);
-  }
-  .latest__platforms a:hover { background: var(--panel); color: var(--tiefrot); }
-  .latest__platforms a span.s { color: var(--muted); font-size: 10px; letter-spacing: 0.22em; }
-  @media (max-width: 880px) {
-    .latest { grid-template-columns: 1fr; gap: var(--s-6); }
-  }
+  .latest__meta .k { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 4px; }
+  .latest__meta .v { font-family: var(--font-mono); font-size: 14px; color: var(--bone); letter-spacing: 0.04em; }
+  .latest__desc { font-family: var(--font-grotesk); font-size: 15.5px; line-height: 1.65; color: var(--bone-dim); max-width: 56ch; margin: var(--s-5) 0; }
+  .latest__desc em { color: var(--bone-dim); font-style: italic; }
+  .latest__platforms { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: var(--s-5); }
+  .latest__platforms a { background: var(--void); color: var(--bone); padding: 14px 16px; text-decoration: none; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; transition: all 150ms var(--ease); }
+  .latest__platforms a:hover { background: var(--panel); color: var(--tiefrot); text-decoration: none; }
+  @media (max-width: 880px) { .latest { grid-template-columns: 1fr; gap: var(--s-6); } }
 
-  /* ===== CATALOG GRID ===== */
-  .filters {
-    display: flex; gap: 0;
-    border: 1px solid var(--border);
-    margin-bottom: var(--s-6);
-    flex-wrap: wrap;
-  }
-  .filters button {
-    flex: 1 1 auto;
-    appearance: none;
-    background: transparent;
-    border: 0;
-    border-right: 1px solid var(--border);
-    color: var(--bone-dim);
-    padding: 12px 16px;
-    font-family: var(--font-mono); font-size: 11px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    cursor: pointer;
-    transition: all 150ms var(--ease);
-  }
+  /* ===== catalog ===== */
+  .filters { display: flex; gap: 0; border: 1px solid var(--border); margin-bottom: var(--s-6); flex-wrap: wrap; }
+  .filters button { flex: 1 1 auto; appearance: none; background: transparent; border: 0; border-right: 1px solid var(--border); color: var(--bone-dim); padding: 12px 16px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer; transition: all 150ms var(--ease); }
   .filters button:last-child { border-right: 0; }
   .filters button:hover { color: var(--bone); background: rgba(255,255,255,0.03); }
-  .filters button.active {
-    color: var(--void);
-    background: var(--bone);
-  }
+  .filters button.active { color: var(--void); background: var(--bone); }
   .filters button[data-rail="LJ"].active { background: var(--cosmic-glow); color: var(--void); }
-  .filters button[data-rail="CT"].active { background: var(--bone); color: var(--void); }
-  .filters button[data-rail="NS"].active { background: var(--sodium-glow); color: var(--void); }
-
-  .catalog {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-  .cat {
-    position: relative;
-    background: var(--void);
-    aspect-ratio: 1/1;
-    display: block;
-    overflow: hidden;
-    text-decoration: none;
-    color: var(--bone);
-    transition: transform 300ms var(--ease);
-  }
-  .cat img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 600ms var(--ease), filter 300ms var(--ease);
-  }
+  .filters button[data-rail="DM"].active { background: var(--glut-glow); color: var(--void); }
+  .filters button[data-rail="ST"].active { background: var(--cold-blue); color: var(--void); }
+  .catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .cat { position: relative; background: var(--void); aspect-ratio: 1/1; display: block; overflow: hidden; text-decoration: none; color: var(--bone); }
+  .cat img { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease), filter 300ms var(--ease); }
   .cat:hover img { transform: scale(1.04); filter: brightness(0.45); }
-  .cat__rail {
-    position: absolute; top: 10px; left: 10px;
-    font-family: var(--font-mono); font-size: 9.5px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--bone);
-    padding: 4px 7px;
-    background: rgba(10,10,10,0.7);
-    border: 1px solid rgba(232,227,218,0.18);
-    backdrop-filter: blur(4px);
-  }
+  .cat__rail { position: absolute; top: 10px; left: 10px; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); padding: 4px 7px; background: rgba(10,10,10,0.7); border: 1px solid rgba(232,227,218,0.18); backdrop-filter: blur(4px); }
   .cat__rail[data-rail="LJ"] { color: var(--cosmic-glow); border-color: rgba(232,121,196,0.5); }
-  .cat__rail[data-rail="CT"] { color: var(--bone); }
-  .cat__rail[data-rail="NS"] { color: var(--sodium-glow); border-color: rgba(232,112,58,0.5); }
-  .cat__rail[data-rail="NT"] { color: var(--cold-blue); }
-  .cat__rail[data-rail="TB"] { color: var(--giftgrun-glow); border-color: rgba(90,224,130,0.5); }
-  .cat__info {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    padding: var(--s-4);
-    background: linear-gradient(0deg, rgba(5,5,5,0.95) 30%, transparent 100%);
-    opacity: 0; transform: translateY(8px);
-    transition: all 250ms var(--ease);
-  }
+  .cat__rail[data-rail="DM"] { color: var(--glut-glow); border-color: rgba(255,106,42,0.5); }
+  .cat__rail[data-rail="ST"] { color: var(--cold-blue); }
+  .cat__rail[data-rail="ND"] { color: var(--knochen-glow); }
+  .cat__info { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--s-4); background: linear-gradient(0deg, rgba(5,5,5,0.95) 30%, transparent 100%); opacity: 0; transform: translateY(8px); transition: all 250ms var(--ease); }
   .cat:hover .cat__info { opacity: 1; transform: translateY(0); }
-  .cat__title {
-    font-family: var(--font-display);
-    font-size: 24px;
-    line-height: 0.95;
-    text-transform: uppercase;
-    margin: 0 0 6px;
-    color: var(--bone);
-  }
-  .cat__meta {
-    font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--muted);
-  }
+  .cat__title { font-family: var(--font-display); font-size: 24px; line-height: 0.95; text-transform: uppercase; margin: 0 0 6px; color: var(--bone); }
+  .cat__m { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
 
-  /* ===== SCHIENEN — FIXED LAYOUT (no more LJ-NN/RAIL collision) ===== */
-  .rails {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-  .rail {
-    background: var(--void);
-    padding: var(--s-7) var(--s-6);
-    position: relative;
-    overflow: hidden;
-    min-height: 320px;
-    display: flex;
-    flex-direction: column;
-  }
-  .rail::before {
-    content: "";
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 100% 0%, var(--glow, transparent) 0%, transparent 55%);
-    opacity: 0.15;
-    pointer-events: none;
-  }
+  /* ===== schienen ===== */
+  .rails { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .rail { background: var(--void); padding: var(--s-7) var(--s-6); position: relative; overflow: hidden; min-height: 300px; display: flex; flex-direction: column; }
+  .rail::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, var(--glow, transparent) 0%, transparent 55%); opacity: 0.15; pointer-events: none; }
   .rail[data-rail="LJ"] { --glow: var(--cosmic-glow); }
   .rail[data-rail="CT"] { --glow: var(--nachtblau-glow); }
-  .rail[data-rail="NS"] { --glow: var(--sodium-glow); }
-  .rail[data-rail="NT"] { --glow: var(--cold-blue); }
-  .rail[data-rail="TB"] { --glow: var(--giftgrun-glow); }
-
-  .rail__head {
-    display: flex; justify-content: space-between; align-items: baseline;
-    margin-bottom: var(--s-5);
-    gap: var(--s-3);
-  }
-  .rail__cat {
-    font-family: var(--font-mono); font-size: 11px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--muted);
-  }
+  .rail[data-rail="DM"] { --glow: var(--glut-glow); }
+  .rail[data-rail="ND"] { --glow: var(--knochen-glow); }
+  .rail[data-rail="ST"] { --glow: var(--cold-blue); }
+  .rail__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--s-5); gap: var(--s-3); }
+  .rail__cat { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
   .rail__cat b { color: var(--bone); font-weight: 500; }
-  .rail__num {
-    font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--muted-deep);
-  }
-  .rail__title {
-    font-family: var(--font-display);
-    font-size: 52px;
-    line-height: 0.92;
-    letter-spacing: -0.005em;
-    margin: 0 0 var(--s-2);
-    color: var(--bone);
-  }
+  .rail__num { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-deep); }
+  .rail__title { font-family: var(--font-display); font-size: 50px; line-height: 0.92; letter-spacing: -0.005em; margin: 0 0 var(--s-2); color: var(--bone); text-transform: uppercase; }
   .rail[data-rail="LJ"] .rail__title { color: var(--cosmic-glow); }
-  .rail[data-rail="NS"] .rail__title { color: var(--sodium-glow); }
-  .rail[data-rail="NT"] .rail__title { color: var(--cold-blue); }
-  .rail[data-rail="TB"] .rail__title { color: var(--giftgrun-glow); }
-  .rail__sub {
-    font-family: var(--font-mono); font-size: 12px;
-    letter-spacing: 0.06em;
-    color: var(--bone-dim);
-    margin-bottom: var(--s-4);
-  }
-  .rail__desc {
-    font-family: var(--font-grotesk); font-size: 14px; line-height: 1.55;
-    color: var(--bone-dim);
-    flex: 1;
-  }
-  .rail__foot {
-    margin-top: var(--s-5);
-    padding-top: var(--s-3);
-    border-top: 1px solid var(--border);
-    display: flex; justify-content: space-between;
-    font-family: var(--font-mono); font-size: 10.5px;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--muted);
-  }
+  .rail[data-rail="DM"] .rail__title { color: var(--glut-glow); }
+  .rail[data-rail="ND"] .rail__title { color: var(--knochen-glow); }
+  .rail[data-rail="ST"] .rail__title { color: var(--cold-blue); }
+  .rail__sub { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--bone-dim); margin-bottom: var(--s-4); }
+  .rail__desc { font-family: var(--font-grotesk); font-size: 14px; line-height: 1.55; color: var(--bone-dim); flex: 1; }
+  .rail__foot { margin-top: var(--s-5); padding-top: var(--s-3); border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
   .rail__foot b { color: var(--bone); font-weight: 500; }
 
-  /* ===== UPDATES ===== */
-  .updates {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--s-5);
-  }
-  .upd {
-    padding: var(--s-6);
-    border: 1px solid var(--border);
-    background: var(--panel);
-    box-shadow: var(--shadow-card);
-  }
-  .upd__date {
-    font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: var(--s-3);
-    display: flex; justify-content: space-between;
-  }
-  .upd__date b { color: var(--tiefrot); font-weight: 500; }
-  .upd__title {
-    font-family: var(--font-mono); font-size: 16px;
-    color: var(--bone);
-    letter-spacing: -0.005em;
-    line-height: 1.35;
-    margin: 0 0 var(--s-3);
-  }
-  .upd__body {
-    font-family: var(--font-grotesk); font-size: 13.5px; line-height: 1.55;
-    color: var(--bone-dim);
-  }
-
-  /* ===== UPCOMING / pipeline ===== */
-  .pipe {
-    border: 1px solid var(--border);
-  }
-  .pipe__row {
-    display: grid;
-    grid-template-columns: 80px 100px 1.5fr 1fr 110px;
-    gap: var(--s-5);
-    align-items: center;
-    padding: var(--s-5) var(--s-6);
-    border-bottom: 1px solid var(--border);
-    font-family: var(--font-mono);
-    font-size: 13px;
-  }
-  .pipe__row:last-child { border-bottom: 0; }
-  .pipe__row.head {
-    background: rgba(255,255,255,0.02);
-    color: var(--muted);
-    font-size: 10.5px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    padding-top: 14px;
-    padding-bottom: 14px;
-  }
-  .pipe__when { color: var(--bone); letter-spacing: 0.04em; }
-  .pipe__cat { color: var(--muted); letter-spacing: 0.06em; }
-  .pipe__title { color: var(--bone); font-family: var(--font-mono); font-size: 15px; letter-spacing: -0.005em; }
-  .pipe__title small { display: block; font-size: 11px; letter-spacing: 0.06em; color: var(--muted); margin-top: 3px; }
-  .pipe__rail {
-    display: inline-block;
-    padding: 4px 9px;
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    border: 1px solid var(--border-warm);
-    color: var(--bone-dim);
-  }
-  .pipe__rail[data-rail="LJ"] { color: var(--cosmic-glow); border-color: rgba(232,121,196,0.45); }
-  .pipe__rail[data-rail="CT"] { color: var(--bone); }
-  .pipe__rail[data-rail="NS"] { color: var(--sodium-glow); border-color: rgba(232,112,58,0.45); }
-  .pipe__rail[data-rail="TB"] { color: var(--giftgrun-glow); border-color: rgba(90,224,130,0.45); }
-  .pipe__state {
-    font-size: 10px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: right;
-  }
-  .pipe__state .dot {
-    display: inline-block; width: 7px; height: 7px;
-    margin-right: 6px;
-    border-radius: 999px;
-    background: var(--muted-deep);
-    vertical-align: 1px;
-  }
-  .pipe__state[data-s="render"] { color: var(--tiefrot); }
-  .pipe__state[data-s="render"] .dot { background: var(--tiefrot); box-shadow: 0 0 8px var(--tiefrot); }
-  .pipe__state[data-s="master"] { color: var(--cold-blue); }
-  .pipe__state[data-s="master"] .dot { background: var(--cold-blue); }
-  .pipe__state[data-s="press"] { color: var(--bone); }
-  .pipe__state[data-s="press"] .dot { background: var(--bone); }
-  @media (max-width: 720px) {
-    .pipe__row { grid-template-columns: 1fr; gap: 4px; padding: var(--s-4); }
-    .pipe__row.head { display: none; }
-    .pipe__state { text-align: left; }
-  }
-
-  /* ===== MANIFEST ===== */
-  .man {
-    display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
-    gap: var(--s-8);
-    align-items: start;
-  }
-  .man__facts {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-  .man__facts dl {
-    margin: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .man__facts > dl > div {
-    grid-column: span 2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
-  .man__facts > dl > div:last-child { border-bottom: 0; }
+  /* ===== manifest ===== */
+  .man { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: var(--s-8); align-items: start; }
+  .man__facts { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .man__facts > div { display: grid; grid-template-columns: 1fr 1fr; padding: 14px 0; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .man__facts > div:last-child { border-bottom: 0; }
   .man__facts dt { color: var(--muted); margin: 0; }
   .man__facts dd { color: var(--bone); margin: 0; text-align: right; letter-spacing: 0.08em; }
   .man__body p { font-family: var(--font-grotesk); font-size: 16px; line-height: 1.65; color: var(--bone-dim); margin: 0 0 var(--s-5); }
   .man__body p:first-of-type { font-size: 22px; line-height: 1.4; color: var(--bone); font-style: italic; letter-spacing: -0.005em; }
   .man__body p:first-of-type::first-letter { color: var(--tiefrot); }
-  .man__stamp {
-    margin-top: var(--s-7);
-    padding-top: var(--s-5);
-    border-top: 1px solid var(--border);
-    color: var(--bone);
-    font-family: var(--font-mono); font-size: 11.5px;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    line-height: 1.9;
-  }
+  .man__stamp { margin-top: var(--s-7); padding-top: var(--s-5); border-top: 1px solid var(--border); color: var(--bone); font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.9; }
   .man__stamp div:first-child { color: var(--tiefrot); }
-  @media (max-width: 880px) {
-    .man { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 880px) { .man { grid-template-columns: 1fr; } }
 
-  /* ===== LISTEN ===== */
-  .channels {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-  .ch {
-    background: var(--void);
-    padding: var(--s-6);
-    text-decoration: none;
-    color: var(--bone);
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: var(--s-3);
-    min-height: 160px;
-    transition: background 150ms var(--ease);
-    position: relative;
-    overflow: hidden;
-  }
+  /* ===== listen ===== */
+  .channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .ch { background: var(--void); padding: var(--s-6); text-decoration: none; color: var(--bone); display: grid; grid-template-rows: auto 1fr auto; gap: var(--s-3); min-height: 150px; transition: background 150ms var(--ease); position: relative; overflow: hidden; }
   .ch:hover { background: var(--panel); text-decoration: none; }
-  .ch::after {
-    content: "↗";
-    position: absolute; top: 18px; right: 18px;
-    color: var(--muted);
-    font-family: var(--font-mono); font-size: 14px;
-    transition: all 150ms var(--ease);
-  }
+  .ch::after { content: "↗"; position: absolute; top: 18px; right: 18px; color: var(--muted); font-family: var(--font-mono); font-size: 14px; transition: all 150ms var(--ease); }
   .ch:hover::after { color: var(--tiefrot); transform: translate(2px, -2px); }
-  .ch__name {
-    font-family: var(--font-mono); font-size: 11px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--muted);
-  }
-  .ch__handle {
-    font-family: var(--font-display);
-    font-size: 32px;
-    line-height: 0.95;
-    letter-spacing: -0.005em;
-    margin: 0;
-    color: var(--bone);
-    text-transform: uppercase;
-  }
-  .ch__handle small {
-    display: block;
-    margin-top: 6px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--bone-dim);
-    text-transform: uppercase;
-  }
-  .ch__meta {
-    font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--muted);
-  }
+  .ch__name { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  .ch__handle { font-family: var(--font-display); font-size: 32px; line-height: 0.95; letter-spacing: -0.005em; margin: 0; color: var(--bone); text-transform: uppercase; }
+  .ch__meta { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
 
-  /* ===== FOOTER ===== */
-  footer.foot {
-    background: var(--void-deep);
-    border-top: 1px solid var(--border);
-    padding: var(--s-9) 0 var(--s-7);
-  }
-  .foot__grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: var(--s-8);
-    margin-bottom: var(--s-9);
-  }
+  /* ===== footer ===== */
+  footer.foot { background: var(--void-deep); border-top: 1px solid var(--border); padding: var(--s-9) 0 var(--s-7); }
+  .foot__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--s-8); margin-bottom: var(--s-9); }
   .foot__brand .wordmark { font-size: 16px; letter-spacing: 0.42em; }
-  .foot__brand p {
-    color: var(--muted);
-    font-family: var(--font-grotesk);
-    font-size: 13px;
-    margin-top: var(--s-4);
-    max-width: 30ch;
-    line-height: 1.6;
-  }
-  .foot__col h5 {
-    font-family: var(--font-mono); font-size: 10px;
-    letter-spacing: 0.28em; text-transform: uppercase;
-    color: var(--muted);
-    margin: 0 0 var(--s-4);
-  }
+  .foot__brand p { color: var(--muted); font-family: var(--font-grotesk); font-size: 13px; margin-top: var(--s-4); max-width: 30ch; line-height: 1.6; }
+  .foot__col h5 { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); margin: 0 0 var(--s-4); }
   .foot__col ul { list-style: none; padding: 0; margin: 0; }
   .foot__col li { margin: 0 0 8px; }
-  .foot__col a {
-    color: var(--bone-dim);
-    text-decoration: none;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.04em;
-  }
+  .foot__col a { color: var(--bone-dim); text-decoration: none; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; }
   .foot__col a:hover { color: var(--tiefrot); text-decoration: underline; text-underline-offset: 3px; }
-  .foot__bottom {
-    border-top: 1px solid var(--border);
-    padding-top: var(--s-5);
-    display: flex; justify-content: space-between; flex-wrap: wrap;
-    gap: var(--s-4);
-    font-family: var(--font-mono); font-size: 10.5px;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--muted);
-  }
-  @media (max-width: 720px) {
-    .foot__grid { grid-template-columns: 1fr 1fr; }
-  }
+  .foot__bottom { border-top: 1px solid var(--border); padding-top: var(--s-5); display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s-4); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  @media (max-width: 720px) { .foot__grid { grid-template-columns: 1fr 1fr; } }
+
+  /* ===== rollout ===== */
+  .rollout { display: grid; grid-template-columns: 300px 1fr; gap: var(--s-7); align-items: stretch; }
+  @media (max-width: 760px){ .rollout { grid-template-columns: 1fr; } }
+  .ro-cd { border: 1px solid var(--border); background: radial-gradient(ellipse at 70% 20%, #1a0e02 0%, var(--void) 62%); padding: var(--s-6); display: flex; flex-direction: column; justify-content: center; }
+  .ro-eye { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: var(--s-3); }
+  .ro-title { font-family: var(--font-display); font-size: 44px; line-height: 0.9; text-transform: uppercase; color: var(--bone); margin: 0 0 4px; }
+  .ro-cat { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--cosmic-glow); margin-bottom: var(--s-5); }
+  .ro-clock { display: flex; gap: var(--s-4); }
+  .ro-num { font-family: var(--font-mono); font-weight: 700; font-size: 32px; color: var(--bone); font-variant-numeric: tabular-nums; line-height: 1; }
+  .ro-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--muted-deep); text-transform: uppercase; margin-top: 5px; }
+  .ro-when { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: var(--s-5); }
+  .ro-sched { border: 1px solid var(--border); }
+  .ro-row { display: grid; grid-template-columns: 60px 78px 1fr 88px; gap: var(--s-4); align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 12.5px; text-decoration: none; }
+  .ro-row:last-child { border-bottom: 0; }
+  .ro-row.ep { background: rgba(255,42,85,0.05); }
+  .ro-row .d { color: var(--muted); letter-spacing: 0.04em; }
+  .ro-row .c { color: var(--muted); }
+  .ro-row .t { color: var(--bone); letter-spacing: 0.02em; }
+  .ro-row .st { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; text-align: right; white-space: nowrap; }
+  .ro-row .st.l { color: var(--good); }
+  .ro-row .st.n { color: var(--tiefrot); }
+  .ro-row .st.w { color: var(--muted-deep); }
+  a.ro-row:hover { background: var(--panel); }
+  a.ro-row:hover .t { color: var(--tiefrot); }
+  @media (max-width: 520px){ .ro-row { grid-template-columns: 54px 1fr 74px; } .ro-row .c { display: none; } }
 </style>
 </head>
 <body id="top">
 
-<a href="#latest" class="skiplink">SKIP TO CONTENT</a>
-
-<!-- ==================== NAV ==================== -->
 <nav class="nav" data-screen-label="00 Nav">
   <div class="container nav__inner">
-    <a class="nav__mark" href="#top">
-      <span class="nav__dot" aria-hidden="true"></span>
-      <span>NULLTAG</span>
-    </a>
+    <a class="nav__mark" href="#top"><span class="nav__dot" aria-hidden="true"></span><span>NULLTAG</span></a>
     <div class="nav__menu">
       <a href="#latest">Latest</a>
+      <a href="#rollout">Rollout</a>
       <a href="#catalog">Catalog</a>
       <a href="#schienen">Schienen</a>
+      <a href="#lineage">Lineage</a>
+      <a href="facts.html">Facts</a>
       <a href="#manifest">Manifest</a>
+      <a href="#tools">Tools</a>
       <a class="nav__cta" href="#listen">▶ Listen</a>
     </div>
   </div>
 </nav>
 
-<!-- ==================== HERO ==================== -->
 <header class="hero" data-screen-label="01 Hero">
-  <img class="hero__video" src="assets/logo-poster.png" alt="NULLTAG · smoke wave collapses into a wordmark eclipse" />
-  <video class="hero__video hero__video--lazy" autoplay muted loop playsinline preload="auto" poster="assets/logo-poster.png" hidden>
+  <img class="hero__video" id="hero-poster" src="assets/logo-poster.png" alt="NULLTAG · smoke wave collapses into a wordmark eclipse" />
+  <video class="hero__video" id="hero-video" autoplay muted loop playsinline preload="auto" poster="assets/logo-poster.png" style="display:none">
     <source src="assets/logo.mp4" type="video/mp4" />
   </video>
-  <button class="hero__playbtn" type="button" aria-label="Play hero motion" data-hero-play>
-    <span aria-hidden="true">▶</span> PLAY MOTION
-  </button>
   <div class="hero__grid" aria-hidden="true"></div>
   <div class="hero__vignette" aria-hidden="true"></div>
 
@@ -956,50 +263,24 @@
     </div>
 
     <div>
-      <div class="latest__cat" style="color: var(--bone-dim); margin-bottom: var(--s-5);">
-        — CINEMATIC TECHNO · COSMIC FRENCHCORE · GERMAN UNDERGROUND
-      </div>
+      <div class="latest__cat" style="color: var(--bone-dim); margin-bottom: var(--s-5);">— CINEMATIC TECHNO · COSMIC FRENCHCORE · GERMAN UNDERGROUND</div>
       <h1 class="hero__title">NULL<em>TAG</em></h1>
-      <p class="hero__sub">
-        A one-person Swiss music label working across five <b>Schienen</b> — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key and ISRC are <b>treated as design</b>, not metadata to hide.
-      </p>
+      <p class="hero__sub">A one-person Swiss music label working across five <b>Schienen</b> — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key and ISRC are <b>treated as design</b>, not metadata to hide.</p>
       <div class="hero__cta">
         <a href="#latest" class="btn-hero">▶ Play latest release</a>
-        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 13</a>
-      </div>
-
-      <div class="hero__sc" id="sc-strip" aria-label="NULLTAG on SoundCloud">
-        <button class="hero__sc-btn" id="sc-toggle" type="button" aria-label="Play">▶</button>
-        <span class="hero__sc-dot" id="sc-dot" data-on="0" aria-hidden="true"></span>
-        <span class="hero__sc-state" id="sc-state">TAP TO PLAY</span>
-        <span class="hero__sc-sep" aria-hidden="true">·</span>
-        <span class="hero__sc-track" id="sc-track">NULLTAG · SOUNDCLOUD</span>
-        <a class="hero__sc-open" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener">OPEN ↗</a>
+        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 49 Tracks</a>
       </div>
     </div>
 
     <div class="hero__meta">
-      <div class="cell">
-        <div class="k">Catalog</div>
-        <div class="v">13 <small>rel.</small></div>
-      </div>
-      <div class="cell">
-        <div class="k">Schienen</div>
-        <div class="v">05 <small>rails</small></div>
-      </div>
-      <div class="cell">
-        <div class="k">Latest</div>
-        <div class="v">PLASTIC <small>PARADISE EP</small></div>
-      </div>
-      <div class="cell">
-        <div class="k">Origin</div>
-        <div class="v">BUCHS SG <small>· CH</small></div>
-      </div>
+      <div class="cell"><div class="k">Tracks</div><div class="v">49 <small>live</small></div></div>
+      <div class="cell"><div class="k">Schienen</div><div class="v">05 <small>rails</small></div></div>
+      <div class="cell"><div class="k">Latest</div><div class="v">SUPERNOVA <small>LJ-10</small></div></div>
+      <div class="cell"><div class="k">Origin</div><div class="v">BUCHS SG <small>· CH</small></div></div>
     </div>
   </div>
 </header>
 
-<!-- ==================== §01 LATEST ==================== -->
 <section class="s" id="latest" data-screen-label="02 Latest">
   <div class="container">
     <div class="s__head">
@@ -1007,269 +288,229 @@
         <div class="s__num">§01 · LATEST RELEASE · PINNED · T-0</div>
         <h2 class="s__title">Latest<br/>Release</h2>
       </div>
-      <div class="s__meta">DROPPED · MMXXVI / 04<br/>NULLTAG-09</div>
+      <div class="s__meta">DROPPED · MMXXVI / 06<br/>LJ-10</div>
     </div>
-
     <div class="latest">
       <div class="latest__cover">
-        <img src="covers/plastic_funeral.jpg" alt="Plastic Paradise EP cover artwork" />
+        <img src="covers/supernova.jpg" alt="Supernova cover artwork" />
         <span class="pin">● PINNED</span>
-        <span class="ticks"><i></i><i></i></span>
       </div>
-
       <div class="latest__body">
-        <div class="latest__cat">NULLTAG-09 · ECHO · EP · 04 TRACKS</div>
-        <h3 class="latest__title">Plastic<br/>Paradise EP</h3>
-
+        <div class="latest__cat">LJ-10 · LICHTJAHR · SINGLE · LICHTJAHR VOL.2</div>
+        <h3 class="latest__title">Super<br/>nova</h3>
         <div class="latest__meta">
-          <div><div class="k">BPM</div><div class="v">152 – 168</div></div>
-          <div><div class="k">KEY</div><div class="v">F♯m · D♭m</div></div>
-          <div><div class="k">DURATION</div><div class="v">18:24</div></div>
+          <div><div class="k">BPM</div><div class="v">200</div></div>
+          <div><div class="k">MODE</div><div class="v">Aeolian</div></div>
+          <div><div class="k">DURATION</div><div class="v">04:23</div></div>
           <div><div class="k">FORMAT</div><div class="v">WAV · MP3-320</div></div>
         </div>
-
-        <p class="latest__desc">
-          Four tracks recorded between February and April. Synthetic euphoria as architecture — plastic palms, sodium streetlights, a paradise pressed in vinyl-substitute. <em>Eine fiktionalisierte Ostschweiz zwischen 2 und 5 Uhr morgens.</em>
-        </p>
-
+        <p class="latest__desc">A dying star burns the brightest. Emotional solo-piano intro into a euphoric festival drop — tears on the dancefloor. <em>„Supernova — burn it all to light / beautiful goodbye."</em></p>
         <div class="latest__platforms">
-          <a href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" target="_blank" rel="noopener">
-            <span>Apple Music</span><span class="s">↗</span>
-          </a>
-          <a href="https://soundcloud.com/nulltag" target="_blank" rel="noopener">
-            <span>SoundCloud</span><span class="s">↗</span>
-          </a>
-          <a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener">
-            <span>Spotify</span><span class="s">↗</span>
-          </a>
-          <a href="https://bandcamp.com/nulltag" target="_blank" rel="noopener">
-            <span>Bandcamp</span><span class="s">↗</span>
-          </a>
+          <a href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span>SoundCloud</span><span>↗</span></a>
+          <a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><span>Spotify</span><span>↗</span></a>
+          <a href="https://music.apple.com/ch/artist/nulltag" target="_blank" rel="noopener"><span>Apple Music</span><span>↗</span></a>
+          <a href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" target="_blank" rel="noopener"><span>YouTube</span><span>↗</span></a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ==================== §02 CATALOG ==================== -->
-<section class="s" id="catalog" data-screen-label="03 Catalog">
+<section class="s" id="rollout" data-screen-label="03 Rollout">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§02 · CATALOG · EVERY RELEASE</div>
-        <h2 class="s__title">Catalog</h2>
+        <div class="s__num">§02 · ROLLOUT · LICHTJAHR VOL.2</div>
+        <h2 class="s__title">Rollout</h2>
       </div>
-      <div class="s__meta">13 RELEASES · 05 RAILS<br/>MMXXVI</div>
+      <div class="s__meta">WÖCHENTLICH FREITAGS<br/>10:00 CEST · 2/6 → 6/6</div>
     </div>
 
-    <div class="filters" role="tablist">
-      <button class="active" data-rail="ALL">ALL · 13</button>
-      <button data-rail="LJ">LICHTJAHRE · 07</button>
-      <button data-rail="CT">CINETEKK · 04</button>
-      <button data-rail="NS">NACHTSTROM · 00</button>
-      <button data-rail="NT">ECHO · 02</button>
+    <div class="rollout">
+      <div class="ro-cd">
+        <div class="ro-eye">— Nächster Drop in</div>
+        <div class="ro-title" id="ro-title">Microwave</div>
+        <div class="ro-cat" id="ro-cat">LJ-11 · 190 BPM · Vol.2</div>
+        <div class="ro-clock">
+          <div><div class="ro-num" id="ro-d">00</div><div class="ro-lbl">Tage</div></div>
+          <div><div class="ro-num" id="ro-h">00</div><div class="ro-lbl">Std</div></div>
+          <div><div class="ro-num" id="ro-m">00</div><div class="ro-lbl">Min</div></div>
+          <div><div class="ro-num" id="ro-s">00</div><div class="ro-lbl">Sek</div></div>
+        </div>
+        <div class="ro-when" id="ro-when">Freitag, 20. Juni 2026 · 10:00 CEST</div>
+      </div>
+
+      <div class="ro-sched">
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">28.05</span><span class="c">LJ-07</span><span class="t">Trappist Loop</span><span class="st l">● live</span></a>
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">30.05</span><span class="c">LJ-08</span><span class="t">Event Horizon</span><span class="st l">● live</span></a>
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">06.06</span><span class="c">LJ-09</span><span class="t">Andromeda Approach</span><span class="st l">● live</span></a>
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">13.06</span><span class="c">LJ-10</span><span class="t">Supernova</span><span class="st l">● live</span></a>
+        <div class="ro-row"><span class="d">20.06</span><span class="c">LJ-11</span><span class="t">Microwave</span><span class="st n">◷ next · Fr</span></div>
+        <div class="ro-row"><span class="d">02.07</span><span class="c">LJ-12</span><span class="t">Last Light</span><span class="st w">◷ scheduled</span></div>
+        <div class="ro-row ep"><span class="d">02.07</span><span class="c">EP</span><span class="t">Vol.2 — Full EP + Playlist</span><span class="st w">◷ public</span></div>
+      </div>
     </div>
 
-    <div class="catalog" id="catalog-grid">
-      <!-- generated below -->
+    <div style="margin-top:var(--s-6);">
+      <div style="font-family:var(--font-mono); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); margin-bottom:var(--s-3);">Wo erscheint es — Singles zuerst auf SoundCloud (freitags 10:00), dann überall</div>
+      <div class="latest__platforms" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
+        <a href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span>SoundCloud</span><span class="s">PRIMARY ↗</span></a>
+        <a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><span>Spotify</span><span>↗</span></a>
+        <a href="https://music.apple.com/ch/artist/nulltag" target="_blank" rel="noopener"><span>Apple Music</span><span>↗</span></a>
+        <a href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" target="_blank" rel="noopener"><span>YouTube</span><span>↗</span></a>
+        <a href="https://www.deezer.com/artist/388775221" target="_blank" rel="noopener"><span>Deezer</span><span>↗</span></a>
+      </div>
+      <div style="margin-top:var(--s-4); display:flex; gap:14px; flex-wrap:wrap;">
+        <a class="btn-hero btn-hero--ghost" href="facts.html" style="font-size:11px;">★ Die Physik hinter den Tracks →</a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ==================== §03 SCHIENEN ==================== -->
-<section class="s" id="schienen" data-screen-label="04 Schienen">
+<section class="s" id="catalog" data-screen-label="04 Catalog">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§03 · RELEASE RAILS · 05</div>
+        <div class="s__num">§03 · CATALOG · FEATURED ARTWORK</div>
+        <h2 class="s__title">Catalog</h2>
+      </div>
+      <div class="s__meta">49 TRACKS · 05 SCHIENEN<br/>FEATURED ARTWORK</div>
+    </div>
+    <div class="filters" role="tablist" id="filters">
+      <button class="active" data-rail="ALL">ALL · 15</button>
+      <button data-rail="LJ">LICHTJAHR · 08</button>
+      <button data-rail="CT">CINETEKK · 04</button>
+      <button data-rail="DM">DOME · 01</button>
+      <button data-rail="ST">STANDALONE · 02</button>
+    </div>
+    <div class="catalog" id="catalog-grid"></div>
+  </div>
+</section>
+
+<section class="s" id="schienen" data-screen-label="05 Schienen">
+  <div class="container">
+    <div class="s__head">
+      <div>
+        <div class="s__num">§04 · RELEASE RAILS · 05</div>
         <h2 class="s__title">Schienen</h2>
       </div>
       <div class="s__meta">FIVE WORLDS<br/>ONE WORDMARK</div>
     </div>
-
     <div class="rails">
       <article class="rail" data-rail="LJ">
-        <div class="rail__head">
-          <span class="rail__cat"><b>LJ-NN</b> · RAIL</span>
-          <span class="rail__num">01 / 05</span>
-        </div>
-        <h3 class="rail__title">Lichtjahre</h3>
+        <div class="rail__head"><span class="rail__cat"><b>LJ-NN</b> · EP-RAIL</span><span class="rail__num">01 / 05</span></div>
+        <h3 class="rail__title">Lichtjahr</h3>
         <div class="rail__sub">Cosmic frenchcore</div>
-        <p class="rail__desc">
-          Uplifting frenchcore set to celestial-body imagery. Aeolian and Phrygian-Dom keys, kicks tuned to planetary motion.
-        </p>
+        <p class="rail__desc">Uplifting-to-symphonic Frenchcore zu Himmelskörper-Bildern. Aeolian / Phrygian-Dom. Vol.1 komplett (6 Tracks), Vol.2 im wöchentlichen Rollout (2/6 live).</p>
         <div class="rail__foot"><span><b>188–205</b> BPM</span><span>EN</span></div>
       </article>
-
       <article class="rail" data-rail="CT">
-        <div class="rail__head">
-          <span class="rail__cat"><b>CT-NN</b> · RAIL</span>
-          <span class="rail__num">02 / 05</span>
-        </div>
+        <div class="rail__head"><span class="rail__cat"><b>CT-NN</b> · ALBUM</span><span class="rail__num">02 / 05</span></div>
         <h3 class="rail__title">Cinetekk</h3>
-        <div class="rail__sub">Cinematic techno</div>
-        <p class="rail__desc">
-          Film ohne Bilder. Single light beam, one red dot, German vocals sparse. Minor key, slow build, never a drop without a reason.
-        </p>
-        <div class="rail__foot"><span><b>144–157</b> BPM</span><span>DE</span></div>
+        <div class="rail__sub">Cinematic techno · Album</div>
+        <p class="rail__desc">Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. 9/9 Tracks live.</p>
+        <div class="rail__foot"><span><b>144–160</b> BPM</span><span>DE</span></div>
       </article>
-
-      <article class="rail" data-rail="NS">
-        <div class="rail__head">
-          <span class="rail__cat"><b>NS-NN</b> · RAIL</span>
-          <span class="rail__num">03 / 05</span>
-        </div>
-        <h3 class="rail__title">Nachtstrom</h3>
-        <div class="rail__sub">German night-techno</div>
-        <p class="rail__desc">
-          Asphalt-Schwarz und Natriumdampflicht. Architecture heroes, Sodium-Orange accent, Phrygian-Dom keys.
-        </p>
-        <div class="rail__foot"><span><b>145–160</b> BPM</span><span>DE</span></div>
+      <article class="rail" data-rail="DM">
+        <div class="rail__head"><span class="rail__cat"><b>DM-NN</b> · EP</span><span class="rail__num">03 / 05</span></div>
+        <h3 class="rail__title">Dome EP</h3>
+        <div class="rail__sub">Festival frenchcore · Mainstage</div>
+        <p class="rail__desc">Euphoric Peaktime-Mainstage-Anthem als durchgehender Story-Arc: Arrival → Communion → Intimacy → Surrender. 4/4 live.</p>
+        <div class="rail__foot"><span><b>188–200</b> BPM</span><span>EN</span></div>
       </article>
-
-      <article class="rail" data-rail="NT">
-        <div class="rail__head">
-          <span class="rail__cat"><b>NT-NN</b> · RAIL</span>
-          <span class="rail__num">04 / 05</span>
-        </div>
-        <h3 class="rail__title">Echo</h3>
-        <div class="rail__sub">Standalones</div>
-        <p class="rail__desc">
-          Heterogeneous experiments. Drone, ambient, spoken word, broken tempos. No fixed system — each release its own statement.
-        </p>
-        <div class="rail__foot"><span><b>any</b> BPM</span><span>MIXED</span></div>
+      <article class="rail" data-rail="ND">
+        <div class="rail__head"><span class="rail__cat"><b>TS · BB · TB</b> · DIST</span><span class="rail__num">04 / 05</span></div>
+        <h3 class="rail__title">Distribution</h3>
+        <div class="rail__sub">Trance · Hard Techno · Hands-Up</div>
+        <p class="rail__desc">Singles + EPs für die Distribution: Tausend Stimmen, BLACKBOX EP und die Tonband-Singles (DE Hardtek / Hands-Up). 16 Tracks live.</p>
+        <div class="rail__foot"><span><b>110–175</b> BPM</span><span>DE · EN</span></div>
       </article>
-
-      <article class="rail" data-rail="TB">
-        <div class="rail__head">
-          <span class="rail__cat"><b>TB-NN</b> · RAIL</span>
-          <span class="rail__num">05 / 05</span>
-        </div>
-        <h3 class="rail__title">Tonband</h3>
-        <div class="rail__sub">Comedy hardtek</div>
-        <p class="rail__desc">
-          Frenchcore lineage on Swiss-German tongue. Halftone-riso pop, Vögel Einsneunzig DNA, deadpan delivery.
-        </p>
-        <div class="rail__foot"><span><b>190</b> BPM</span><span>CH-DE</span></div>
+      <article class="rail" data-rail="ST">
+        <div class="rail__head"><span class="rail__cat"><b>NULLTAG-NN</b> · SINGLES</span><span class="rail__num">05 / 05</span></div>
+        <h3 class="rail__title">Standalones</h3>
+        <div class="rail__sub">Singles ohne EP-Bindung</div>
+        <p class="rail__desc">Reine NULLTAG-Singles mit eigenem Catalog — Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music u. a.</p>
+        <div class="rail__foot"><span><b>147–220</b> BPM</span><span>MIXED</span></div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ==================== §04 UPDATES ==================== -->
-<section class="s" id="updates" data-screen-label="05 Updates">
+<section class="s" id="lineage" data-screen-label="06 Lineage">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§04 · UPDATES · LATEST</div>
-        <h2 class="s__title">Updates</h2>
+        <div class="s__num">§05 · LINEAGE · TECHNO / EDM</div>
+        <h2 class="s__title">Family Tree</h2>
       </div>
-      <div class="s__meta">LOG · 03 ENTRIES<br/>MMXXVI / 04 → 05</div>
+      <div class="s__meta">ROOTS → NULLTAG<br/>INTERACTIVE</div>
     </div>
-
-    <div class="updates">
-      <article class="upd">
-        <div class="upd__date"><span>2026 · 05 · 14</span><b>● NEW</b></div>
-        <h4 class="upd__title">Lichtjahre Vol.2 brief locked — render queue opens MMXXVI / 06.</h4>
-        <div class="upd__body">
-          Cover brief manifest closed, palette signature confirmed: COSMIC magenta on void, single TIEFROT rule, celestial-body hero. Seven tracks queued for render.
-        </div>
-      </article>
-      <article class="upd">
-        <div class="upd__date"><span>2026 · 04 · 28</span><span>PRESS</span></div>
-        <h4 class="upd__title">Plastic Paradise EP shipped across all platforms — distribution sister-pairs synced.</h4>
-        <div class="upd__body">
-          NULLTAG-09 live on Apple Music, Spotify, SoundCloud and Bandcamp. WAV-master / JPG-q92 sibling pair pressed identical filenames.
-        </div>
-      </article>
-      <article class="upd">
-        <div class="upd__date"><span>2026 · 04 · 02</span><span>ARCHIVE</span></div>
-        <h4 class="upd__title">CINETEKK release pack published — sticky-TOC HTML on file.</h4>
-        <div class="upd__body">
-          Full release-spec document with suno-prompt copy-blocks and tracklist table archived under ui_kits/release_pack/. Reuse as template for NS-01.
-        </div>
-      </article>
+    <p style="font-family:var(--font-grotesk); font-size:16px; line-height:1.6; color:var(--bone-dim); max-width:64ch; margin:0 0 var(--s-6);">Wo kommt NULLTAG her? Von Kraftwerk &amp; Disco über Detroit Techno, Trance und Hardcore bis zu den fünf Schienen. Klick einen Knoten — die Abstammungslinie leuchtet auf.</p>
+    <div style="border:1px solid var(--border); background:var(--void-deep);">
+      <iframe src="family-tree.html" title="Techno / EDM Family Tree" loading="lazy" style="width:100%; height:760px; border:0; display:block;"></iframe>
+    </div>
+    <div style="margin-top:var(--s-4); text-align:right;">
+      <a class="btn-hero btn-hero--ghost" href="family-tree.html" target="_blank" rel="noopener" style="font-size:11px;">↗ Vollbild öffnen</a>
     </div>
   </div>
 </section>
 
-<!-- ==================== §05 UPCOMING ==================== -->
-<section class="s" id="upcoming" data-screen-label="06 Upcoming">
+<section class="s" id="tools" data-screen-label="07 Tools">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§05 · UPCOMING · PIPELINE</div>
-        <h2 class="s__title">Upcoming</h2>
+        <div class="s__num">§06 · TOOLS · GADGETS</div>
+        <h2 class="s__title">Tools</h2>
       </div>
-      <div class="s__meta">04 IN PROGRESS<br/>T+2w → T+24w</div>
+      <div class="s__meta">EMBEDDABLE<br/>BRAND-NATIVE</div>
     </div>
-
-    <div class="pipe">
-      <div class="pipe__row head">
-        <span>DROP</span><span>CAT</span><span>TITLE</span><span>RAIL</span><span style="text-align:right;">STATE</span>
-      </div>
-      <div class="pipe__row">
-        <span class="pipe__when">T+02w</span>
-        <span class="pipe__cat">LJ-08</span>
-        <div class="pipe__title">Mercurys Burn — Single<small>Lead track · LJ Vol.2</small></div>
-        <span><span class="pipe__rail" data-rail="LJ">LICHTJAHRE</span></span>
-        <span class="pipe__state" data-s="press"><span class="dot"></span>PRESS</span>
-      </div>
-      <div class="pipe__row">
-        <span class="pipe__when">T+06w</span>
-        <span class="pipe__cat">LJ-09</span>
-        <div class="pipe__title">Lichtjahre Vol.2 — Full Album<small>07 tracks · brief locked</small></div>
-        <span><span class="pipe__rail" data-rail="LJ">LICHTJAHRE</span></span>
-        <span class="pipe__state" data-s="master"><span class="dot"></span>MASTER</span>
-      </div>
-      <div class="pipe__row">
-        <span class="pipe__when">T+12w</span>
-        <span class="pipe__cat">NS-01</span>
-        <div class="pipe__title">Natriumdampflicht<small>NACHTSTROM rail · debut</small></div>
-        <span><span class="pipe__rail" data-rail="NS">NACHTSTROM</span></span>
-        <span class="pipe__state" data-s="render"><span class="dot"></span>RENDER</span>
-      </div>
-      <div class="pipe__row">
-        <span class="pipe__when">T+24w</span>
-        <span class="pipe__cat">TB-01</span>
-        <div class="pipe__title">Vögel Einsneunzig<small>TONBAND rail · debut</small></div>
-        <span><span class="pipe__rail" data-rail="TB">TONBAND</span></span>
-        <span class="pipe__state" data-s="render"><span class="dot"></span>RENDER</span>
-      </div>
+    <div class="channels">
+      <a class="ch" href="tools.html?w=countdown" target="_blank" rel="noopener">
+        <div class="ch__name">— G-01 · ANTICIPATION</div>
+        <h4 class="ch__handle">Drop<br/>Countdown</h4>
+        <div class="ch__meta">Nächster Friday-Drop · live</div>
+      </a>
+      <a class="ch" href="tools.html?w=smartlink" target="_blank" rel="noopener">
+        <div class="ch__name">— G-02 · CONVERSION</div>
+        <h4 class="ch__handle">Smart<br/>Link</h4>
+        <div class="ch__meta">Ein Link · alle Plattformen</div>
+      </a>
+      <a class="ch" href="tools.html?w=finder" target="_blank" rel="noopener">
+        <div class="ch__name">— G-03 · SOCIAL HOOK</div>
+        <h4 class="ch__handle">Schiene<br/>Finder</h4>
+        <div class="ch__meta">Quiz → deine Schiene</div>
+      </a>
+      <a class="ch" href="tools.html" target="_blank" rel="noopener">
+        <div class="ch__name">— GALLERY</div>
+        <h4 class="ch__handle">Alle<br/>Tools</h4>
+        <div class="ch__meta">+ Roadmap · Embeds</div>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- ==================== §06 MANIFEST ==================== -->
-<section class="s" id="manifest" data-screen-label="07 Manifest">
+<section class="s" id="manifest" data-screen-label="08 Manifest">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§06 · MANIFEST · BILINGUAL</div>
+        <div class="s__num">§07 · MANIFEST · BILINGUAL</div>
         <h2 class="s__title">Manifest</h2>
       </div>
       <div class="s__meta">DE · EN<br/>VERBATIM</div>
     </div>
-
     <div class="man">
       <aside class="man__facts" aria-label="Label facts">
-        <dl>
-          <div><dt>Composer</dt><dd>Ivan Stricker</dd></div>
-          <div><dt>Location</dt><dd>Buchs SG · CH</dd></div>
-          <div><dt>Founded</dt><dd>MMXXVI</dd></div>
-          <div><dt>Method</dt><dd>Suno Pro · Lic.</dd></div>
-          <div><dt>Languages</dt><dd>EN · DE · CH-DE</dd></div>
-          <div><dt>Catalog</dt><dd>13 / 20</dd></div>
-        </dl>
+        <div><dt>Composer</dt><dd>Ivan Stricker</dd></div>
+        <div><dt>Location</dt><dd>Buchs SG · CH</dd></div>
+        <div><dt>Founded</dt><dd>MMXXVI</dd></div>
+        <div><dt>Method</dt><dd>Suno Pro · Lic.</dd></div>
+        <div><dt>Languages</dt><dd>EN · DE · CH-DE</dd></div>
+        <div><dt>Catalog</dt><dd>49 Tracks</dd></div>
       </aside>
-
       <div class="man__body">
-        <p>“Kino ohne Bilder. Filme entstehen im Kopf, nicht auf der Leinwand. Cinematic techno · cosmic frenchcore · German underground.”</p>
-
+        <p>„Kino ohne Bilder. Filme entstehen im Kopf, nicht auf der Leinwand. Cinematic techno · cosmic frenchcore · German underground."</p>
         <p>NULLTAG is a one-person Swiss music label. Releases ship across five Schienen — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key, and ISRC are <em>treated as design</em>, not metadata to hide.</p>
-
-        <p>Brutalist verbal language, single TIEFROT mark per surface, JetBrains Mono everywhere. The label sees itself as a small operation that happens to spec releases like a research lab — physics-as-lyrics, BPM-as-tag, every track gets a style-block treated as a primary source.</p>
-
+        <p>Brutalist verbal language, single TIEFROT mark per surface, JetBrains Mono everywhere. A small operation that happens to spec releases like a research lab — physics-as-lyrics, BPM-as-tag.</p>
         <div class="man__stamp">
           <div>—</div>
           <div>NULLTAG · MMXXVI · Buchs SG, Switzerland</div>
@@ -1281,242 +522,120 @@
   </div>
 </section>
 
-<!-- ==================== §07 LISTEN ==================== -->
-<section class="s" id="listen" data-screen-label="08 Listen">
+<section class="s" id="listen" data-screen-label="09 Listen">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§07 · LISTEN · CHANNELS</div>
+        <div class="s__num">§08 · LISTEN · CHANNELS</div>
         <h2 class="s__title">Listen</h2>
       </div>
-      <div class="s__meta">SEVEN PLATFORMS<br/>SAME STAMP</div>
+      <div class="s__meta">SIX PLATFORMS<br/>SAME STAMP</div>
     </div>
-
     <div class="channels">
-      <a class="ch" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener">
-        <div class="ch__name">— PRIMARY</div>
-        <h4 class="ch__handle">SoundCloud<small>/nulltag</small></h4>
-        <div class="ch__meta">FULL CATALOG · PREVIEWS</div>
-      </a>
-      <a class="ch" href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener">
-        <div class="ch__name">— STREAMING</div>
-        <h4 class="ch__handle">Spotify<small>open.spotify.com</small></h4>
-        <div class="ch__meta">ALL RELEASES · CANVASES</div>
-      </a>
-      <a class="ch" href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" target="_blank" rel="noopener">
-        <div class="ch__name">— STREAMING</div>
-        <h4 class="ch__handle">Apple Music<small>music.apple.com</small></h4>
-        <div class="ch__meta">ALL RELEASES · LOSSLESS</div>
-      </a>
-      <a class="ch" href="https://nulltag.bandcamp.com" target="_blank" rel="noopener">
-        <div class="ch__name">— DIRECT</div>
-        <h4 class="ch__handle">Bandcamp<small>nulltag.bandcamp.com</small></h4>
-        <div class="ch__meta">WAV · FLAC · MP3-320</div>
-      </a>
-      <a class="ch" href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" target="_blank" rel="noopener">
-        <div class="ch__name">— VIDEO</div>
-        <h4 class="ch__handle">YouTube<small>@nulltag</small></h4>
-        <div class="ch__meta">FULL TRACKS · LOOPS</div>
-      </a>
-      <a class="ch" href="https://www.instagram.com/nulltag.ch/" target="_blank" rel="noopener">
-        <div class="ch__name">— SOCIAL</div>
-        <h4 class="ch__handle">Instagram<small>@nulltag.ch</small></h4>
-        <div class="ch__meta">COVERS · CANVASES · STORIES</div>
-      </a>
-      <a class="ch" href="https://linkfire.com/nulltag" target="_blank" rel="noopener">
-        <div class="ch__name">— SMART LINK</div>
-        <h4 class="ch__handle">Linkfire<small>/nulltag</small></h4>
-        <div class="ch__meta">ALL PLATFORMS · ONE PAGE</div>
-      </a>
+      <a class="ch" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><div class="ch__name">— PRIMARY</div><h4 class="ch__handle">SoundCloud</h4><div class="ch__meta">/nulltag</div></a>
+      <a class="ch" href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><div class="ch__name">STREAMING</div><h4 class="ch__handle">Spotify</h4><div class="ch__meta">Artist</div></a>
+      <a class="ch" href="https://music.apple.com/ch/artist/nulltag" target="_blank" rel="noopener"><div class="ch__name">STREAMING</div><h4 class="ch__handle">Apple</h4><div class="ch__meta">Music</div></a>
+      <a class="ch" href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" target="_blank" rel="noopener"><div class="ch__name">VIDEO</div><h4 class="ch__handle">YouTube</h4><div class="ch__meta">Channel</div></a>
+      <a class="ch" href="https://www.instagram.com/nulltag.ch/" target="_blank" rel="noopener"><div class="ch__name">SOCIAL</div><h4 class="ch__handle">Instagram</h4><div class="ch__meta">@nulltag.ch</div></a>
+      <a class="ch" href="https://www.deezer.com/artist/388775221" target="_blank" rel="noopener"><div class="ch__name">STREAMING</div><h4 class="ch__handle">Deezer</h4><div class="ch__meta">Artist</div></a>
     </div>
   </div>
 </section>
 
-<!-- ==================== FOOTER ==================== -->
-<footer class="foot" data-screen-label="09 Footer">
+<footer class="foot">
   <div class="container">
     <div class="foot__grid">
       <div class="foot__brand">
-        <div class="wordmark">NULLTAG</div>
+        <span class="wordmark">NULLTAG</span>
         <p>Swiss independent electronic music label. Cinematic techno · cosmic frenchcore · German underground from Buchs SG.</p>
       </div>
-      <div class="foot__col">
-        <h5>Navigate</h5>
-        <ul>
-          <li><a href="#latest">Latest</a></li>
-          <li><a href="#catalog">Catalog</a></li>
-          <li><a href="#schienen">Schienen</a></li>
-          <li><a href="#manifest">Manifest</a></li>
-        </ul>
-      </div>
-      <div class="foot__col">
-        <h5>Schienen</h5>
-        <ul>
-          <li><a href="#schienen">Lichtjahre</a></li>
-          <li><a href="#schienen">Cinetekk</a></li>
-          <li><a href="#schienen">Nachtstrom</a></li>
-          <li><a href="#schienen">Echo</a></li>
-          <li><a href="#schienen">Tonband</a></li>
-        </ul>
-      </div>
-      <div class="foot__col">
-        <h5>Listen</h5>
-        <ul>
-          <li><a href="https://soundcloud.com/nulltag">SoundCloud</a></li>
-          <li><a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV">Spotify</a></li>
-          <li><a href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431">Apple Music</a></li>
-          <li><a href="https://nulltag.bandcamp.com">Bandcamp</a></li>
-        </ul>
-      </div>
+      <div class="foot__col"><h5>Navigate</h5><ul><li><a href="#latest">Latest</a></li><li><a href="#catalog">Catalog</a></li><li><a href="#schienen">Schienen</a></li><li><a href="#manifest">Manifest</a></li></ul></div>
+      <div class="foot__col"><h5>Listen</h5><ul><li><a href="https://soundcloud.com/nulltag">SoundCloud</a></li><li><a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV">Spotify</a></li><li><a href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q">YouTube</a></li></ul></div>
+      <div class="foot__col"><h5>Connect</h5><ul><li><a href="https://www.instagram.com/nulltag.ch/">Instagram</a></li><li><a href="mailto:ivan@nulltag.ch">ivan@nulltag.ch</a></li></ul></div>
     </div>
-
     <div class="foot__bottom">
-      <div>CH-9470 BUCHS SG · UTC+01:00 · CET · EN/DE/CH-DE</div>
-      <div>© NULLTAG · MMXXVI · All rights reserved.</div>
-      <div>MADE WITH SUNO PRO · COMMERCIAL LICENSE</div>
+      <span>NULLTAG · MMXXVI · BUCHS SG · CH</span>
+      <span>music.nulltag.ch</span>
     </div>
   </div>
 </footer>
 
-<!-- ==================== CATALOG DATA ==================== -->
 <script>
-  const CATALOG = [
-    { cat: "LJ-01", rail: "LJ", title: "Lichtjahre Vol.1", img: "covers/lichtjahre.jpg", bpm: "188–205", key: "Aeolian", dur: "42:18" },
-    { cat: "LJ-02", rail: "LJ", title: "Cosmic Sea", img: "covers/cosmic_sea.jpg", bpm: "192", key: "F#m", dur: "05:14" },
-    { cat: "LJ-03", rail: "LJ", title: "The Edge Recedes", img: "covers/the_edge_recedes.jpg", bpm: "196", key: "Bm", dur: "04:48" },
-    { cat: "LJ-04", rail: "LJ", title: "Blue Planet", img: "covers/blue_planet.jpg", bpm: "198", key: "C#m", dur: "05:02" },
-    { cat: "LJ-05", rail: "LJ", title: "Planet Jupiter", img: "covers/planet_jupiter.jpg", bpm: "201", key: "Gm", dur: "05:36" },
-    { cat: "LJ-06", rail: "LJ", title: "Heat Death", img: "covers/heat_death.jpg", bpm: "203", key: "Em", dur: "06:12" },
-    { cat: "LJ-07", rail: "LJ", title: "Mercury's Burn", img: "covers/mercurys_burn.jpg", bpm: "205", key: "F#m", dur: "05:48" },
-    { cat: "CT-01", rail: "CT", title: "Cinetekk Vol.1", img: "covers/cinetekk.jpg", bpm: "144–157", key: "Minor", dur: "38:22" },
-    { cat: "CT-05", rail: "CT", title: "Eisflug", img: "covers/eisflug.jpg", bpm: "149", key: "Am", dur: "04:54" },
-    { cat: "CT-07", rail: "CT", title: "Letzter Sommer", img: "covers/letzter_sommer.jpg", bpm: "152", key: "Em", dur: "05:18" },
-    { cat: "CT-09", rail: "CT", title: "Nachtfalter", img: "covers/nachtfalter.jpg", bpm: "156", key: "F#m", dur: "05:42" },
-    { cat: "NULLTAG-09", rail: "NT", title: "Plastic Paradise EP", img: "covers/plastic_funeral.jpg", bpm: "152–168", key: "F#m / D♭m", dur: "18:24" },
-    { cat: "NULLTAG-07", rail: "NT", title: "Peace Remains", img: "covers/peace_remains.jpg", bpm: "138", key: "Cm", dur: "06:24" },
+  // ── rollout countdown (next Vol.2 Friday drop) ─────────────
+  var RO_DROPS = [
+    { t: Date.UTC(2026,5,20,8,0,0), title:"Microwave",  cat:"LJ-11 · 190 BPM · Vol.2", when:"Freitag, 20. Juni 2026 · 10:00 CEST" },
+    { t: Date.UTC(2026,6,2,8,0,0),  title:"Last Light",  cat:"LJ-12 · 185 BPM · Vol.2", when:"Donnerstag, 2. Juli 2026 · 10:00 CEST" },
+    { t: Date.UTC(2026,6,2,8,0,0),  title:"Vol.2 EP",    cat:"6 Tracks · Full EP + Playlist", when:"Donnerstag, 2. Juli 2026 · public" }
   ];
+  function roPad(n){ return (n<10?"0":"")+n; }
+  function roTick(){
+    var now = Date.now(), d = RO_DROPS[RO_DROPS.length-1];
+    for (var i=0;i<RO_DROPS.length;i++){ if (RO_DROPS[i].t > now){ d = RO_DROPS[i]; break; } }
+    var t = document.getElementById("ro-title"); if (!t) return;
+    t.textContent = d.title;
+    document.getElementById("ro-cat").textContent = d.cat;
+    document.getElementById("ro-when").textContent = d.when;
+    var s = Math.max(0, Math.floor((d.t - now)/1000));
+    document.getElementById("ro-d").textContent = roPad(Math.floor(s/86400));
+    document.getElementById("ro-h").textContent = roPad(Math.floor((s%86400)/3600));
+    document.getElementById("ro-m").textContent = roPad(Math.floor((s%3600)/60));
+    document.getElementById("ro-s").textContent = roPad(s%60);
+  }
+  roTick(); setInterval(roTick, 1000);
 
-  const grid = document.getElementById("catalog-grid");
+  // ── catalog data (real covers) ─────────────────────────────
+  var CATALOG = [
+    { rail:"LJ", title:"Supernova",         cat:"LJ-10", meta:"200 BPM · Vol.2", img:"covers/supernova.jpg" },
+    { rail:"LJ", title:"Andromeda Approach", cat:"LJ-09", meta:"205 BPM · Vol.2", img:"covers/andromeda_approach.jpg" },
+    { rail:"LJ", title:"Mercury's Burn",     cat:"LJ-06", meta:"200 BPM · Vol.1", img:"covers/mercurys_burn.jpg" },
+    { rail:"LJ", title:"Heat Death",         cat:"LJ-05", meta:"185 BPM · Vol.1", img:"covers/heat_death.jpg" },
+    { rail:"LJ", title:"Jupiter",            cat:"LJ-04", meta:"205 BPM · Vol.1", img:"covers/planet_jupiter.jpg" },
+    { rail:"LJ", title:"Blue Planet",        cat:"LJ-03", meta:"199 BPM · Vol.1", img:"covers/blue_planet.jpg" },
+    { rail:"LJ", title:"The Edge Recedes",   cat:"LJ-02", meta:"200 BPM · Vol.1", img:"covers/the_edge_recedes.jpg" },
+    { rail:"LJ", title:"Cosmic Sea",         cat:"LJ-01", meta:"190 BPM · Vol.1", img:"covers/cosmic_sea.jpg" },
+    { rail:"CT", title:"Eisflug",            cat:"CT-05", meta:"152 BPM · DE",   img:"covers/eisflug.jpg" },
+    { rail:"CT", title:"Letzter Sommer",     cat:"CT-07", meta:"150 BPM · DE",   img:"covers/letzter_sommer.jpg" },
+    { rail:"CT", title:"Nachtfalter",        cat:"CT-09", meta:"156 BPM · EN",   img:"covers/nachtfalter.jpg" },
+    { rail:"CT", title:"Cinetekk",           cat:"CT-01", meta:"152 BPM · DE",   img:"covers/cinetekk.jpg" },
+    { rail:"DM", title:"In The Dome",        cat:"DM-01", meta:"190 BPM · DOME EP", img:"covers/in_the_dome.jpg" },
+    { rail:"ST", title:"Plastic Funeral",    cat:"NULLTAG-09", meta:"170 BPM",   img:"covers/plastic_funeral.jpg" },
+    { rail:"ST", title:"Peace Remains",      cat:"NULLTAG-10", meta:"190 BPM",   img:"covers/peace_remains.jpg" }
+  ];
+  var RAIL_NAME = { LJ:"LICHTJAHR", CT:"CINETEKK", DM:"DOME EP", ND:"DISTRIBUTION", ST:"STANDALONE" };
+
   function renderCatalog(filter) {
-    grid.innerHTML = CATALOG
-      .filter(r => filter === "ALL" || r.rail === filter)
-      .map(r => `
-        <a class="cat" href="#listen" aria-label="${r.title}">
-          <img src="${r.img}" alt="${r.title} cover" loading="lazy" />
-          <span class="cat__rail" data-rail="${r.rail}">${r.cat}</span>
-          <div class="cat__info">
-            <h4 class="cat__title">${r.title}</h4>
-            <div class="cat__meta">${r.bpm} BPM · ${r.key} · ${r.dur}</div>
-          </div>
-        </a>
-      `).join("");
+    var grid = document.getElementById("catalog-grid");
+    grid.innerHTML = "";
+    CATALOG.filter(function(c){ return filter === "ALL" || c.rail === filter; }).forEach(function(c){
+      var a = document.createElement("a");
+      a.className = "cat";
+      a.href = "https://soundcloud.com/nulltag";
+      a.target = "_blank"; a.rel = "noopener";
+      a.innerHTML =
+        '<span class="cat__rail" data-rail="'+c.rail+'">'+RAIL_NAME[c.rail]+'</span>' +
+        '<img src="'+c.img+'" alt="'+c.title+' cover" loading="lazy" />' +
+        '<div class="cat__info"><div class="cat__title">'+c.title+'</div><div class="cat__m">'+c.cat+' · '+c.meta+'</div></div>';
+      grid.appendChild(a);
+    });
   }
   renderCatalog("ALL");
 
-  document.querySelectorAll(".filters button").forEach(b => {
-    b.addEventListener("click", () => {
-      document.querySelectorAll(".filters button").forEach(x => x.classList.remove("active"));
-      b.classList.add("active");
-      renderCatalog(b.dataset.rail);
-    });
+  document.getElementById("filters").addEventListener("click", function(e){
+    var btn = e.target.closest("button");
+    if (!btn) return;
+    [].forEach.call(this.querySelectorAll("button"), function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    renderCatalog(btn.dataset.rail);
   });
 
-  // hero motion — autoplay (muted); manual fallback if the browser blocks it
-  const heroBtn = document.querySelector("[data-hero-play]");
-  const heroPoster = document.querySelector(".hero__video:not(.hero__video--lazy)");
-  const heroVideo = document.querySelector(".hero__video--lazy");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (heroBtn && heroVideo && heroPoster) {
-    const showMotion = () => {
-      heroPoster.style.display = "none";
-      heroVideo.hidden = false;
-      heroBtn.hidden = true;
-      return heroVideo.play();
-    };
-    const restorePoster = () => {
-      heroVideo.hidden = true;
-      heroPoster.style.display = "";
-      heroBtn.hidden = false;
-    };
-    heroBtn.addEventListener("click", () => { showMotion().catch(() => {}); });
-    if (!reduceMotion) showMotion().catch(restorePoster);
-  }
-
-  // SoundCloud — autostart with a visible NOW PLAYING strip. Browsers gate
-  // audio-with-sound until the first user gesture, so we attempt playback on
-  // READY and again on the first input; the strip reflects the state.
-  (function scAutoplay() {
-    const SC_URL = "https://soundcloud.com/nulltag";
-    const tg = document.getElementById("sc-toggle"),
-          stEl = document.getElementById("sc-state"),
-          trEl = document.getElementById("sc-track"),
-          dot = document.getElementById("sc-dot");
-    let widget = null, loaded = false, playing = false;
-
-    function setState(txt, on) {
-      if (stEl) stEl.textContent = txt;
-      if (dot) dot.setAttribute("data-on", on ? "1" : "0");
-      if (tg) { tg.textContent = on ? "❚❚" : "▶"; tg.setAttribute("aria-label", on ? "Pause" : "Play"); }
-    }
-    function trackName() {
-      if (!widget) return;
-      widget.getCurrentSound(s => { if (s && trEl) trEl.textContent = s.title || "NULLTAG · SOUNDCLOUD"; });
-    }
-    function bind(ifr) {
-      if (!window.SC || !window.SC.Widget) return;
-      widget = window.SC.Widget(ifr);
-      const E = window.SC.Widget.Events;
-      widget.bind(E.READY, () => { setState("CUED", false); trackName(); try { widget.play(); } catch (e) {} });
-      widget.bind(E.PLAY, () => { playing = true; setState("NOW PLAYING", true); trackName(); });
-      widget.bind(E.PAUSE, () => { playing = false; setState("PAUSED", false); });
-      widget.bind(E.FINISH, () => { playing = false; setState("PAUSED", false); });
-    }
-    function load() {
-      if (loaded) return; loaded = true;
-      setState("LOADING", false);
-      const ifr = document.createElement("iframe");
-      ifr.id = "sc-frame";
-      ifr.title = "NULLTAG audio";
-      ifr.allow = "autoplay";
-      ifr.tabIndex = -1;
-      ifr.setAttribute("aria-hidden", "true");
-      ifr.src = "https://w.soundcloud.com/player/?url=" + encodeURIComponent(SC_URL) +
-        "&auto_play=true&hide_related=true&show_comments=false&show_user=false" +
-        "&show_reposts=false&show_teaser=false&visual=false&single_active=true";
-      ifr.style.cssText = "position:absolute;width:1px;height:1px;opacity:0;border:0;left:-9999px;top:-9999px;pointer-events:none";
-      document.body.appendChild(ifr);
-      if (window.SC && window.SC.Widget) { bind(ifr); return; }
-      const s = document.createElement("script");
-      s.src = "https://w.soundcloud.com/player/api.js";
-      s.onload = () => bind(ifr);
-      s.onerror = () => setState("OPEN ON SOUNDCLOUD ↗", false);
-      document.head.appendChild(s);
-    }
-    function kick() {
-      document.removeEventListener("pointerdown", kick, true);
-      document.removeEventListener("keydown", kick, true);
-      if (widget) { try { widget.play(); } catch (e) {} } else { load(); }
-    }
-    if (tg) tg.addEventListener("click", e => {
-      e.stopPropagation();
-      if (!loaded) { load(); return; }
-      if (!widget) return;
-      if (playing) widget.pause(); else widget.play();
-    });
-    load();
-    document.addEventListener("pointerdown", kick, true);
-    document.addEventListener("keydown", kick, true);
+  // hero: swap poster → motion video once it can play
+  (function(){
+    var v = document.getElementById("hero-video");
+    var p = document.getElementById("hero-poster");
+    if (!v) return;
+    v.addEventListener("canplaythrough", function(){ v.style.display = "block"; p.style.display = "none"; }, { once:true });
+    v.load();
   })();
-
-  // smooth scroll fallback (small browsers)
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener("click", e => {
-      const id = a.getAttribute("href").slice(1);
-      const el = document.getElementById(id);
-      if (el) { e.preventDefault(); el.scrollIntoView({ behavior: "smooth", block: "start" }); }
-    });
-  });
 </script>
-
 </body>
 </html>

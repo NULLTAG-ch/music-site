@@ -175,6 +175,8 @@
   --s-9:  64px;
   --s-10: 96px;
 
+  --site-max: 1280px;   /* max content width — .container on the landing page */
+
   --r-0:  0px;      /* default — most surfaces are sharp */
   --r-sm: 3px;      /* code badges */
   --r-md: 4px;      /* buttons, copy-blocks */
