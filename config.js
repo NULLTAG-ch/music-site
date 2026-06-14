@@ -23,23 +23,22 @@ window.CONFIG = {
   // tags: short descriptive chips (genre / format / rail).
   latestRelease: {
     show: true,
-    title: "Plastic Paradise EP",
-    subtitle: "EP · 2026",
-    artwork: "assets/cover-placeholder.svg",
-    ctaLabel: "Listen on Apple Music",
-    listenUrl: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431",
-    appleEmbed: "https://embed.music.apple.com/ch/album/plastic-paradise-ep/6769685431",
+    title: "Supernova",
+    subtitle: "LJ-10 · Lichtjahr Vol.2 · 2026",
+    artwork: "covers/supernova.jpg",
+    ctaLabel: "Listen on SoundCloud",
+    listenUrl: "https://soundcloud.com/nulltag",
     meta: {
-      cat: "",                 // e.g. "NULLTAG-01"
-      bpm: "",                 // e.g. "152"
-      key: "",                 // e.g. "F♯m"
-      duration: "",            // e.g. "18:24"
+      cat: "LJ-10",
+      bpm: "200",
+      key: "",
+      duration: "04:23",
       format: "WAV · MP3-320",
-      isrc: "",                // e.g. "CH-XXX-26-00001"
+      isrc: "",
       year: "2026",
-      schiene: ""              // e.g. "Echo"
+      schiene: "lichtjahr"
     },
-    tags: ["Electronic", "EP", "Independent"]
+    tags: ["Cosmic Frenchcore", "Single", "Vol.2"]
   },
 
   // Release overview. Enriched live from Deezer (no key) and/or a
@@ -64,22 +63,23 @@ window.CONFIG = {
   // A "Schiene" (rail) is the release LINE / sound-world a release belongs
   // to (≠ the format EP/Single/Album). The 5 NULLTAG rails:
   schienen: [
-    { id: "lichtjahre", name: "LICHTJAHRE", sound: "Cosmic frenchcore",    accent: "#e879c4" },
-    { id: "cinetekk",   name: "CINETEKK",   sound: "Cinematic techno",     accent: "#c44a3a" },
-    { id: "nachtstrom", name: "NACHTSTROM", sound: "German night-techno",  accent: "#e8703a" },
-    { id: "echo",       name: "ECHO",       sound: "Standalones",          accent: "#5fc8e0" },
-    { id: "tonband",    name: "TONBAND",    sound: "Comedy hardtek",       accent: "#d4c8a8" }
+    { id: "lichtjahr",  name: "LICHTJAHR",    sound: "Cosmic frenchcore",               accent: "#e879c4" },
+    { id: "cinetekk",   name: "CINETEKK",     sound: "Cinematic techno · Album",        accent: "#3aa8ff" },
+    { id: "dome",       name: "DOME EP",      sound: "Festival frenchcore",             accent: "#ff6a2a" },
+    { id: "dist",       name: "DISTRIBUTION", sound: "Trance · Hard Techno · Hands-Up", accent: "#d4c8a8" },
+    { id: "standalone", name: "STANDALONES",  sound: "Singles, heterogen",              accent: "#5fc8e0" }
   ],
-  // Map each release (by its exact Deezer title, case-insensitive) to a
+  // Map each release title (Deezer / SoundCloud, case-insensitive) to a
   // Schiene id above. Unmapped releases simply show no rail tag — nothing
-  // is invented. Current Deezer titles to assign (your call):
-  //   "PLASTIC PARADISE"  -> ""   (e.g. "echo")
-  //   "BLACKBOX"          -> ""   (e.g. "cinetekk")
-  //   "TEKKNO TRAIN"      -> ""   (e.g. "tonband")
-  //   "Tausend Stimmen / Thousand Voices" -> ""   (e.g. "echo")
-  //   "Lichtjahr"         -> "lichtjahre"   (assigned — clearly the LJ rail)
+  // is invented.
   schieneMap: {
-    "lichtjahr": "lichtjahre"
+    "lichtjahr": "lichtjahr",
+    "cinetekk": "cinetekk",
+    "in the dome": "dome", "god of bass": "dome", "stuck on repeat": "dome", "fell in love with the music": "dome",
+    "blackbox": "dist", "tausend stimmen": "dist", "thousand voices": "dist", "swiss geeman": "dist",
+    "plastic paradise": "standalone", "plastic funeral": "standalone", "peace remains": "standalone",
+    "lovesong": "standalone", "freedom": "standalone", "fifteen years": "standalone", "beauty of music": "standalone",
+    "voegel einsneunzig": "standalone", "tekkno train": "standalone"
   },
 
   // Where the music lives — prioritised: SoundCloud, Apple Music, Spotify.
@@ -112,19 +112,11 @@ window.CONFIG = {
   // note (1–2 sentences), link (optional "more info ↗" url, "" to hide).
   upcoming: [
     {
-      title: "NACHTSTROM NS-01",
-      schiene: "Nachtstrom",
-      status: "Writing",
-      eta: "2026",
-      note: "First single of the asphalt-black rail — German night-techno, Sodium-Orange palette, Phrygian-Dom keys. Architecture heroes, single light source.",
-      link: ""
-    },
-    {
-      title: "LICHTJAHRE Vol.2",
-      schiene: "Lichtjahre",
-      status: "Concept",
-      eta: "2026",
-      note: "Second cosmic-frenchcore volume. Brief locked, cover system in design — successor to the released Vol.1.",
+      title: "Lichtjahr Vol.2 — Full EP",
+      schiene: "Lichtjahr",
+      status: "Scheduled",
+      eta: "26.06.2026",
+      note: "6-track cosmic-frenchcore EP. Weekly SoundCloud singles, then everywhere on all streaming services 26 June 2026.",
       link: ""
     }
   ]
