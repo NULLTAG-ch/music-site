@@ -106,18 +106,18 @@
         <button class="gadget__embed" data-embed="countdown">&lt;/&gt; Embed</button>
       </div>
       <div class="cd">
-        <div class="cd__cover"><span class="tag">● NEXT DROP</span><img id="cd-cover" src="covers/microwave.jpg" alt="Next drop cover" /></div>
+        <div class="cd__cover"><span class="tag">● NEXT DROP</span><img id="cd-cover" src="covers/last_light.jpg" alt="Next drop cover" /></div>
         <div class="cd__body">
-          <div class="cd__eye" id="cd-cat">LJ-11 · LICHTJAHRE</div>
-          <h3 class="cd__title" id="cd-title">Microwave</h3>
-          <div class="cd__sub" id="cd-sub">Cosmic Frenchcore · 190 BPM · Lichtjahr Vol.2</div>
+          <div class="cd__eye" id="cd-cat">LJ-12 · LICHTJAHR · SOUNDCLOUD</div>
+          <h3 class="cd__title" id="cd-title">Last Light</h3>
+          <div class="cd__sub" id="cd-sub">Atmospheric Closer · 185 BPM · Letzte SoundCloud-Single</div>
           <div class="cd__clock">
             <div class="cd__unit"><div class="cd__num" id="cd-d">00</div><div class="cd__lbl">Tage</div></div>
             <div class="cd__unit"><div class="cd__num" id="cd-h">00</div><div class="cd__lbl">Std</div></div>
             <div class="cd__unit"><div class="cd__num" id="cd-m">00</div><div class="cd__lbl">Min</div></div>
             <div class="cd__unit"><div class="cd__num" id="cd-s">00</div><div class="cd__lbl">Sek</div></div>
           </div>
-          <div class="cd__when" id="cd-when">Freitag, 20. Juni 2026 · 10:00 CEST</div>
+          <div class="cd__when" id="cd-when">Freitag, 19. Juni 2026 · 10:00 CEST</div>
         </div>
       </div>
       <div class="gadget__note">Zählt automatisch zum nächsten Single-Drop (freitags 10:00 CEST) und springt nach dem Release zum nächsten Track. <code>&lt;iframe src="tools.html?w=countdown" width="640" height="280"&gt;</code></div>
@@ -201,9 +201,9 @@
   // ===== G-01 · COUNTDOWN =====
   // Upcoming drops (UTC instants; 10:00 CEST = 08:00 UTC). Auto-advances.
   var DROPS = [
-    { cat:"LJ-11 · LICHTJAHRE", title:"Microwave",   sub:"Cosmic Frenchcore · 190 BPM · Lichtjahr Vol.2", cover:"covers/microwave.jpg",   when:"Freitag, 20. Juni 2026 · 10:00 CEST", t:Date.UTC(2026,5,20,8,0,0) },
-    { cat:"LJ-12 · LICHTJAHRE", title:"Last Light",   sub:"Atmospheric Closer · 185 BPM · Lichtjahr Vol.2", cover:"covers/last_light.jpg", when:"Donnerstag, 2. Juli 2026 · 10:00 CEST", t:Date.UTC(2026,6,2,8,0,0) },
-    { cat:"EP · LICHTJAHR VOL.2", title:"Vol.2 EP",    sub:"Full EP + Playlist · 6 Tracks",                  cover:"covers/lichtjahr_vol2.jpg",              when:"Donnerstag, 2. Juli 2026 · 10:00 CEST", t:Date.UTC(2026,6,2,8,0,0) }
+    { cat:"LJ-12 · LICHTJAHR · SOUNDCLOUD", title:"Last Light", sub:"Atmospheric Closer · 185 BPM · Letzte SoundCloud-Single", cover:"covers/last_light.jpg", when:"Freitag, 19. Juni 2026 · 10:00 CEST", t:Date.UTC(2026,5,19,8,0,0) },
+    { cat:"EP · LICHTJAHR VOL.2 · STREAMING", title:"Vol.2 EP", sub:"Full EP · alle Streaming-Dienste · 6 Tracks",   cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 26. Juni 2026 · überall", t:Date.UTC(2026,5,26,8,0,0) },
+    { cat:"EVENT · LICHTJAHR VOL.2", title:"Showroom",   sub:"Lichtjahr Vol.2 · Showroom",                          cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 3. Juli 2026", t:Date.UTC(2026,6,3,8,0,0) }
   ];
   function activeDrop(){ var now=Date.now(); for (var i=0;i<DROPS.length;i++){ if (DROPS[i].t > now) return DROPS[i]; } return DROPS[DROPS.length-1]; }
   function pad(n){ return (n<10?"0":"")+n; }

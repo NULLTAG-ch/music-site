@@ -116,7 +116,7 @@ window.CONFIG = {
       schiene: "Lichtjahr",
       status: "Scheduled",
       eta: "26.06.2026",
-      note: "6-track cosmic-frenchcore EP. Weekly SoundCloud singles, then everywhere on all streaming services 26 June 2026.",
+      note: "6-track cosmic-frenchcore EP. SoundCloud singles are uploads (last single 'Last Light', Fri 19.06); the real release — distribution to all streaming services — is 26 June 2026. Showroom 03 July.",
       link: ""
     }
   ]

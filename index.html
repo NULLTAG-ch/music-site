@@ -214,6 +214,10 @@
   .ro-row { display: grid; grid-template-columns: 60px 78px 1fr 88px; gap: var(--s-4); align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 12.5px; text-decoration: none; }
   .ro-row:last-child { border-bottom: 0; }
   .ro-row.ep { background: rgba(255,42,85,0.05); }
+  .ro-grp { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 16px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.018); font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted-deep); }
+  .ro-grp b { color: var(--bone-dim); font-weight: 500; }
+  .ro-grp.real { background: rgba(255,42,85,0.06); }
+  .ro-grp.real b { color: var(--tiefrot); }
   .ro-row .d { color: var(--muted); letter-spacing: 0.04em; }
   .ro-row .c { color: var(--muted); }
   .ro-row .t { color: var(--bone); letter-spacing: 0.02em; }
@@ -323,36 +327,39 @@
         <div class="s__num">§02 · ROLLOUT · LICHTJAHR VOL.2</div>
         <h2 class="s__title">Rollout</h2>
       </div>
-      <div class="s__meta">WÖCHENTLICH FREITAGS<br/>10:00 CEST · 2/6 → 6/6</div>
+      <div class="s__meta">SOUNDCLOUD-SINGLES → STREAMING<br/>LETZTE SINGLE 19.06 · EP 26.06</div>
     </div>
 
     <div class="rollout">
       <div class="ro-cd">
-        <div class="ro-eye">— Nächster Drop in</div>
-        <div class="ro-title" id="ro-title">Microwave</div>
-        <div class="ro-cat" id="ro-cat">LJ-11 · 190 BPM · Vol.2</div>
+        <div class="ro-eye">— Nächstes Release in</div>
+        <div class="ro-title" id="ro-title">Last Light</div>
+        <div class="ro-cat" id="ro-cat">LJ-12 · Letzte SoundCloud-Single</div>
         <div class="ro-clock">
           <div><div class="ro-num" id="ro-d">00</div><div class="ro-lbl">Tage</div></div>
           <div><div class="ro-num" id="ro-h">00</div><div class="ro-lbl">Std</div></div>
           <div><div class="ro-num" id="ro-m">00</div><div class="ro-lbl">Min</div></div>
           <div><div class="ro-num" id="ro-s">00</div><div class="ro-lbl">Sek</div></div>
         </div>
-        <div class="ro-when" id="ro-when">Freitag, 20. Juni 2026 · 10:00 CEST</div>
+        <div class="ro-when" id="ro-when">Freitag, 19. Juni 2026 · 10:00 CEST</div>
       </div>
 
       <div class="ro-sched">
-        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">28.05</span><span class="c">LJ-07</span><span class="t">Trappist Loop</span><span class="st l">● live</span></a>
-        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">30.05</span><span class="c">LJ-08</span><span class="t">Event Horizon</span><span class="st l">● live</span></a>
-        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">06.06</span><span class="c">LJ-09</span><span class="t">Andromeda Approach</span><span class="st l">● live</span></a>
-        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">13.06</span><span class="c">LJ-10</span><span class="t">Supernova</span><span class="st l">● live</span></a>
-        <div class="ro-row"><span class="d">20.06</span><span class="c">LJ-11</span><span class="t">Microwave</span><span class="st n">◷ next · Fr</span></div>
-        <div class="ro-row"><span class="d">02.07</span><span class="c">LJ-12</span><span class="t">Last Light</span><span class="st w">◷ scheduled</span></div>
-        <div class="ro-row ep"><span class="d">02.07</span><span class="c">EP</span><span class="t">Vol.2 — Full EP + Playlist</span><span class="st w">◷ public</span></div>
+        <div class="ro-grp"><span>① SoundCloud · Wöchentliche Singles</span><b>Vol.2 · 6 Tracks</b></div>
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">29.05</span><span class="c">LJ-07</span><span class="t">Trappist Loop</span><span class="st l">● live</span></a>
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">05.06</span><span class="c">LJ-08</span><span class="t">Event Horizon</span><span class="st l">● live</span></a>
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">12.06</span><span class="c">LJ-09</span><span class="t">Andromeda Approach</span><span class="st l">● live</span></a>
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">12.06</span><span class="c">LJ-10</span><span class="t">Supernova</span><span class="st l">● live</span></a>
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">12.06</span><span class="c">LJ-11</span><span class="t">Microwave</span><span class="st l">● live · früher Drop</span></a>
+        <div class="ro-row"><span class="d">19.06</span><span class="c">LJ-12</span><span class="t">Last Light</span><span class="st n">◷ Fr · letzte Single</span></div>
+        <div class="ro-grp real"><span>② Echte Veröffentlichung · Streaming-Distribution</span><b>ab 26.06</b></div>
+        <div class="ro-row ep"><span class="d">26.06</span><span class="c">EP</span><span class="t">Vol.2 — Full EP · alle Streaming-Dienste</span><span class="st n">◷ Release · Fr</span></div>
+        <div class="ro-row ep"><span class="d">03.07</span><span class="c">SHOW</span><span class="t">Showroom</span><span class="st w">◷ Event</span></div>
       </div>
     </div>
 
     <div style="margin-top:var(--s-6);">
-      <div style="font-family:var(--font-mono); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); margin-bottom:var(--s-3);">Wo erscheint es — Singles zuerst auf SoundCloud (freitags 10:00), dann überall</div>
+      <div style="font-family:var(--font-mono); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); margin-bottom:var(--s-3);">SoundCloud-Singles wöchentlich freitags · echte Veröffentlichung auf allen Streaming-Diensten am 26.06.2026</div>
       <div class="latest__platforms" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
         <a href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span>SoundCloud</span><span class="s">PRIMARY ↗</span></a>
         <a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><span>Spotify</span><span>↗</span></a>
@@ -563,9 +570,9 @@
 <script>
   // ── rollout countdown (next Vol.2 Friday drop) ─────────────
   var RO_DROPS = [
-    { t: Date.UTC(2026,5,20,8,0,0), title:"Microwave",  cat:"LJ-11 · 190 BPM · Vol.2", when:"Freitag, 20. Juni 2026 · 10:00 CEST" },
-    { t: Date.UTC(2026,6,2,8,0,0),  title:"Last Light",  cat:"LJ-12 · 185 BPM · Vol.2", when:"Donnerstag, 2. Juli 2026 · 10:00 CEST" },
-    { t: Date.UTC(2026,6,2,8,0,0),  title:"Vol.2 EP",    cat:"6 Tracks · Full EP + Playlist", when:"Donnerstag, 2. Juli 2026 · public" }
+    { t: Date.UTC(2026,5,19,8,0,0), title:"Last Light", cat:"LJ-12 · Letzte SoundCloud-Single", when:"Freitag, 19. Juni 2026 · 10:00 CEST" },
+    { t: Date.UTC(2026,5,26,8,0,0), title:"Vol.2 EP",   cat:"Alle Streaming-Dienste · 6 Tracks", when:"Freitag, 26. Juni 2026 · überall" },
+    { t: Date.UTC(2026,6,3,8,0,0),  title:"Showroom",   cat:"Lichtjahr Vol.2 · Event", when:"Freitag, 3. Juli 2026" }
   ];
   function roPad(n){ return (n<10?"0":"")+n; }
   function roTick(){
