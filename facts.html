@@ -4,6 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>NULLTAG · Lichtjahr Vol.2 · Physik-Video</title>
+<meta name="description" content="Lichtjahr Vol.2 — echte Astrophysik als Musik. Das Physik-Video: 6 Tracks, 6 kosmische Phänomene." />
+<link rel="icon" type="image/svg+xml" href="assets/avatar.svg" />
+<meta property="og:title" content="NULLTAG · Lichtjahr Vol.2 — Physik-Video" />
+<meta property="og:description" content="Echte Astrophysik als Musik. Zum Anschauen." />
+<meta property="og:type" content="video.other" />
+<meta property="og:image" content="https://music.nulltag.ch/assets/facts-poster.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -11,24 +17,53 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   html, body { height: 100%; }
-  body { margin: 0; background: #050505; overflow: hidden; }
-  #video-root { position: fixed; inset: 0; }
-  #root { position: absolute; inset: 0; }
-  /* corner link back to the read version — above the stage */
-  .facts-read { position: fixed; bottom: 14px; left: 16px; z-index: 50; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #8a8580; text-decoration: none; border: 1px solid #3a3a3a; background: rgba(10,10,10,0.7); padding: 9px 12px; }
-  .facts-read:hover { color: #e8e3da; border-color: #ff2a55; }
-</style>
+  body { margin: 0; min-height: 100vh; background:
+      radial-gradient(ellipse 50% 40% at 22% 24%, rgba(95,140,200,0.10), transparent 60%),
+      radial-gradient(ellipse 44% 36% at 82% 78%, rgba(232,121,196,0.08), transparent 60%),
+      radial-gradient(ellipse at 50% 45%, #0d0a14 0%, #0a0a0a 58%, #050505 100%);
+    color: var(--bone); font-family: var(--font-mono); display: flex; flex-direction: column; }
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="animations.jsx"></script>
-<script type="text/babel" src="scenes.jsx"></script>
+  .fv-top { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; }
+  .fv-top a { color: var(--bone); text-decoration: none; font-size: 13px; letter-spacing: 0.4em; font-weight: 500; display: inline-flex; align-items: center; gap: 10px; }
+  .fv-top a .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tiefrot); box-shadow: 0 0 8px var(--tiefrot); }
+  .fv-top .rail { color: var(--muted); font-size: 11px; letter-spacing: 0.22em; }
+
+  .fv-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 8px 22px 22px; }
+  .fv { position: relative; width: 100%; max-width: 1280px; aspect-ratio: 16 / 9; border: 1px solid var(--border); background: #000; box-shadow: var(--shadow-cover); overflow: hidden; }
+  .fv video { width: 100%; height: 100%; display: block; object-fit: cover; background: #000; }
+
+  .fv-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 0 22px 26px; }
+  .fv-cap { color: var(--muted); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .fv-cap b { color: var(--bone); font-weight: 500; }
+  .fv-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .fv-btn { font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-dim); text-decoration: none; border: 1px solid var(--border-warm); background: rgba(10,10,10,0.6); padding: 10px 14px; transition: all 150ms var(--ease); }
+  .fv-btn:hover { color: var(--bone); border-color: var(--tiefrot); background: var(--tiefrot-dim); }
+  .fv-btn--primary { color: var(--void); background: var(--tiefrot); border-color: var(--tiefrot); font-weight: 700; }
+  .fv-btn--primary:hover { background: var(--bone); border-color: var(--bone); color: var(--void); }
+</style>
 </head>
 <body>
-<div id="video-root" data-screen-label="t=0s">
-  <div id="root"></div>
-</div>
-<a class="facts-read" href="facts-read.html">≡ Alle Fakten lesen</a>
+  <header class="fv-top">
+    <a href="index.html"><span class="dot" aria-hidden="true"></span>NULLTAG</a>
+    <span class="rail">LICHTJAHR VOL.2 · PHYSIK-VIDEO</span>
+  </header>
+
+  <main class="fv-wrap">
+    <div class="fv">
+      <video controls autoplay muted playsinline preload="metadata" poster="assets/facts-poster.jpg">
+        <source src="assets/facts.mp4" type="video/mp4" />
+        Dein Browser kann dieses Video nicht abspielen — <a href="facts-read.html" style="color:var(--tiefrot)">lies die Fakten</a>.
+      </video>
+    </div>
+  </main>
+
+  <footer class="fv-foot">
+    <div class="fv-cap">6 Tracks · 6 echte Phänomene · <b>Echte Astrophysik als Musik</b></div>
+    <div class="fv-links">
+      <a class="fv-btn" href="facts-read.html">≡ Alle Fakten lesen</a>
+      <a class="fv-btn fv-btn--primary" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener">▶ Hör Lichtjahr Vol.2</a>
+      <a class="fv-btn" href="index.html">← Zurück</a>
+    </div>
+  </footer>
 </body>
 </html>
