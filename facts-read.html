@@ -27,7 +27,8 @@
   @media (max-width: 820px){ .fact, .fact:nth-child(even) { grid-template-columns: 1fr; } .fact:nth-child(even) .scene-wrap { order: 0; } }
 
   .scene-wrap { display: flex; justify-content: center; }
-  .scene { position: relative; width: 360px; height: 360px; max-width: 86vw; border: 1px solid var(--border); overflow: hidden; background: radial-gradient(ellipse at 50% 50%, #0d0a14 0%, var(--void) 60%, var(--void-deep) 100%); }
+  .scene-wrap { min-width: 0; }
+  .scene { position: relative; width: 100%; max-width: 360px; aspect-ratio: 1 / 1; border: 1px solid var(--border); overflow: hidden; background: radial-gradient(ellipse at 50% 50%, #0d0a14 0%, var(--void) 60%, var(--void-deep) 100%); }
   .scene .starfield { position: absolute; inset: 0; background-image:
       radial-gradient(1px 1px at 20% 30%, rgba(232,227,218,0.5), transparent),
       radial-gradient(1px 1px at 70% 60%, rgba(232,227,218,0.4), transparent),
