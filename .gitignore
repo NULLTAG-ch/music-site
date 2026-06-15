@@ -1,3 +1,5 @@
 # High-res cover masters — web uses the .jpg versions
 covers/*.png
 .playwright-mcp/
+.DS_Store
+**/.DS_Store
