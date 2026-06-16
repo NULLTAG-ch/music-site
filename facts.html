@@ -40,6 +40,9 @@
   .fv-btn:hover { color: var(--bone); border-color: var(--tiefrot); background: var(--tiefrot-dim); }
   .fv-btn--primary { color: var(--void); background: var(--tiefrot); border-color: var(--tiefrot); font-weight: 700; }
   .fv-btn--primary:hover { background: var(--bone); border-color: var(--bone); color: var(--void); }
+  .fv-unmute { position: absolute; top: 16px; right: 16px; z-index: 3; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--void); background: var(--tiefrot); border: 0; padding: 10px 14px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 18px rgba(255,42,85,0.45); transition: opacity .25s var(--ease); }
+  .fv-unmute:hover { background: var(--bone); }
+  .fv-unmute.hidden { opacity: 0; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -50,10 +53,11 @@
 
   <main class="fv-wrap">
     <div class="fv">
-      <video controls autoplay muted playsinline preload="metadata" poster="assets/facts-poster.jpg">
+      <video id="fv-video" controls autoplay muted loop playsinline preload="metadata" poster="assets/facts-poster.jpg">
         <source src="assets/facts.mp4" type="video/mp4" />
         Dein Browser kann dieses Video nicht abspielen — <a href="facts-read.html" style="color:var(--tiefrot)">lies die Fakten</a>.
       </video>
+      <button id="fv-unmute" class="fv-unmute" aria-label="Ton einschalten">♪ Ton an</button>
     </div>
   </main>
 
@@ -65,5 +69,14 @@
       <a class="fv-btn" href="index.html">← Zurück</a>
     </div>
   </footer>
+  <script>
+    (function () {
+      var v = document.getElementById("fv-video"), b = document.getElementById("fv-unmute");
+      if (!v || !b) return;
+      function unmute() { v.muted = false; v.volume = 1; if (v.paused) v.play(); b.classList.add("hidden"); }
+      b.addEventListener("click", unmute);
+      v.addEventListener("volumechange", function () { if (!v.muted && v.volume > 0) b.classList.add("hidden"); });
+    })();
+  </script>
 </body>
 </html>
