@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter+Tight:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style> html,body{margin:0;background:transparent;} #frame{width:1080px;height:1920px;position:relative;overflow:hidden;} </style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script>Babel.registerPreset('react-classic',{presets:[[Babel.availablePresets['react'],{runtime:'classic'}]]});</script>
+</head>
+<body>
+<div id="frame"><div id="root"></div></div>
+<script src="../../../animations.jsx" type="text/babel" data-presets="react-classic"></script>
+<script type="text/babel" data-presets="react-classic">
+const C={void:'#0a0a0a',deep:'#050505',bone:'#e8e3da',dim:'#c9c4bc',muted:'#8a8580',red:'#ff2a55',cosmic:'#e879c4',glut:'#ff6a2a',blue:'#5fc8e0',amber:'#ffd9a0',good:'#7ad08a'};
+const MONO="'JetBrains Mono',ui-monospace,monospace",DISP="'Bebas Neue','Oswald',sans-serif",GROT="'Space Grotesk',system-ui,sans-serif";
+const SL=11.5;
+function Stamp(){return(<>
+  <div style={{position:'absolute',top:54,left:54,fontFamily:MONO,fontSize:24,fontWeight:500,letterSpacing:'0.4em',color:C.bone,opacity:0.85,textShadow:'0 2px 12px #000'}}>NULLTAG</div>
+  <div style={{position:'absolute',top:58,right:54,fontFamily:MONO,fontSize:17,letterSpacing:'0.22em',color:C.dim,textShadow:'0 2px 12px #000'}}>LICHTJAHR VOL.2</div>
+  <div style={{position:'absolute',bottom:48,left:0,right:0,textAlign:'center',fontFamily:MONO,fontSize:18,letterSpacing:'0.2em',color:C.dim,opacity:0.9,textShadow:'0 2px 12px #000'}}>music.nulltag.ch</div>
+</>);}
+function Vignette(){return <div style={{position:'absolute',inset:0,pointerEvents:'none',background:'radial-gradient(ellipse at 50% 42%, transparent 46%, rgba(5,5,5,0.4) 82%, rgba(0,0,0,0.78) 100%)'}}/>;}
+function VCaption({cat,status,statusTone,title,line,chip}){
+  const {localTime,duration}=useSprite();
+  const rev=(d)=>{const t=Easing.easeOutCubic(clamp((localTime-d)/0.55,0,1));return{opacity:t,transform:`translateY(${(1-t)*28}px)`};};
+  const fade=clamp((duration-localTime)/0.55,0,1);
+  const stTone=statusTone==='live'?C.good:statusTone==='soon'?C.red:C.cosmic;
+  return(<div style={{position:'absolute',left:0,right:0,bottom:0,height:'62%',display:'flex',flexDirection:'column',justifyContent:'flex-end',paddingBottom:150,paddingLeft:60,paddingRight:60,textAlign:'center',opacity:fade,background:'linear-gradient(0deg, rgba(5,5,5,0.95) 30%, rgba(5,5,5,0.55) 62%, transparent)'}}>
+    <div style={{...rev(0.05),fontFamily:MONO,fontSize:26,letterSpacing:'0.24em',color:C.cosmic,marginBottom:22,display:'flex',gap:22,justifyContent:'center',alignItems:'center'}}>
+      <span>{cat}</span>{status&&<span style={{color:stTone}}>{status}</span>}</div>
+    <div style={{...rev(0.16),fontFamily:DISP,fontSize:130,lineHeight:0.86,letterSpacing:'-0.01em',textTransform:'uppercase',color:C.bone,textShadow:'0 6px 50px rgba(0,0,0,0.85)',marginBottom:26}}>{title}</div>
+    <div style={{...rev(0.32),fontFamily:GROT,fontSize:34,lineHeight:1.5,color:C.bone,maxWidth:940,margin:'0 auto 26px',textShadow:'0 2px 18px rgba(0,0,0,0.95)'}} dangerouslySetInnerHTML={{__html:line}}/>
+    {chip&&<div style={{...rev(0.5),display:'inline-block',alignSelf:'center',fontFamily:MONO,fontSize:22,letterSpacing:'0.16em',textTransform:'uppercase',color:C.bone,border:`1px solid ${C.red}`,background:'rgba(255,42,85,0.16)',padding:'13px 22px'}}>{chip}</div>}
+  </div>);
+}
+const SCENES=[
+  {cat:'LJ-07 · 195 BPM',status:'● LIVE',tone:'live',title:'Trappist Loop',line:"40 Lichtjahre entfernt umkreisen <b style='color:#e879c4'>7 erdgroße Planeten</b> den Zwergstern TRAPPIST-1.<br/>Ihre Umlaufzeiten bilden die <b style='color:#e879c4'>längste bekannte Resonanzkette</b> — exakt im Takt.",chip:'7-Beat-Phrasen statt 8'},
+  {cat:'LJ-08 · 200 BPM',status:'● LIVE',tone:'live',title:'Event Horizon',line:"Der <b style='color:#e879c4'>Ereignishorizont</b> ist die Grenze, ab der nicht mal Licht entkommt.<br/>Von außen scheint die Zeit am Rand <b style='color:#e879c4'>einzufrieren</b>.",chip:'Outro: 200 → 140 BPM'},
+  {cat:'LJ-09 · 190 BPM',status:'● LIVE',tone:'live',title:'Andromeda',line:"Andromeda rast mit <b style='color:#e879c4'>~110 km/s</b> auf uns zu.<br/>Lange galt die Kollision als sicher — Hubble&#43;Gaia (2025): <b style='color:#5fc8e0'>nur ~50% in 10 Mrd. Jahren</b>.",chip:'We won’t be there — but the song will'},
+  {cat:'LJ-10 · 200 BPM',status:'● LIVE',tone:'live',title:'Supernova',line:"Ein Stern kollabiert in Sekunden — und leuchtet kurz <b style='color:#e879c4'>heller als eine ganze Galaxie</b>.<br/>Dabei entsteht das <b style='color:#ffd9a0'>Eisen in deinem Blut</b>.",chip:'A dying star burns the brightest'},
+  {cat:'LJ-11 · 190 BPM',status:'◷ FR 20.06',tone:'soon',title:'Microwave',line:"Das <b style='color:#5fc8e0'>älteste Licht</b> des Alls — 380.000 Jahre nach dem Urknall frei.<br/>Es erreicht uns bei <b style='color:#5fc8e0'>2,7 Kelvin</b> — ein Teil des TV-Rauschens ist genau das.",chip:'Still echoing'},
+  {cat:'LJ-12 · 185 BPM',status:'◷ 02.07',tone:'soon',title:'Last Light',line:"Rote Zwerge brennen <b style='color:#e879c4'>Billionen Jahre</b>. Irgendwann sendet der <b style='color:#e879c4'>allerletzte Stern</b> sein letztes Photon.<br/>Danach: ewige Dunkelheit.",chip:'Ende der Zeit'},
+];
+function Root(){
+  const [t,setT]=React.useState(0);
+  React.useEffect(()=>{window.__setT=(v)=>setT(v);window.__ready=true;window.__DUR=SL;},[]);
+  const sn=parseInt(new URLSearchParams(location.search).get('scene')||'0',10);
+  const sc=SCENES[sn];
+  const ctx={time:t,duration:SL,playing:false,setTime:setT,setPlaying:()=>{}};
+  return(<TimelineContext.Provider value={ctx}><div style={{position:'absolute',inset:0}}>
+    <Sprite start={0} end={SL}><VCaption {...sc}/></Sprite>
+    <Vignette/><Stamp/>
+  </div></TimelineContext.Provider>);
+}
+(function mount(){ if(!window.TimelineContext){return void setTimeout(mount,30);}
+  ReactDOM.createRoot(document.getElementById('root')).render(<Root/>); })();
+</script>
+</body></html>

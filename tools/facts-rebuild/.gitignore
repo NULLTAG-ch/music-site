@@ -1,0 +1,23 @@
+# Schwere/regenerierbare Zwischendateien — NICHT committen
+render/frames/
+render/frames-v/
+work/
+work2/
+*-raw.png
+poster-raw.png
+probe-*.png
+facts-original-backup.mp4
+
+# out/: nur finale Master-Clips + genutzte Stills behalten
+out/*.json
+out/*.err
+out/frame-*.png
+# alte/ungenutzte 5s-Kling-Varianten (durch -10s ersetzt)
+out/vid-3-andromeda.mp4
+out/vid-4-supernova.mp4
+out/vid-5-cmb.mp4
+# ungenutzte v1-Stills (durch v2 ersetzt)
+out/still-1-trappist.png
+out/still-3-andromeda.png
+out/still-4-supernova.png
+out/still-5-cmb.png

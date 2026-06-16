@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter+Tight:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  html,body{margin:0;background:transparent;}
+  #frame{width:1920px;height:1080px;position:relative;overflow:hidden;}
+  #scaler{width:1280px;height:720px;position:absolute;left:0;top:0;transform:scale(1.5);transform-origin:top left;}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script>
+  // force classic JSX runtime (React.createElement) — automatic runtime emits a bare import that breaks in-browser
+  Babel.registerPreset('react-classic', { presets: [[Babel.availablePresets['react'], { runtime: 'classic' }]] });
+</script>
+</head>
+<body>
+<div id="frame"><div id="scaler"><div id="root"></div></div></div>
+<script src="../../../animations.jsx" type="text/babel" data-presets="react-classic"></script>
+<script type="text/babel" data-presets="react-classic">
+// Sprite/useTime/useSprite/Easing/interpolate/clamp/TimelineContext come from animations.jsx (shared global scope)
+const C = { void:'#0a0a0a', deep:'#050505', bone:'#e8e3da', dim:'#c9c4bc', muted:'#8a8580',
+  red:'#ff2a55', cosmic:'#e879c4', glut:'#ff6a2a', blue:'#5fc8e0', amber:'#ffd9a0', good:'#7ad08a' };
+const MONO="'JetBrains Mono',ui-monospace,monospace", DISP="'Bebas Neue','Oswald',sans-serif", GROT="'Space Grotesk',system-ui,sans-serif";
+const W=1280,H=720,CX=640,CY=296;
+function mulberry(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+
+function Starfield({n=90,seed=7,opacity=0.75}){const T=useTime();
+  const stars=React.useMemo(()=>{const r=mulberry(seed);const a=[];for(let i=0;i<n;i++)a.push({x:r()*W,y:r()*H,s:r()*1.6+0.4,ph:r()*6.28,sp:r()*1.5+0.5,c:r()>0.85?C.cosmic:C.bone});return a;},[n,seed]);
+  return(<div style={{position:'absolute',inset:0}}>{stars.map((st,i)=>{const tw=0.5+0.5*Math.sin(T*st.sp+st.ph);
+    return <div key={i} style={{position:'absolute',left:st.x,top:st.y,width:st.s,height:st.s,borderRadius:'50%',background:st.c,opacity:opacity*(0.3+0.7*tw)}}/>;})}</div>);}
+function Vignette(){return <div style={{position:'absolute',inset:0,pointerEvents:'none',background:'radial-gradient(ellipse at 50% 48%, transparent 50%, rgba(5,5,5,0.45) 86%, rgba(0,0,0,0.82) 100%)'}}/>;}
+function Stamp(){return(<>
+  <div style={{position:'absolute',top:34,left:40,fontFamily:MONO,fontSize:14,fontWeight:500,letterSpacing:'0.4em',color:C.bone,opacity:0.82,textShadow:'0 2px 12px #000'}}>NULLTAG</div>
+  <div style={{position:'absolute',top:36,right:40,fontFamily:MONO,fontSize:11,letterSpacing:'0.22em',color:C.dim,textShadow:'0 2px 12px #000'}}>LICHTJAHR VOL.2</div>
+  <div style={{position:'absolute',bottom:34,right:40,fontFamily:MONO,fontSize:11,letterSpacing:'0.18em',color:C.dim,opacity:0.85,textShadow:'0 2px 12px #000'}}>music.nulltag.ch</div>
+</>);}
+
+// Caption: eyebrow / huge title / 1-2 fact lines / chip, staggered reveal + bottom scrim
+function Caption({cat,status,statusTone,title,line,chip}){
+  const {localTime,duration}=useSprite();
+  const rev=(d)=>{const t=Easing.easeOutCubic(clamp((localTime-d)/0.55,0,1));return{opacity:t,transform:`translateY(${(1-t)*22}px)`};};
+  const fade=clamp((duration-localTime)/0.55,0,1);
+  const stTone=statusTone==='live'?C.good:statusTone==='soon'?C.red:C.cosmic;
+  return(<div style={{position:'absolute',left:0,right:0,bottom:0,paddingBottom:54,textAlign:'center',opacity:fade,background:'linear-gradient(0deg, rgba(5,5,5,0.94) 22%, rgba(5,5,5,0.5) 55%, transparent)'}}>
+    <div style={{...rev(0.05),fontFamily:MONO,fontSize:16,letterSpacing:'0.24em',color:C.cosmic,marginBottom:14,display:'flex',gap:16,justifyContent:'center',alignItems:'center'}}>
+      <span>{cat}</span>{status&&<span style={{color:stTone}}>{status}</span>}</div>
+    <div style={{...rev(0.16),fontFamily:DISP,fontSize:title.length>12?108:128,lineHeight:0.84,letterSpacing:'-0.01em',textTransform:'uppercase',color:C.bone,textShadow:'0 6px 50px rgba(0,0,0,0.8)',marginBottom:16}}>{title}</div>
+    <div style={{...rev(0.32),fontFamily:GROT,fontSize:22,lineHeight:1.5,color:C.bone,maxWidth:880,margin:'0 auto 16px',textShadow:'0 2px 18px rgba(0,0,0,0.9)'}} dangerouslySetInnerHTML={{__html:line}}/>
+    {chip&&<div style={{...rev(0.5),display:'inline-block',fontFamily:MONO,fontSize:14,letterSpacing:'0.16em',textTransform:'uppercase',color:C.bone,border:`1px solid ${C.red}`,background:'rgba(255,42,85,0.16)',padding:'9px 16px'}}>{chip}</div>}
+  </div>);
+}
+function FactScene(p){return <Caption {...p}/>;}
+
+function IntroScene(){
+  const {localTime,duration}=useSprite();const T=useTime();
+  const titleT=Easing.easeOutExpo(clamp(localTime/0.9,0,1));
+  const subT=Easing.easeOutCubic(clamp((localTime-0.7)/0.6,0,1));
+  const pulse=0.9+0.25*Math.sin(T*1.6);const fade=clamp((duration-localTime)/0.6,0,1);
+  return(<div style={{position:'absolute',inset:0,opacity:fade,background:`radial-gradient(ellipse at 50% 45%, #0d0a14 0%, ${C.void} 60%, ${C.deep} 100%)`}}>
+    <Starfield n={120} seed={3}/>
+    <div style={{position:'absolute',left:CX,top:CY-30,transform:'translate(-50%,-50%)',width:240,height:240,borderRadius:'50%',background:`radial-gradient(circle, ${C.cosmic} 0%, transparent 62%)`,opacity:0.5*pulse,filter:'blur(8px)'}}/>
+    <div style={{position:'absolute',left:0,right:0,top:CY-70,textAlign:'center'}}>
+      <div style={{opacity:subT,fontFamily:MONO,fontSize:16,letterSpacing:'0.3em',color:C.muted,marginBottom:18}}>6 TRACKS · 6 ECHTE PHÄNOMENE</div>
+      <div style={{opacity:titleT,transform:`scale(${0.92+0.08*titleT})`,fontFamily:DISP,fontSize:150,lineHeight:0.82,textTransform:'uppercase',letterSpacing:'-0.01em',color:C.bone}}>Lichtjahr<br/>Vol.2</div>
+      <div style={{width:interpolate([0,1],[0,200])(subT),height:4,background:C.red,margin:'10px auto 0'}}/>
+      <div style={{opacity:subT,fontFamily:GROT,fontSize:23,color:C.dim,marginTop:26}}>Echte Astrophysik als Musik. <b style={{color:C.bone}}>Zum Anschauen.</b></div>
+    </div></div>);
+}
+function OutroScene(){
+  const {localTime,duration}=useSprite();const T=useTime();
+  const a=Easing.easeOutExpo(clamp(localTime/0.8,0,1));
+  const b=Easing.easeOutCubic(clamp((localTime-0.6)/0.6,0,1));
+  const c=Easing.easeOutCubic(clamp((localTime-1.1)/0.6,0,1));
+  const fade=clamp((duration-localTime)/0.6,0,1);const pulse=0.9+0.2*Math.sin(T*1.5);
+  return(<div style={{position:'absolute',inset:0,opacity:fade,background:`radial-gradient(ellipse at 50% 45%, #0d0a14 0%, ${C.void} 60%, ${C.deep} 100%)`}}>
+    <Starfield n={90} seed={9}/>
+    <div style={{position:'absolute',left:CX,top:CY-20,transform:'translate(-50%,-50%)',width:300,height:300,borderRadius:'50%',background:`radial-gradient(circle, ${C.red} 0%, transparent 60%)`,opacity:0.3*pulse,filter:'blur(6px)'}}/>
+    <div style={{position:'absolute',left:0,right:0,top:CY-90,textAlign:'center'}}>
+      <div style={{opacity:a,fontFamily:MONO,fontSize:15,letterSpacing:'0.3em',color:C.muted,marginBottom:20}}>LICHTJAHR VOL.2 · NULLTAG</div>
+      <div style={{opacity:a,transform:`scale(${0.94+0.06*a})`,fontFamily:DISP,fontSize:128,lineHeight:0.84,textTransform:'uppercase',color:C.bone}}>Hör die Physik</div>
+      <div style={{width:b*180,height:4,background:C.red,margin:'14px auto 0'}}/>
+      <div style={{opacity:b,fontFamily:GROT,fontSize:23,color:C.dim,marginTop:26}}>Auf allen gängigen Streaming-Diensten</div>
+      <div style={{opacity:c,fontFamily:MONO,fontSize:18,letterSpacing:'0.2em',color:C.bone,marginTop:18}}>26. JUNI 2026</div>
+      <div style={{opacity:c,fontFamily:MONO,fontSize:13,letterSpacing:'0.18em',color:C.muted,marginTop:14}}>SPOTIFY · APPLE MUSIC · SOUNDCLOUD · DEEZER · YOUTUBE</div>
+    </div></div>);
+}
+
+// timeline (seconds)
+const T0=6.5, SL=11.5; const s=(i)=>T0+i*SL; // scene i start
+const SCENES=[
+  {s:s(0),e:s(1),cat:'LJ-07 · 195 BPM',status:'● LIVE',tone:'live',title:'Trappist Loop',
+   line:"40 Lichtjahre entfernt umkreisen <b style='color:#e879c4'>7 erdgroße Planeten</b> den Zwergstern TRAPPIST-1.<br/>Ihre Umlaufzeiten bilden die <b style='color:#e879c4'>längste bekannte Resonanzkette</b> — exakt im Takt, seit Milliarden Jahren.",chip:'7-Beat-Phrasen statt 8'},
+  {s:s(1),e:s(2),cat:'LJ-08 · 200 BPM',status:'● LIVE',tone:'live',title:'Event Horizon',
+   line:"Der <b style='color:#e879c4'>Ereignishorizont</b> ist die Grenze, ab der nicht mal Licht entkommt.<br/>Von außen scheint die Zeit am Rand <b style='color:#e879c4'>einzufrieren</b> — beim Fall vergeht sie für dich normal.",chip:'Outro: 200 → 140 BPM'},
+  {s:s(2),e:s(3),cat:'LJ-09 · 190 BPM',status:'● LIVE',tone:'live',title:'Andromeda',
+   line:"Andromeda rast mit <b style='color:#e879c4'>~110 km/s</b> auf uns zu.<br/>Lange galt die Kollision als sicher — neue Hubble&#43;Gaia-Daten (2025): <b style='color:#5fc8e0'>nur ~50% in 10 Mrd. Jahren</b>.",chip:'We won’t be there — but the song will'},
+  {s:s(3),e:s(4),cat:'LJ-10 · 200 BPM',status:'● LIVE',tone:'live',title:'Supernova',
+   line:"Ein Stern kollabiert in Sekunden — und leuchtet kurz <b style='color:#e879c4'>heller als eine ganze Galaxie</b>.<br/>Dabei entstehen die schweren Elemente: das <b style='color:#ffd9a0'>Eisen in deinem Blut</b>.",chip:'A dying star burns the brightest'},
+  {s:s(4),e:s(5),cat:'LJ-11 · 190 BPM',status:'◷ FR 20.06',tone:'soon',title:'Microwave',
+   line:"Das <b style='color:#5fc8e0'>älteste Licht</b> des Alls — 380.000 Jahre nach dem Urknall frei, heute 13,8 Mrd. Jahre alt.<br/>Es erreicht uns bei <b style='color:#5fc8e0'>2,7 Kelvin</b> — ein Teil des TV-Rauschens ist genau das.",chip:'Still echoing'},
+  {s:s(5),e:s(6),cat:'LJ-12 · 185 BPM',status:'◷ 02.07',tone:'soon',title:'Last Light',
+   line:"Rote Zwerge brennen <b style='color:#e879c4'>Billionen Jahre</b>. Irgendwann sendet der <b style='color:#e879c4'>allerletzte Stern</b> sein letztes Photon.<br/>Danach: die ewige Dunkelheit.",chip:'Ende der Zeit'},
+];
+const DUR=s(6)+7.5; // = 75.5 + 7.5 = 83
+
+function Root(){
+  const [t,setT]=React.useState(0);
+  React.useEffect(()=>{ window.__setT=(v)=>setT(v); window.__ready=true; window.__DUR=DUR; },[]);
+  const ctx={time:t,duration:DUR,playing:false,setTime:setT,setPlaying:()=>{}};
+  return(<TimelineContext.Provider value={ctx}>
+    <div style={{position:'absolute',inset:0}}>
+      <Sprite start={0} end={T0+0.3}><IntroScene/></Sprite>
+      {SCENES.map((sc,i)=><Sprite key={i} start={sc.s} end={sc.e}><FactScene cat={sc.cat} status={sc.status} statusTone={sc.tone} title={sc.title} line={sc.line} chip={sc.chip}/></Sprite>)}
+      <Sprite start={s(6)-0.3} end={DUR}><OutroScene/></Sprite>
+      <Vignette/><Stamp/>
+    </div>
+  </TimelineContext.Provider>);
+}
+// wait for engine (animations.jsx) to populate window, then mount
+(function mount(){ if(!window.TimelineContext){return void setTimeout(mount,30);}
+  ReactDOM.createRoot(document.getElementById('root')).render(<Root/>); })();
+</script>
+</body></html>
