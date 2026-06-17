@@ -372,9 +372,6 @@
 
 <header class="hero" data-screen-label="01 Hero">
   <img class="hero__video" id="hero-poster" src="assets/logo-poster.jpg" alt="NULLTAG · dark rave venue, red laser beam through fog" />
-  <video class="hero__video" id="hero-video" autoplay muted loop playsinline preload="auto" poster="assets/logo-poster.jpg" style="display:none">
-    <source src="assets/logo.mp4" type="video/mp4" />
-  </video>
   <div class="hero__grid" aria-hidden="true"></div>
   <div class="hero__vignette" aria-hidden="true"></div>
 
@@ -393,12 +390,12 @@
       <p class="hero__sub">A one-person Swiss music label working across five <b>Schienen</b> — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key and ISRC are <b>treated as design</b>, not metadata to hide.</p>
       <div class="hero__cta">
         <a href="#latest" class="btn-hero">▶ Play latest release</a>
-        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 49 Tracks</a>
+        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 53 Tracks</a>
       </div>
     </div>
 
     <div class="hero__meta" id="hero-stats">
-      <div class="cell"><div class="k">Tracks</div><div class="v">49 <small>live</small></div></div>
+      <div class="cell"><div class="k">Tracks</div><div class="v">53 <small>live</small></div></div>
       <div class="cell"><div class="k">Schienen</div><div class="v">05 <small>rails</small></div></div>
       <div class="cell"><div class="k">Latest</div><div class="v">SUPERNOVA <small>LJ-10</small></div></div>
       <div class="cell"><div class="k">Origin</div><div class="v">BUCHS SG <small>· CH</small></div></div>
@@ -503,14 +500,15 @@
         <div class="s__num">§03 · CATALOG · FEATURED ARTWORK</div>
         <h2 class="s__title">Catalog</h2>
       </div>
-      <div class="s__meta">49 TRACKS · 05 SCHIENEN<br/>FEATURED ARTWORK</div>
+      <div class="s__meta">53 TRACKS · 05 SCHIENEN<br/>FEATURED ARTWORK</div>
     </div>
     <div class="filters" role="tablist" id="filters">
-      <button class="active" data-rail="ALL">ALL · 18</button>
+      <button class="active" data-rail="ALL">ALL · 53</button>
       <button data-rail="LJ">LICHTJAHR · 11</button>
-      <button data-rail="CT">CINETEKK · 04</button>
-      <button data-rail="DM">DOME · 01</button>
-      <button data-rail="ST">STANDALONE · 02</button>
+      <button data-rail="CT">CINETEKK · 08</button>
+      <button data-rail="DM">DOME · 04</button>
+      <button data-rail="ND">DISTRIBUTION · 16</button>
+      <button data-rail="ST">STANDALONE · 14</button>
     </div>
     <div class="catalog" id="catalog-grid"></div>
   </div>
@@ -537,7 +535,7 @@
         <div class="rail__head"><span class="rail__cat"><b>CT-NN</b> · ALBUM</span><span class="rail__num">02 / 05</span></div>
         <h3 class="rail__title">Cinetekk</h3>
         <div class="rail__sub">Cinematic techno · Album</div>
-        <p class="rail__desc">Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. 9/9 Tracks live.</p>
+        <p class="rail__desc">Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. 8/8 Tracks live.</p>
         <div class="rail__foot"><span><b>144–160</b> BPM</span><span>DE</span></div>
       </article>
       <article class="rail" data-rail="DM">
@@ -804,7 +802,36 @@
     { rail:"ST", title:"Freedom",            cat:"NULLTAG-13", meta:"200 BPM · EN",   img:"covers/freedom.jpg" },
     { rail:"ST", title:"SHOWROOM",           cat:"NULLTAG-14", meta:"200 BPM · EN",   img:"covers/showroom.jpg" },
     { rail:"ST", title:"Beauty of Music",    cat:"NULLTAG-15", meta:"168 BPM · EN",   img:"covers/beauty_of_music.jpg" },
-    { rail:"ST", title:"Higher Ground",      cat:"NULLTAG-16", meta:"184 BPM · EN",   img:"covers/higher_ground.jpg" }
+    { rail:"ST", title:"Higher Ground",      cat:"NULLTAG-16", meta:"184 BPM · EN",   img:"covers/higher_ground.jpg" },
+    { rail:"DM", title:"God Of Bass", cat:"DOME · EP", meta:"EN", img:"covers/rel_dome.jpg" },
+    { rail:"DM", title:"Stuck On Repeat", cat:"DOME · EP", meta:"EN", img:"covers/rel_dome.jpg" },
+    { rail:"DM", title:"Fell In Love With The Music", cat:"DOME · EP", meta:"EN", img:"covers/rel_dome.jpg" },
+    { rail:"CT", title:"Glassplitter", cat:"CINETEKK · ALBUM", meta:"DE", img:"covers/rel_cinetekk.jpg" },
+    { rail:"CT", title:"Vergessenes Spiegelbild", cat:"CINETEKK · ALBUM", meta:"DE", img:"covers/rel_cinetekk.jpg" },
+    { rail:"CT", title:"Asche In Der Hand", cat:"CINETEKK · ALBUM", meta:"DE", img:"covers/rel_cinetekk.jpg" },
+    { rail:"CT", title:"Schwerkraft", cat:"CINETEKK · ALBUM", meta:"DE", img:"covers/rel_cinetekk.jpg" },
+    { rail:"ND", title:"Bayern Crew", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_bayern_crew.jpg" },
+    { rail:"ND", title:"Swiss Geeman", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_swiss_geeman.jpg" },
+    { rail:"ND", title:"Achthundert Beamte", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_achthundert_beamte.jpg" },
+    { rail:"ND", title:"Sternenstaub", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_sternenstaub.jpg" },
+    { rail:"ND", title:"Einfacher als du denkst!", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_einfacher_als_du_denkst.jpg" },
+    { rail:"ND", title:"Wo ist der Bass?", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_wo_ist_der_bass.jpg" },
+    { rail:"ND", title:"Sandkastenparty", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_sandkastenparty.jpg" },
+    { rail:"ND", title:"TEKKNO TRAIN (Remastered)", cat:"TEKKNO TRAIN · REMASTER", meta:"DE", img:"covers/rel_tekkno_train_remastered.jpg" },
+    { rail:"ND", title:"KILL SWITCH", cat:"BLACKBOX · EP", meta:"EN", img:"covers/rel_blackbox.jpg" },
+    { rail:"ND", title:"GHOST PROTOCOL", cat:"BLACKBOX · EP", meta:"EN", img:"covers/rel_blackbox.jpg" },
+    { rail:"ND", title:"HONEYPOT", cat:"BLACKBOX · EP", meta:"EN", img:"covers/rel_blackbox.jpg" },
+    { rail:"ND", title:"BLACKBOX", cat:"BLACKBOX · EP", meta:"EN", img:"covers/rel_blackbox.jpg" },
+    { rail:"ST", title:"Plastic Paradise", cat:"PLASTIC PARADISE · EP", meta:"EN", img:"covers/rel_plastic_paradise.jpg" },
+    { rail:"ST", title:"Concrete Messiah", cat:"PLASTIC PARADISE · EP", meta:"EN", img:"covers/rel_plastic_paradise.jpg" },
+    { rail:"ST", title:"Nulltag Rising", cat:"PLASTIC PARADISE · EP", meta:"EN", img:"covers/rel_plastic_paradise.jpg" },
+    { rail:"ND", title:"TEKKNO TRAIN", cat:"TEKKNO TRAIN", meta:"DE", img:"covers/rel_tekkno_train.jpg" },
+    { rail:"ND", title:"Thousand Voices Stringtheory", cat:"TAUSEND STIMMEN", meta:"DE · EN", img:"covers/rel_tausend_stimmen_thousand_voices.jpg" },
+    { rail:"ND", title:"Thousand Voices", cat:"TAUSEND STIMMEN", meta:"DE · EN", img:"covers/rel_tausend_stimmen_thousand_voices.jpg" },
+    { rail:"ND", title:"Tausend Stimmen", cat:"TAUSEND STIMMEN", meta:"DE · EN", img:"covers/rel_tausend_stimmen_thousand_voices.jpg" },
+    { rail:"ST", title:"Nulltag Erwacht", cat:"CORONATION · TRILOGY", meta:"EN", img:"covers/rel_coronation_trilogy.jpg" },
+    { rail:"ST", title:"Nulltag S'Éveille", cat:"CORONATION · TRILOGY", meta:"EN", img:"covers/rel_coronation_trilogy.jpg" },
+    { rail:"ST", title:"Vögel Einsneunzig", cat:"NULLTAG · SINGLE", meta:"DE", img:"covers/rel_voegel_einsneunzig.jpg" }
   ];
   var RAIL_NAME = { LJ:"LICHTJAHR", CT:"CINETEKK", DM:"DOME EP", ND:"DISTRIBUTION", ST:"STANDALONE" };
 
@@ -833,14 +860,6 @@
     renderCatalog(btn.dataset.rail);
   });
 
-  // hero: swap poster → motion video once it can play
-  (function(){
-    var v = document.getElementById("hero-video");
-    var p = document.getElementById("hero-poster");
-    if (!v) return;
-    v.addEventListener("canplaythrough", function(){ v.style.display = "block"; p.style.display = "none"; }, { once:true });
-    v.load();
-  })();
 </script>
 
 <script>
@@ -967,8 +986,7 @@
       });
       if (mobile) { var sm = document.querySelector('#schienen'); if (sm) sm.classList.add('no-pin'); return; }
       var heroTl = gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: '+=120%', scrub: 1, pin: true } });
-      heroTl.to('#hero-video', { scale: 1.25, yPercent: 8, ease: 'none' }, 0)
-            .to('#hero-poster', { scale: 1.25, yPercent: 8, ease: 'none' }, 0)
+      heroTl.to('#hero-poster', { scale: 1.25, yPercent: 8, ease: 'none' }, 0)
             .to('#hero-stats', { opacity: 0, y: -20, ease: 'none' }, 0.4)
             .to('.hero__cue', { opacity: 0, ease: 'none' }, 0.05)
             .to('.hero__title', { opacity: 0.18, ease: 'none' }, 0.5);
