@@ -212,7 +212,8 @@
   var DROPS = [
     { cat:"LJ-12 · LICHTJAHR · SOUNDCLOUD", title:"Last Light", sub:"Atmospheric Closer · 188 BPM · Letzte SoundCloud-Single", cover:"covers/last_light.jpg", when:"Freitag, 19. Juni 2026 · 10:00 CEST", t:Date.UTC(2026,5,19,8,0,0) },
     { cat:"EP · LICHTJAHR VOL.2 · STREAMING", title:"Vol.2 EP", sub:"Full EP · alle Streaming-Dienste · 6 Tracks",   cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 26. Juni 2026 · überall", t:Date.UTC(2026,5,26,8,0,0) },
-    { cat:"EVENT · LICHTJAHR VOL.2", title:"Showroom",   sub:"Lichtjahr Vol.2 · Showroom",                          cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 3. Juli 2026", t:Date.UTC(2026,6,3,8,0,0) }
+    { cat:"EVENT · LICHTJAHR VOL.2", title:"Showroom",   sub:"Lichtjahr Vol.2 · Showroom",                          cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 3. Juli 2026", t:Date.UTC(2026,6,3,8,0,0) },
+    { cat:"NULLTAG-16 · STANDALONE · STREAMING", title:"Higher Ground", sub:"Cinematic Frenchcore · 184 BPM · EN", cover:"covers/higher_ground.jpg", when:"Freitag, 10. Juli 2026 · 10:00 CEST", t:Date.UTC(2026,6,10,8,0,0) }
   ];
   function activeDrop(){ var now=Date.now(); for (var i=0;i<DROPS.length;i++){ if (DROPS[i].t > now) return DROPS[i]; } return DROPS[DROPS.length-1]; }
   function pad(n){ return (n<10?"0":"")+n; }

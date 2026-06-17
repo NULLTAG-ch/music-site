@@ -758,9 +758,10 @@
 <script>
   // ── rollout countdown (next Vol.2 Friday drop) ─────────────
   var RO_DROPS = [
-    { t: Date.UTC(2026,5,19,8,0,0), title:"Last Light", cat:"LJ-12 · Letzte SoundCloud-Single", when:"Freitag, 19. Juni 2026 · 10:00 CEST" },
-    { t: Date.UTC(2026,5,26,8,0,0), title:"Vol.2 EP",   cat:"Alle Streaming-Dienste · 6 Tracks", when:"Freitag, 26. Juni 2026 · überall" },
-    { t: Date.UTC(2026,6,3,8,0,0),  title:"Showroom",   cat:"Lichtjahr Vol.2 · Event", when:"Freitag, 3. Juli 2026" }
+    { t: Date.UTC(2026,5,19,8,0,0), title:"Last Light",     cat:"LJ-12 · Letzte SoundCloud-Single",   when:"Freitag, 19. Juni 2026 · 10:00 CEST" },
+    { t: Date.UTC(2026,5,26,8,0,0), title:"Vol.2 EP",       cat:"Alle Streaming-Dienste · 6 Tracks",  when:"Freitag, 26. Juni 2026 · überall" },
+    { t: Date.UTC(2026,6,3,8,0,0),  title:"Showroom",       cat:"Lichtjahr Vol.2 · Event",             when:"Freitag, 3. Juli 2026" },
+    { t: Date.UTC(2026,6,10,8,0,0), title:"Higher Ground",  cat:"NULLTAG-16 · Standalone · alle DSPs", when:"Freitag, 10. Juli 2026 · 10:00 CEST" }
   ];
   function roPad(n){ return (n<10?"0":"")+n; }
   function roTick(){
@@ -797,7 +798,8 @@
     { rail:"CT", title:"Cinetekk",           cat:"CT-01", meta:"152 BPM · DE",   img:"covers/cinetekk.jpg" },
     { rail:"DM", title:"In The Dome",        cat:"DM-01", meta:"190 BPM · DOME EP", img:"covers/in_the_dome.jpg" },
     { rail:"ST", title:"Plastic Funeral",    cat:"NULLTAG-09", meta:"170 BPM",   img:"covers/plastic_funeral.jpg" },
-    { rail:"ST", title:"Peace Remains",      cat:"NULLTAG-10", meta:"190 BPM",   img:"covers/peace_remains.jpg" }
+    { rail:"ST", title:"Peace Remains",      cat:"NULLTAG-10", meta:"190 BPM",        img:"covers/peace_remains.jpg" },
+    { rail:"ST", title:"Higher Ground",      cat:"NULLTAG-16", meta:"184 BPM · EN",   img:"covers/higher_ground.jpg" }
   ];
   var RAIL_NAME = { LJ:"LICHTJAHR", CT:"CINETEKK", DM:"DOME EP", ND:"DISTRIBUTION", ST:"STANDALONE" };
 
@@ -842,7 +844,8 @@
   var DROPS = [
     { cat:"LJ-12 · LICHTJAHR · SOUNDCLOUD", title:"Last Light", sub:"Atmospheric Closer · 188 BPM · Letzte SoundCloud-Single", cover:"covers/last_light.jpg", when:"Freitag, 19. Juni 2026 · 10:00 CEST", t:Date.UTC(2026,5,19,8,0,0) },
     { cat:"EP · LICHTJAHR VOL.2 · STREAMING", title:"Vol.2 EP", sub:"Full EP · alle Streaming-Dienste · 6 Tracks", cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 26. Juni 2026 · überall", t:Date.UTC(2026,5,26,8,0,0) },
-    { cat:"EVENT · LICHTJAHR VOL.2", title:"Showroom", sub:"Lichtjahr Vol.2 · Showroom", cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 3. Juli 2026", t:Date.UTC(2026,6,3,8,0,0) }
+    { cat:"EVENT · LICHTJAHR VOL.2", title:"Showroom", sub:"Lichtjahr Vol.2 · Showroom", cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 3. Juli 2026", t:Date.UTC(2026,6,3,8,0,0) },
+    { cat:"NULLTAG-16 · STANDALONE · STREAMING", title:"Higher Ground", sub:"Cinematic Frenchcore · 184 BPM · EN", cover:"covers/higher_ground.jpg", when:"Freitag, 10. Juli 2026 · 10:00 CEST", t:Date.UTC(2026,6,10,8,0,0) }
   ];
   function activeDrop(){ var now=Date.now(); for (var i=0;i<DROPS.length;i++){ if (DROPS[i].t > now) return DROPS[i]; } return DROPS[DROPS.length-1]; }
   function tpad(n){ return (n<10?"0":"")+n; }
