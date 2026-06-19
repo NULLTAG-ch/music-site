@@ -188,6 +188,22 @@
   .ch__handle { font-family: var(--font-display); font-size: 32px; line-height: 0.95; letter-spacing: -0.005em; margin: 0; color: var(--bone); text-transform: uppercase; }
   .ch__meta { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
 
+  /* ===== facts ===== */
+  .facts__video { position: relative; display: block; aspect-ratio: 16/9; border: 1px solid var(--border); overflow: hidden; background: #050505; text-decoration: none; }
+  .facts__video img { width: 100%; height: 100%; object-fit: cover; opacity: 0.78; transition: opacity 300ms var(--ease), transform 600ms var(--ease); }
+  .facts__video:hover img { opacity: 0.92; transform: scale(1.03); }
+  .facts__video .veil { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(5,5,5,0.65) 100%); }
+  .facts__play { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; pointer-events: none; }
+  .facts__play .disc { display: flex; align-items: center; justify-content: center; width: clamp(64px,12vw,84px); height: clamp(64px,12vw,84px); border-radius: 50%; background: var(--tiefrot); color: var(--void); font-size: clamp(22px,4vw,30px); padding-left: 6px; transition: transform 150ms var(--ease); }
+  .facts__video:hover .facts__play .disc { transform: scale(1.08); }
+  .facts__play .lbl { font-family: var(--font-mono); font-size: clamp(11px,2.4vw,13px); letter-spacing: 0.24em; text-transform: uppercase; color: var(--bone); }
+  .facts__tag { position: absolute; top: 16px; left: 16px; background: rgba(10,10,10,0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); color: var(--bone); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 5px 9px; border: 1px solid rgba(232,227,218,0.18); }
+  .facts__foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px; margin-top: var(--s-6); }
+  .facts__credit { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--muted); line-height: 1.7; }
+  .facts__credit b { color: var(--bone); font-weight: 500; }
+  .facts__credit span { color: var(--muted-deep); }
+  .facts__actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
   /* ===== footer ===== */
   footer.foot { background: var(--void-deep); border-top: 1px solid var(--border); padding: var(--s-9) 0 var(--s-7); }
   .foot__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--s-8); margin-bottom: var(--s-9); }
@@ -362,7 +378,7 @@
       <a href="#catalog">Catalog</a>
       <a href="#schienen">Schienen</a>
       <a href="#lineage">Lineage</a>
-      <a href="facts.html">Facts</a>
+      <a href="#facts">Facts</a>
       <a href="#manifest">Manifest</a>
       <a href="#tools">Tools</a>
       <a class="nav__cta" href="#listen">▶ Listen</a>
@@ -390,12 +406,12 @@
       <p class="hero__sub">A one-person Swiss music label working across five <b>Schienen</b> — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key and ISRC are <b>treated as design</b>, not metadata to hide.</p>
       <div class="hero__cta">
         <a href="#latest" class="btn-hero">▶ Play latest release</a>
-        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 53 Tracks</a>
+        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 54 Tracks</a>
       </div>
     </div>
 
     <div class="hero__meta" id="hero-stats">
-      <div class="cell"><div class="k">Tracks</div><div class="v">53 <small>live</small></div></div>
+      <div class="cell"><div class="k">Tracks</div><div class="v">54 <small>live</small></div></div>
       <div class="cell"><div class="k">Schienen</div><div class="v">05 <small>rails</small></div></div>
       <div class="cell"><div class="k">Latest</div><div class="v">SUPERNOVA <small>LJ-10</small></div></div>
       <div class="cell"><div class="k">Origin</div><div class="v">BUCHS SG <small>· CH</small></div></div>
@@ -500,11 +516,11 @@
         <div class="s__num">§03 · CATALOG · FEATURED ARTWORK</div>
         <h2 class="s__title">Catalog</h2>
       </div>
-      <div class="s__meta">53 TRACKS · 05 SCHIENEN<br/>FEATURED ARTWORK</div>
+      <div class="s__meta">54 TRACKS · 05 SCHIENEN<br/>FEATURED ARTWORK</div>
     </div>
     <div class="filters" role="tablist" id="filters">
-      <button class="active" data-rail="ALL">ALL · 53</button>
-      <button data-rail="LJ">LICHTJAHR · 11</button>
+      <button class="active" data-rail="ALL">ALL · 54</button>
+      <button data-rail="LJ">LICHTJAHR · 12</button>
       <button data-rail="CT">CINETEKK · 08</button>
       <button data-rail="DM">DOME · 04</button>
       <button data-rail="ND">DISTRIBUTION · 16</button>
@@ -682,11 +698,39 @@
   </div>
 </section>
 
-<section class="s" id="manifest" data-screen-label="08 Manifest">
+<section class="s" id="facts" data-screen-label="08 Facts">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§07 · MANIFEST · BILINGUAL</div>
+        <div class="s__num">§07 · FACTS · PHYSIK-VIDEO</div>
+        <h2 class="s__title">Die Physik<br/>hinter den Tracks</h2>
+      </div>
+      <div class="s__meta">LICHTJAHR VOL.2<br/>6 PHÄNOMENE</div>
+    </div>
+    <a class="facts__video" href="facts.html" aria-label="Lichtjahr Vol.2 — Physik-Video ansehen">
+      <img src="assets/facts-poster.jpg" alt="Lichtjahr Vol.2 — Physik-Video" loading="lazy" />
+      <div class="veil" aria-hidden="true"></div>
+      <div class="facts__play">
+        <span class="disc" aria-hidden="true">▶</span>
+        <span class="lbl">Video ansehen</span>
+      </div>
+      <span class="facts__tag">Lichtjahr Vol.2 · Physik-Video</span>
+    </a>
+    <div class="facts__foot">
+      <div class="facts__credit">6 Tracks · 6 echte Phänomene · <b>Echte Astrophysik als Musik</b><br/><span>Footage: NASA / SVS · ESA / Hubble · Public Domain</span></div>
+      <div class="facts__actions">
+        <a class="btn-hero btn-hero--ghost" href="facts-read.html" style="font-size:11px;">≡ Alle Fakten lesen</a>
+        <a class="btn-hero" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener" style="font-size:11px;">▶ Hör Lichtjahr Vol.2</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="manifest" data-screen-label="09 Manifest">
+  <div class="container">
+    <div class="s__head">
+      <div>
+        <div class="s__num">§08 · MANIFEST · BILINGUAL</div>
         <h2 class="s__title">Manifest</h2>
       </div>
       <div class="s__meta">DE · EN<br/>VERBATIM</div>
@@ -715,11 +759,11 @@
   </div>
 </section>
 
-<section class="s" id="listen" data-screen-label="09 Listen">
+<section class="s" id="listen" data-screen-label="10 Listen">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§08 · LISTEN · CHANNELS</div>
+        <div class="s__num">§09 · LISTEN · CHANNELS</div>
         <h2 class="s__title">Listen</h2>
       </div>
       <div class="s__meta">SIX PLATFORMS<br/>SAME STAMP</div>
@@ -779,6 +823,7 @@
 
   // ── catalog data (real covers) ─────────────────────────────
   var CATALOG = [
+    { rail:"LJ", title:"Last Light",         cat:"LJ-12", meta:"188 BPM · Vol.2", img:"covers/last_light.jpg" },
     { rail:"LJ", title:"Microwave",          cat:"LJ-11", meta:"190 BPM · Vol.2", img:"covers/microwave.jpg" },
     { rail:"LJ", title:"Supernova",          cat:"LJ-10", meta:"200 BPM · Vol.2", img:"covers/supernova.jpg" },
     { rail:"LJ", title:"Andromeda Approach", cat:"LJ-09", meta:"190 BPM · Vol.2", img:"covers/andromeda_approach.jpg" },
