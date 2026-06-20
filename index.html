@@ -101,7 +101,7 @@
 
   /* ===== latest ===== */
   .latest { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--s-8); align-items: start; }
-  .latest__cover { position: relative; aspect-ratio: 1/1; border: 1px solid var(--border); box-shadow: var(--shadow-cover); overflow: hidden; background: var(--code-bg); }
+  .latest__cover { display: block; position: relative; aspect-ratio: 1/1; border: 1px solid var(--border); box-shadow: var(--shadow-cover); overflow: hidden; background: var(--code-bg); }
   .latest__cover img { width: 100%; height: 100%; object-fit: cover; }
   .latest__cover .pin { position: absolute; top: 16px; left: 16px; background: var(--tiefrot); color: var(--void); padding: 5px 9px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; }
   .latest__cat { color: var(--tiefrot); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; margin-bottom: var(--s-3); }
@@ -429,26 +429,20 @@
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§01 · LATEST RELEASE · PINNED · T-0</div>
+        <div class="s__num">§01 · LATEST · NOW PLAYING · AUTO</div>
         <h2 class="s__title">Latest<br/>Release</h2>
       </div>
-      <div class="s__meta">DROPPED · MMXXVI / 06<br/>LJ-10</div>
+      <div class="s__meta">NEUESTE SINGLE<br/>AUTO · SOUNDCLOUD</div>
     </div>
     <div class="latest">
-      <div class="latest__cover" id="latest-cover-wrap">
-        <img src="covers/supernova.jpg" alt="Supernova cover artwork" />
-        <span class="pin">● PINNED</span>
-      </div>
+      <a class="latest__cover" id="latest-cover-wrap" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener">
+        <img id="latest-cover-img" src="covers/lichtjahr_vol2.jpg" alt="Neueste NULLTAG-Single — Cover" />
+        <span class="pin" id="latest-pin">● NOW PLAYING</span>
+      </a>
       <div class="latest__body">
-        <div class="latest__cat">LJ-10 · LICHTJAHR · SINGLE · LICHTJAHR VOL.2</div>
-        <h3 class="latest__title">Super<br/>nova</h3>
-        <div class="latest__meta">
-          <div><div class="k">BPM</div><div class="v">200</div></div>
-          <div><div class="k">MODE</div><div class="v">Aeolian</div></div>
-          <div><div class="k">DURATION</div><div class="v">04:23</div></div>
-          <div><div class="k">FORMAT</div><div class="v">WAV · MP3-320</div></div>
-        </div>
-        <p class="latest__desc">A dying star burns the brightest. Emotional solo-piano intro into a euphoric festival drop — tears on the dancefloor. <em>„Supernova — burn it all to light / beautiful goodbye."</em></p>
+        <div class="latest__cat" id="latest-cat">NULLTAG · NEUESTE SINGLE · SOUNDCLOUD</div>
+        <h3 class="latest__title" id="latest-title">Neueste<br/>Single</h3>
+        <p class="latest__desc">Der zuletzt veröffentlichte NULLTAG-Release — spielt automatisch, sobald du die Seite öffnest, und aktualisiert sich mit jedem neuen Drop. Jederzeit pausierbar.</p>
         <div class="latest__platforms">
           <a href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span>SoundCloud</span><span>↗</span></a>
           <a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><span>Spotify</span><span>↗</span></a>
@@ -1112,7 +1106,26 @@
     if (!f || !window.SC || !SC.Widget) return;
     var w = SC.Widget(f);
     var started = false;
-    w.bind(SC.Widget.Events.PLAY, function(){ started = true; });
+
+    // Sync the Latest-Release card (cover + title + link) to whatever track is playing.
+    var elImg = document.getElementById('latest-cover-img');
+    var elTitle = document.getElementById('latest-title');
+    var elCat = document.getElementById('latest-cat');
+    var elWrap = document.getElementById('latest-cover-wrap');
+    function syncCard(){
+      w.getCurrentSound(function(s){
+        if (!s) return;
+        var title = (s.title || '').replace(/^\s*NULLTAG\s*[-–—:]\s*/i, '').trim();
+        if (title && elTitle) elTitle.textContent = title;
+        if (s.permalink_url && elWrap) elWrap.href = s.permalink_url;
+        var art = s.artwork_url || (s.user && s.user.avatar_url);
+        if (art && elImg) { elImg.src = art.replace(/-large\.(jpg|png)/, '-t500x500.$1'); elImg.alt = (title || 'NULLTAG') + ' — Cover'; }
+        if (elCat) elCat.textContent = 'NULLTAG · NEUESTER RELEASE · SOUNDCLOUD';
+      });
+    }
+    w.bind(SC.Widget.Events.READY, syncCard);
+    w.bind(SC.Widget.Events.PLAY, function(){ started = true; syncCard(); });
+
     // Browsers block sound-on autoplay until a user gesture — kick playback on first interaction.
     var EVS = ['pointerdown','touchstart','keydown','scroll'];
     function kick(){ if (!started) { try { w.play(); } catch(e){} } EVS.forEach(function(ev){ window.removeEventListener(ev, kick); }); }
