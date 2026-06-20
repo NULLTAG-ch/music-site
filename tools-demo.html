@@ -130,6 +130,40 @@
   .sf__preview { margin-top: 16px; }
   .sf__preview iframe { width: 100%; height: 120px; border: 1px solid var(--border); display: block; }
 
+  /* ---- HÄRTE-TUNER ---- */
+  .tuner { --tn: var(--tiefrot); position: relative; }
+  .tuner::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+    background: radial-gradient(ellipse 70% 80% at 50% 0%, var(--tn), transparent 62%);
+    transition: background 200ms var(--ease); mix-blend-mode: screen; }
+  .tn { position: relative; padding: 30px 26px 26px; text-align: center; }
+  .tn__readout { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .tn__bpm { font-family: var(--font-mono); font-weight: 700; font-size: clamp(64px, 14vw, 112px); line-height: 0.9; letter-spacing: -0.02em; color: var(--tn); font-variant-numeric: tabular-nums; transition: color 120ms var(--ease); text-shadow: 0 0 40px var(--tn); }
+  .tn__bpm small { display: inline-block; font-size: 16px; letter-spacing: 0.2em; color: var(--muted); margin-left: 10px; text-shadow: none; vertical-align: middle; }
+  .tn__bpm.beat { animation: thump 90ms var(--ease); }
+  @keyframes thump { 0% { transform: scale(1.05); } 100% { transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce){ .tn__bpm.beat { animation: none; } }
+  .tn__zone { font-family: var(--font-display); font-size: 34px; line-height: 1; letter-spacing: 0.01em; text-transform: uppercase; color: var(--bone); margin-top: 6px; }
+  .tn__hard { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted); }
+  .tn__range { -webkit-appearance: none; appearance: none; width: 100%; max-width: 560px; height: 4px; margin: 30px auto 10px; display: block; background: linear-gradient(90deg, var(--tn) 0%, var(--tn) var(--fill,60%), var(--border) var(--fill,60%)); border-radius: 999px; outline: none; cursor: pointer; }
+  .tn__range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 26px; height: 26px; border-radius: 50%; background: var(--bone); border: 3px solid var(--tn); box-shadow: 0 0 18px var(--tn); cursor: grab; transition: transform 100ms var(--ease); }
+  .tn__range::-webkit-slider-thumb:active { transform: scale(1.15); cursor: grabbing; }
+  .tn__range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--bone); border: 3px solid var(--tn); box-shadow: 0 0 18px var(--tn); cursor: grab; }
+  .tn__range:focus-visible { box-shadow: 0 0 0 2px var(--void), 0 0 0 4px var(--tn); }
+  .tn__scale { display: flex; justify-content: space-between; max-width: 560px; margin: 0 auto; color: var(--muted-deep); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .tn__lockwrap { margin-top: 26px; }
+  .tn__lockwrap .btnx { font-size: 13px; padding: 13px 22px; }
+  .tn__res { display: none; border-top: 1px solid var(--border); padding: 22px; }
+  .tn__res.show { display: block; animation: dropin 360ms var(--ease); }
+  @keyframes dropin { 0% { opacity: 0; transform: translateY(-12px); } 100% { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .tn__res.show { animation: none; } }
+  .tn__res .grid { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: start; }
+  .tn__res img.cov { width: 100%; aspect-ratio: 1/1; object-fit: cover; border: 1px solid var(--border); }
+  .tn__resname { font-family: var(--font-display); font-size: 46px; line-height: 0.9; text-transform: uppercase; margin: 2px 0 8px; color: var(--tn); }
+  .tn__resmeta { color: var(--bone-dim); font-family: var(--font-grotesk); font-size: 14px; line-height: 1.55; margin: 0 0 12px; }
+  .tn__restrack { color: var(--muted); font-size: 12px; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .tn__res iframe { width: 100%; height: 120px; border: 1px solid var(--border); display: block; margin-top: 14px; }
+  @media (max-width: 760px){ .tn__res .grid { grid-template-columns: 1fr; } }
+
   .note { color: var(--muted-deep); font-size: 11px; letter-spacing: 0.04em; line-height: 1.6; padding: 30px 0 60px; }
   .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--bone); color: var(--void); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; padding: 11px 18px; border-radius: var(--r-md); opacity: 0; pointer-events: none; transition: all 220ms var(--ease); z-index: 50; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -233,44 +267,51 @@
     </div>
   </section>
 
-  <!-- ============ FINDER ============ -->
+  <!-- ============ HÄRTE-TUNER ============ -->
   <section class="mod" style="border-bottom:0;">
     <div class="mod__head">
       <span class="mod__code">SF</span>
-      <span class="mod__name">Schiene-Finder</span>
-      <span class="mod__sub">· Quiz → Schiene · anspielbar</span>
+      <span class="mod__name">Härte-Tuner</span>
+      <span class="mod__sub">· stell deine Beat-Härte ein</span>
     </div>
-    <p class="muted-copy" style="max-width:62ch; color:var(--bone-dim); font-family:var(--font-grotesk); margin:0;">Spielerischer Einstieg für Neue: drei Fragen → passende Schiene + Track, <b style="color:var(--bone)">direkt anspielbar</b> und als Story teilbar.</p>
+    <p class="muted-copy" style="max-width:62ch; color:var(--bone-dim); font-family:var(--font-grotesk); margin:0;">Kein Quiz mehr — ein Instrument. Zieh den Regler, <b style="color:var(--bone)">hör den Kick im gewählten BPM</b>, der Hintergrund heizt mit. Lande auf deiner Härte → deine Schiene. 🔊 Ton an empfohlen.</p>
 
     <div class="mod__body">
-      <div class="panel">
-        <div class="panel__bar"><span class="t"><span class="dot"></span>Schiene-Finder · interaktiv</span><code>tools.html?w=finder</code></div>
-        <div class="sf">
-          <div id="sf-quiz">
-            <div class="sf__q" id="sf-qnum">Frage 01 / 03</div>
-            <div class="sf__prompt" id="sf-prompt"></div>
-            <div class="sf__opts" id="sf-opts"></div>
-            <div class="sf__prog" id="sf-prog"><span class="on"></span><span></span><span></span></div>
+      <div class="panel tuner" id="tuner">
+        <div class="panel__bar">
+          <span class="t"><span class="dot" id="tn-beat"></span>Härte-Tuner · Web Audio</span>
+          <button class="btnx" id="tn-sound">♪ Kick: an</button>
+        </div>
+        <div class="tn">
+          <div class="tn__readout">
+            <div class="tn__bpm" id="tn-bpm-wrap"><span id="tn-bpm">182</span><small>BPM</small></div>
+            <div class="tn__zone" id="tn-zone">Lichtjahr</div>
+            <div class="tn__hard" id="tn-hard">hart · mainstage</div>
           </div>
-          <div class="sf__res" id="sf-res">
-            <div class="grid">
-              <img class="cov" id="sf-cov" src="" alt="Empfohlenes Cover" />
-              <div>
-                <div class="sf__q">Deine Schiene</div>
-                <div class="sf__resname"><span class="schiene" id="sf-name"></span></div>
-                <div class="sf__resdesc" id="sf-desc"></div>
-                <div class="sf__restrack" id="sf-track"></div>
-                <div class="sf__acts">
-                  <button class="btnx" id="sf-share">↗ Ergebnis teilen</button>
-                  <button class="btnx" id="sf-restart">↻ Nochmal</button>
-                </div>
+          <input class="tn__range" type="range" id="tn-range" min="140" max="210" value="182" step="1" aria-label="Beat-Härte in BPM" />
+          <div class="tn__scale">
+            <span>144 · kino</span><span>175 · hardtek</span><span>190 · festival</span><span>205 · kosmisch</span>
+          </div>
+          <div class="tn__lockwrap"><button class="btnx btnx--primary" id="tn-lock">■ Lock it in ▶</button></div>
+        </div>
+        <div class="tn__res" id="tn-res">
+          <div class="grid">
+            <img class="cov" id="tn-cov" src="" alt="Empfohlenes Cover" />
+            <div>
+              <div class="sf__q" style="color:var(--muted); font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase;">Deine Härte · <span id="tn-bpm-out">182</span> BPM → Schiene</div>
+              <div class="tn__resname" id="tn-resname">Lichtjahr</div>
+              <div class="tn__resmeta" id="tn-resmeta"></div>
+              <div class="tn__restrack" id="tn-restrack"></div>
+              <div class="sf__acts">
+                <button class="btnx" id="tn-share">↗ Ergebnis teilen</button>
+                <button class="btnx" id="tn-retry">↻ Neu justieren</button>
               </div>
+              <iframe id="tn-pv" allow="autoplay; encrypted-media" scrolling="no" frameborder="0" title="Track-Vorschau"></iframe>
             </div>
-            <div class="sf__preview"><iframe id="sf-pv" allow="autoplay; encrypted-media" scrolling="no" frameborder="0" title="Track-Vorschau"></iframe></div>
           </div>
         </div>
       </div>
-      <div class="was">Vorher: <s>Ergebnis war nur ein Link nach SoundCloud.</s> &nbsp;Jetzt: <b>anspielbare Vorschau · teilbares Ergebnis</b></div>
+      <div class="was">Vorher: <s>3-Klick-Quiz, statisches Ergebnis.</s> &nbsp;Jetzt: <b>spielbarer BPM-Tuner · echter Kick · live Heat · anspielbares Ergebnis</b></div>
     </div>
   </section>
 
@@ -377,40 +418,89 @@ var DROPS = [
   });
 })();
 
-/* ============ SF · Schiene-Finder ============ */
-var SCHIENEN = {
-  lichtjahr:{ name:"Lichtjahr", desc:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Kicks auf Planetenbewegung getunt.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg", sc:"supernova" },
-  cinetekk:{ name:"Cinetekk", desc:"Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg", sc:"letzter-sommer" },
-  dome:{ name:"Dome EP", desc:"Festival-Frenchcore, euphoric Peaktime-Mainstage als Story-Arc. Hände hoch.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg", sc:"in-the-dome" }
-};
-var SF_Q = [
-  { q:"Wann hörst du am liebsten?", opts:[["Nachts allein, Kopfhörer","cinetekk"],["Peaktime, Mainstage","dome"],["Sonnenaufgang nach der Rave","lichtjahr"]] },
-  { q:"Was soll die Musik mit dir machen?", opts:[["Mich wegtragen, kosmisch","lichtjahr"],["Mich zerlegen, Hände hoch","dome"],["Mich fühlen lassen, Kino im Kopf","cinetekk"]] },
-  { q:"Deine Sprache?", opts:[["Egal, Hauptsache Energie","dome"],["Deutsch, Gänsehaut","cinetekk"],["Englisch, episch","lichtjahr"]] }
-];
+/* ============ SF · Härte-Tuner ============ */
 (function(){
-  var step=0, score={lichtjahr:0,cinetekk:0,dome:0};
-  var quiz=document.getElementById('sf-quiz'), res=document.getElementById('sf-res');
-  var qnum=document.getElementById('sf-qnum'), prompt=document.getElementById('sf-prompt'), opts=document.getElementById('sf-opts'), prog=document.getElementById('sf-prog');
-  function render(){
-    var Q=SF_Q[step]; qnum.textContent="Frage "+String(step+1).padStart(2,'0')+" / 03"; prompt.textContent=Q.q; opts.innerHTML="";
-    Q.opts.forEach(function(o){ var b=document.createElement('button'); b.className="sf__opt"; b.textContent=o[0];
-      b.addEventListener('click', function(){ score[o[1]]++; step++; [].forEach.call(prog.children,function(sp,i){ sp.classList.toggle('on', i<=step); });
-        if(step<SF_Q.length) render(); else finish(); }); opts.appendChild(b); });
+  // BPM → Schiene zones (low→high = soft→brutal)
+  var ZONES = [
+    { max:161, key:"cinetekk",     name:"Cinetekk",     hard:"weich · kino",        meta:"Cinematic Techno — Film ohne Bilder, ein Lichtstrahl, ein roter Punkt. Moll, langsamer Build.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg", sc:"letzter-sommer" },
+    { max:184, key:"distribution", name:"Distribution", hard:"mittelhart · hands-up", meta:"Hardtek & Hands-Up aus der Tonband-Schiene — DE, roh, für den Boden.", track:"Wo ist der Bass? · TONBAND · DE", cover:"covers/rel_wo_ist_der_bass.jpg", sc:"wo-ist-der-bass" },
+    { max:199, key:"dome",         name:"Dome EP",      hard:"hart · mainstage",     meta:"Festival-Frenchcore, euphoric Peaktime-Mainstage als Story-Arc. Hände hoch.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg", sc:"in-the-dome" },
+    { max:210, key:"lichtjahr",    name:"Lichtjahr",    hard:"brutal · kosmisch",    meta:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Kicks auf Planetenbewegung getunt.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg", sc:"supernova" }
+  ];
+  function zoneFor(bpm){ for(var i=0;i<ZONES.length;i++){ if(bpm<=ZONES[i].max) return ZONES[i]; } return ZONES[ZONES.length-1]; }
+  // heat color: cold-blue → amber → tiefrot → glut, monotonic with BPM
+  var STOPS = [[140,74,160,208],[170,232,160,58],[195,255,42,85],[210,255,106,42]];
+  function lerp(a,b,t){ return Math.round(a+(b-a)*t); }
+  function heat(bpm){
+    for(var i=0;i<STOPS.length-1;i++){
+      var s=STOPS[i],e=STOPS[i+1];
+      if(bpm<=e[0]){ var t=(bpm-s[0])/(e[0]-s[0]); return "rgb("+lerp(s[1],e[1],t)+","+lerp(s[2],e[2],t)+","+lerp(s[3],e[3],t)+")"; }
+    }
+    var L=STOPS[STOPS.length-1]; return "rgb("+L[1]+","+L[2]+","+L[3]+")";
   }
-  function finish(){
-    var win=Object.keys(score).sort(function(a,b){return score[b]-score[a];})[0], s=SCHIENEN[win];
-    document.getElementById('sf-cov').src=s.cover; document.getElementById('sf-name').textContent=s.name;
-    document.getElementById('sf-desc').textContent=s.desc; document.getElementById('sf-track').textContent="▶ "+s.track;
-    document.getElementById('sf-pv').src="https://w.soundcloud.com/player/?url="+encodeURIComponent("https://soundcloud.com/nulltag/"+s.sc)+"&color=%23ff2a55&auto_play=false&hide_related=true&show_comments=false&show_user=true&visual=false";
-    quiz.style.display="none"; res.classList.add('show'); track('finder_result', win);
-    document.getElementById('sf-share').onclick=function(){ var text="Meine NULLTAG-Schiene: "+s.name+" → "+s.track+" · music.nulltag.ch";
+
+  var tuner=document.getElementById('tuner'), range=document.getElementById('tn-range');
+  var elBpm=document.getElementById('tn-bpm'), elBpmWrap=document.getElementById('tn-bpm-wrap'),
+      elZone=document.getElementById('tn-zone'), elHard=document.getElementById('tn-hard'),
+      beat=document.getElementById('tn-beat'), res=document.getElementById('tn-res');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // --- Web Audio metronome ---
+  var actx=null, sound=true, playing=false, nextT=0, lookahead=null, bpm=parseInt(range.value,10);
+  function ctx(){ if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } } if(actx.state==='suspended') actx.resume(); return actx; }
+  function kick(t){
+    if(!actx) return;
+    var o=actx.createOscillator(), g=actx.createGain();
+    o.frequency.setValueAtTime(150,t); o.frequency.exponentialRampToValueAtTime(44,t+0.12);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.7,t+0.005); g.gain.exponentialRampToValueAtTime(0.0001,t+0.19);
+    o.connect(g).connect(actx.destination); o.start(t); o.stop(t+0.21);
+    var c=actx.createOscillator(), cg=actx.createGain(); c.type='square'; c.frequency.setValueAtTime(1400,t);
+    cg.gain.setValueAtTime(0.12,t); cg.gain.exponentialRampToValueAtTime(0.0001,t+0.03);
+    c.connect(cg).connect(actx.destination); c.start(t); c.stop(t+0.04);
+  }
+  function flash(t){ var d=Math.max(0,(t-actx.currentTime)*1000); setTimeout(function(){
+      if(beat){ beat.style.transform='scale(1.9)'; beat.style.opacity='1'; setTimeout(function(){ beat.style.transform=''; },80); }
+      if(!reduce && elBpmWrap){ elBpmWrap.classList.remove('beat'); void elBpmWrap.offsetWidth; elBpmWrap.classList.add('beat'); }
+    }, d); }
+  function schedule(){
+    while(nextT < actx.currentTime + 0.12){ if(sound) kick(nextT); flash(nextT); nextT += 60/bpm; }
+    lookahead=setTimeout(schedule, 25);
+  }
+  function startClock(){ if(playing) return; if(!ctx()) return; playing=true; nextT=actx.currentTime+0.06; schedule(); }
+  function stopClock(){ playing=false; if(lookahead) clearTimeout(lookahead); }
+
+  function paint(){
+    bpm=parseInt(range.value,10);
+    var col=heat(bpm), z=zoneFor(bpm);
+    tuner.style.setProperty('--tn', col);
+    range.style.setProperty('--fill', ((bpm-140)/(210-140)*100)+'%');
+    elBpm.textContent=bpm; elZone.textContent=z.name; elHard.textContent=z.hard;
+  }
+  range.addEventListener('input', function(){ startClock(); paint(); });
+  range.addEventListener('change', function(){ track('tuner_set', range.value); });
+  paint();
+
+  document.getElementById('tn-sound').addEventListener('click', function(){
+    sound=!sound; this.textContent = sound ? '♪ Kick: an' : '♪ Kick: aus';
+    if(sound) startClock();
+  });
+
+  document.getElementById('tn-lock').addEventListener('click', function(){
+    var z=zoneFor(bpm); stopClock();
+    document.getElementById('tn-cov').src=z.cover; document.getElementById('tn-cov').alt=z.track+' Cover';
+    document.getElementById('tn-resname').textContent=z.name;
+    document.getElementById('tn-resmeta').textContent=z.meta;
+    document.getElementById('tn-restrack').textContent="▶ "+z.track;
+    document.getElementById('tn-bpm-out').textContent=bpm;
+    document.getElementById('tn-pv').src="https://w.soundcloud.com/player/?url="+encodeURIComponent("https://soundcloud.com/nulltag/"+z.sc)+"&color=%23ff2a55&auto_play=false&hide_related=true&show_comments=false&show_user=true&visual=false";
+    res.classList.add('show'); res.scrollIntoView({block:'nearest'}); track('tuner_lock', z.key+':'+bpm);
+    document.getElementById('tn-share').onclick=function(){ var text="Meine NULLTAG-Härte: "+bpm+" BPM → "+z.name+" ("+z.track+") · music.nulltag.ch";
       if(navigator.share){navigator.share({text:text,url:"https://music.nulltag.ch"}).catch(function(){});}
-      else {(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){toast('Ergebnis kopiert');},function(){toast(text);});} track('finder_share', win); };
-  }
-  document.getElementById('sf-restart').addEventListener('click', function(){ step=0; score={lichtjahr:0,cinetekk:0,dome:0};
-    [].forEach.call(prog.children,function(sp,i){ sp.classList.toggle('on', i===0); }); document.getElementById('sf-pv').src=""; res.classList.remove('show'); quiz.style.display="block"; render(); });
-  render();
+      else {(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){toast('Ergebnis kopiert');},function(){toast(text);});} track('tuner_share', z.key); };
+  });
+  document.getElementById('tn-retry').addEventListener('click', function(){
+    document.getElementById('tn-pv').src=""; res.classList.remove('show'); startClock();
+  });
 })();
 </script>
 </body>
