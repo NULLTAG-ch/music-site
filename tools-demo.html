@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NULLTAG · Toolbench · Demo</title>
+<meta name="robots" content="noindex" />
+<meta name="description" content="NULLTAG Toolbench — Demo der überarbeiteten Fan-Tools: Smart-Link, Drop-Countdown, Schiene-Finder." />
+<link rel="icon" type="image/svg+xml" href="assets/avatar.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter+Tight:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="colors_and_type.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background:
+      radial-gradient(ellipse 60% 45% at 78% 8%, rgba(255,42,85,0.07), transparent 60%),
+      var(--void); color: var(--bone); font-family: var(--font-mono); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 22px; }
+  a { color: inherit; }
+
+  /* ---- signature: the laser scanline ---- */
+  .laser { position: relative; height: 2px; background: var(--border); overflow: hidden; }
+  .laser::after { content: ""; position: absolute; top: 0; left: -30%; width: 30%; height: 100%;
+    background: linear-gradient(90deg, transparent, var(--tiefrot) 60%, #fff 100%);
+    box-shadow: 0 0 12px var(--tiefrot); animation: sweep 4.2s var(--ease) infinite; }
+  @keyframes sweep { 0% { left: -30%; } 60% { left: 100%; } 100% { left: 100%; } }
+  @media (prefers-reduced-motion: reduce){ .laser::after { animation: none; left: 0; width: 100%; opacity: .5; } }
+
+  /* ---- top ---- */
+  .top { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .top a.home { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--bone); font-size: 13px; letter-spacing: 0.4em; font-weight: 500; }
+  .top a.home .d { width: 7px; height: 7px; border-radius: 50%; background: var(--tiefrot); box-shadow: 0 0 8px var(--tiefrot); }
+  .top .rail { color: var(--muted); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; }
+
+  /* ---- intro ---- */
+  .intro { padding: 56px 0 40px; border-bottom: 1px solid var(--border); }
+  .intro .eye { color: var(--tiefrot); font-size: 11px; letter-spacing: 0.34em; text-transform: uppercase; margin: 0 0 18px; }
+  .intro h1 { font-family: var(--font-display); font-size: clamp(56px, 12vw, 132px); line-height: 0.84; letter-spacing: -0.01em; margin: 0; text-transform: uppercase; }
+  .intro h1 em { font-style: normal; color: var(--tiefrot); }
+  .intro p { max-width: 60ch; color: var(--bone-dim); font-family: var(--font-grotesk); font-size: 16px; line-height: 1.6; margin: 22px 0 0; }
+  .intro .legend { display: flex; gap: 26px; flex-wrap: wrap; margin-top: 26px; color: var(--muted); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .intro .legend b { color: var(--bone); font-weight: 500; }
+
+  /* ---- module ---- */
+  .mod { padding: 40px 0; border-bottom: 1px solid var(--border); }
+  .mod__head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 6px; }
+  .mod__code { font-size: 12px; letter-spacing: 0.2em; color: var(--tiefrot); font-weight: 700; }
+  .mod__name { font-family: var(--font-grotesk); font-weight: 700; font-size: 22px; letter-spacing: -0.01em; color: var(--bone); }
+  .mod__sub { color: var(--muted); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .mod__body { margin-top: 22px; }
+  .was { margin-top: 16px; font-size: 11.5px; letter-spacing: 0.04em; color: var(--muted-deep); }
+  .was b { color: var(--good); font-weight: 500; }
+  .was s { color: var(--muted-deep); }
+
+  /* ---- panel shell ---- */
+  .panel { border: 1px solid var(--border); background: var(--panel); border-radius: var(--r-lg); overflow: hidden; }
+  .panel__bar { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; border-bottom: 1px solid var(--border); background: var(--code-bg); }
+  .panel__bar .t { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 9px; }
+  .panel__bar .t .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tiefrot); box-shadow: 0 0 8px var(--tiefrot); animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+  .panel__bar code { background: transparent; color: var(--muted-deep); font-size: 11px; padding: 0; }
+
+  /* ---- SMART-LINK ---- */
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; padding: 16px; border-bottom: 1px solid var(--border); }
+  .chip { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bone-dim); background: var(--void); border: 1px solid var(--border); border-radius: var(--r-md); padding: 8px 12px; cursor: pointer; transition: all 150ms var(--ease); }
+  .chip:hover { border-color: var(--border-warm); }
+  .chip.on { background: var(--tiefrot); border-color: var(--tiefrot); color: var(--void); font-weight: 700; }
+  .sl { display: grid; grid-template-columns: 168px 1fr 168px; gap: 1px; background: var(--border); }
+  .sl > div { background: var(--panel); padding: 18px; }
+  .sl__cover { background: var(--void) !important; padding: 0 !important; position: relative; aspect-ratio: 1/1; }
+  .sl__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sl__cover .pin { position: absolute; top: 12px; left: 12px; background: var(--tiefrot); color: var(--void); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; padding: 4px 8px; }
+  .sl__eye { color: var(--muted); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .sl__title { font-family: var(--font-display); font-size: 42px; line-height: 0.9; text-transform: uppercase; margin: 6px 0 14px; letter-spacing: -0.01em; }
+  .sl__btns { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .sl__btns a { background: var(--void); color: var(--bone); text-decoration: none; padding: 12px 14px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; transition: all 140ms var(--ease); }
+  .sl__btns a:hover { background: var(--tiefrot-dim); color: var(--tiefrot); }
+  .sl__btns a .p { color: var(--muted-deep); font-size: 10px; }
+  .sl__qr { background: var(--void) !important; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .sl__qr .qrtile { width: 140px; height: 140px; background: var(--bone); border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; padding: 8px; }
+  .sl__qr .qrtile img { width: 100%; height: 100%; display: block; }
+  .sl__qr .lbl { color: var(--muted); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; }
+  .sl__foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px 16px; border-top: 1px solid var(--border); }
+  .sl__url { flex: 1; min-width: 200px; font-size: 12px; color: var(--muted); background: var(--void); border: 1px solid var(--border); border-radius: var(--r-md); padding: 9px 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .counter { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .counter b { color: var(--tiefrot); font-weight: 700; font-size: 13px; }
+
+  .btnx { display: inline-flex; align-items: center; gap: 8px; background: var(--void); color: var(--bone); border: 1px solid var(--border); border-radius: var(--r-md); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 9px 13px; cursor: pointer; transition: all 140ms var(--ease); }
+  .btnx:hover { border-color: var(--tiefrot); color: var(--tiefrot); }
+  .btnx--primary { background: var(--tiefrot); border-color: var(--tiefrot); color: var(--void); font-weight: 700; }
+  .btnx--primary:hover { background: var(--bone); border-color: var(--bone); color: var(--void); }
+
+  /* ---- COUNTDOWN ---- */
+  .cd { display: grid; grid-template-columns: 150px 1fr; gap: 1px; background: var(--border); }
+  .cd > div { background: var(--panel); }
+  .cd__cover { background: var(--void) !important; position: relative; aspect-ratio: 1/1; }
+  .cd__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cd__cover .tag { position: absolute; top: 12px; left: 12px; background: var(--tiefrot); color: var(--void); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; padding: 4px 8px; }
+  .cd__body { padding: 18px 20px; }
+  .cd__eye { color: var(--muted); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .cd__title { font-family: var(--font-display); font-size: 40px; line-height: 0.9; text-transform: uppercase; margin: 4px 0 2px; }
+  .cd__sub { color: var(--bone-dim); font-family: var(--font-grotesk); font-size: 13px; }
+  .cd__clock { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 16px 0; max-width: 360px; }
+  .cd__u { background: var(--void); padding: 12px 8px; text-align: center; }
+  .cd__n { font-family: var(--font-mono); font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--bone); letter-spacing: 0.02em; }
+  .cd__l { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+  .cd__when { color: var(--muted); font-size: 12px; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .cd__acts { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* ---- FINDER ---- */
+  .sf { padding: 22px; }
+  .sf__q { color: var(--muted); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .sf__prompt { font-family: var(--font-grotesk); font-weight: 700; font-size: 24px; letter-spacing: -0.01em; margin: 8px 0 18px; color: var(--bone); }
+  .sf__opts { display: grid; gap: 8px; max-width: 520px; }
+  .sf__opt { text-align: left; background: var(--void); color: var(--bone); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; cursor: pointer; font-family: var(--font-grotesk); font-size: 15px; transition: all 140ms var(--ease); }
+  .sf__opt:hover { border-color: var(--tiefrot); background: var(--tiefrot-dim); }
+  .sf__prog { display: flex; gap: 6px; margin-top: 18px; }
+  .sf__prog span { width: 26px; height: 3px; background: var(--border); }
+  .sf__prog span.on { background: var(--tiefrot); }
+  .sf__res { display: none; }
+  .sf__res.show { display: block; }
+  .sf__res .grid { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: start; }
+  .sf__res img.cov { width: 100%; aspect-ratio: 1/1; object-fit: cover; border: 1px solid var(--border); }
+  .sf__resname { font-family: var(--font-display); font-size: 44px; line-height: 0.9; text-transform: uppercase; margin: 0 0 8px; }
+  .sf__resname .schiene { color: var(--tiefrot); }
+  .sf__resdesc { color: var(--bone-dim); font-family: var(--font-grotesk); font-size: 14px; line-height: 1.55; margin: 0 0 12px; }
+  .sf__restrack { color: var(--muted); font-size: 12px; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .sf__acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sf__preview { margin-top: 16px; }
+  .sf__preview iframe { width: 100%; height: 120px; border: 1px solid var(--border); display: block; }
+
+  .note { color: var(--muted-deep); font-size: 11px; letter-spacing: 0.04em; line-height: 1.6; padding: 30px 0 60px; }
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--bone); color: var(--void); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; padding: 11px 18px; border-radius: var(--r-md); opacity: 0; pointer-events: none; transition: all 220ms var(--ease); z-index: 50; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 760px){
+    .sl { grid-template-columns: 1fr; }
+    .sl__cover { aspect-ratio: 16/9; }
+    .cd { grid-template-columns: 1fr; }
+    .cd__cover { aspect-ratio: 16/9; }
+    .sf__res .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="laser" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <a class="home" href="index.html"><span class="d" aria-hidden="true"></span>NULLTAG</a>
+    <span class="rail">Toolbench · Interne Demo</span>
+  </header>
+
+  <section class="intro">
+    <p class="eye">§ Toolbench · 3 Module · Live-Daten</p>
+    <h1>Fan-<em>Tools</em><br/>v2</h1>
+    <p>Überarbeitete Versionen der drei Gadgets — gebaut, um beim Besuch sofort zu konvertieren statt nur hübsch dazustehen. Jedes Modul zieht aus echten Daten und hat keinen hartcodierten Track mehr. Klick dich durch: alles unten ist funktionsfähig.</p>
+    <div class="legend">
+      <span><b>SL</b> · Smart-Link</span>
+      <span><b>CD</b> · Drop-Countdown</span>
+      <span><b>SF</b> · Schiene-Finder</span>
+    </div>
+  </section>
+
+  <!-- ============ SMART-LINK ============ -->
+  <section class="mod">
+    <div class="mod__head">
+      <span class="mod__code">SL</span>
+      <span class="mod__name">Smart-Link</span>
+      <span class="mod__sub">· „Hör überall" + QR + Tracking</span>
+    </div>
+    <p class="muted-copy" style="max-width:62ch; color:var(--bone-dim); font-family:var(--font-grotesk); margin:0;">Eine gebrandete Landing pro Release — alle DSPs, Copy-Link, scanbarer QR-Code für Flyer/Stories/Backstage, und jeder Klick wird gezählt. Wähle einen Release:</p>
+
+    <div class="mod__body">
+      <div class="panel">
+        <div class="panel__bar"><span class="t"><span class="dot"></span>Smart-Link · live</span><code>tools.html?w=smartlink&amp;t=…</code></div>
+        <div class="chips" id="sl-chips"></div>
+        <div class="sl">
+          <div class="sl__cover"><span class="pin">● NEU</span><img id="sl-cover" src="covers/higher_ground.jpg" alt="Cover" /></div>
+          <div>
+            <div class="sl__eye" id="sl-eye">NULLTAG · SINGLE</div>
+            <div class="sl__title" id="sl-title">Higher Ground</div>
+            <div class="sl__btns" id="sl-btns"></div>
+          </div>
+          <div class="sl__qr">
+            <div class="qrtile"><img id="sl-qr" alt="QR-Code zum Release" /></div>
+            <div class="lbl">Scan → Release<br/>Flyer · Story · Backstage</div>
+          </div>
+        </div>
+        <div class="sl__foot">
+          <span class="sl__url" id="sl-url">soundcloud.com/nulltag/higher-ground</span>
+          <button class="btnx" id="sl-copy">⧉ Copy Link</button>
+          <span class="counter">Klicks (Demo): <b id="sl-count">0</b></span>
+        </div>
+      </div>
+      <div class="was">Vorher: <s>hartcodiert auf „Supernova", Deko-URL, kein QR, kein Tracking.</s> &nbsp;Jetzt: <b>pro Release · QR · Copy · Klick-Zähler (deepaudit-ready)</b></div>
+    </div>
+  </section>
+
+  <!-- ============ COUNTDOWN ============ -->
+  <section class="mod">
+    <div class="mod__head">
+      <span class="mod__code">CD</span>
+      <span class="mod__name">Drop-Countdown</span>
+      <span class="mod__sub">· nächster Drop · live · Kalender</span>
+    </div>
+    <p class="muted-copy" style="max-width:62ch; color:var(--bone-dim); font-family:var(--font-grotesk); margin:0;">Tickt live zum nächsten Release, springt nach dem Drop automatisch weiter — und lässt Fans den Termin direkt in ihren Kalender legen oder teilen.</p>
+
+    <div class="mod__body">
+      <div class="panel">
+        <div class="panel__bar"><span class="t"><span class="dot"></span>Countdown · auto-advance</span><code>tools.html?w=countdown</code></div>
+        <div class="cd">
+          <div class="cd__cover"><span class="tag">● NEXT</span><img id="cd-cover" src="covers/lichtjahr_vol2.jpg" alt="Next drop cover" /></div>
+          <div class="cd__body">
+            <div class="cd__eye" id="cd-eye">LICHTJAHR VOL.2 · EP</div>
+            <div class="cd__title" id="cd-title">Vol.2 EP</div>
+            <div class="cd__sub" id="cd-sub">Full EP · alle Streaming-Dienste</div>
+            <div class="cd__clock">
+              <div class="cd__u"><div class="cd__n" id="cd-d">00</div><div class="cd__l">Tage</div></div>
+              <div class="cd__u"><div class="cd__n" id="cd-h">00</div><div class="cd__l">Std</div></div>
+              <div class="cd__u"><div class="cd__n" id="cd-m">00</div><div class="cd__l">Min</div></div>
+              <div class="cd__u"><div class="cd__n" id="cd-s">00</div><div class="cd__l">Sek</div></div>
+            </div>
+            <div class="cd__when" id="cd-when">—</div>
+            <div class="cd__acts">
+              <button class="btnx btnx--primary" id="cd-ics">＋ Kalender (.ics)</button>
+              <button class="btnx" id="cd-share">↗ Teilen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="was">Vorher: <s>fixe Daten im Code, „Last Light" stand auch nach dem Drop noch.</s> &nbsp;Jetzt: <b>auto-advance · .ics-Download · Share</b></div>
+    </div>
+  </section>
+
+  <!-- ============ FINDER ============ -->
+  <section class="mod" style="border-bottom:0;">
+    <div class="mod__head">
+      <span class="mod__code">SF</span>
+      <span class="mod__name">Schiene-Finder</span>
+      <span class="mod__sub">· Quiz → Schiene · anspielbar</span>
+    </div>
+    <p class="muted-copy" style="max-width:62ch; color:var(--bone-dim); font-family:var(--font-grotesk); margin:0;">Spielerischer Einstieg für Neue: drei Fragen → passende Schiene + Track, <b style="color:var(--bone)">direkt anspielbar</b> und als Story teilbar.</p>
+
+    <div class="mod__body">
+      <div class="panel">
+        <div class="panel__bar"><span class="t"><span class="dot"></span>Schiene-Finder · interaktiv</span><code>tools.html?w=finder</code></div>
+        <div class="sf">
+          <div id="sf-quiz">
+            <div class="sf__q" id="sf-qnum">Frage 01 / 03</div>
+            <div class="sf__prompt" id="sf-prompt"></div>
+            <div class="sf__opts" id="sf-opts"></div>
+            <div class="sf__prog" id="sf-prog"><span class="on"></span><span></span><span></span></div>
+          </div>
+          <div class="sf__res" id="sf-res">
+            <div class="grid">
+              <img class="cov" id="sf-cov" src="" alt="Empfohlenes Cover" />
+              <div>
+                <div class="sf__q">Deine Schiene</div>
+                <div class="sf__resname"><span class="schiene" id="sf-name"></span></div>
+                <div class="sf__resdesc" id="sf-desc"></div>
+                <div class="sf__restrack" id="sf-track"></div>
+                <div class="sf__acts">
+                  <button class="btnx" id="sf-share">↗ Ergebnis teilen</button>
+                  <button class="btnx" id="sf-restart">↻ Nochmal</button>
+                </div>
+              </div>
+            </div>
+            <div class="sf__preview"><iframe id="sf-pv" allow="autoplay; encrypted-media" scrolling="no" frameborder="0" title="Track-Vorschau"></iframe></div>
+          </div>
+        </div>
+      </div>
+      <div class="was">Vorher: <s>Ergebnis war nur ein Link nach SoundCloud.</s> &nbsp;Jetzt: <b>anspielbare Vorschau · teilbares Ergebnis</b></div>
+    </div>
+  </section>
+
+  <p class="note">Interne Demo · noindex · nicht verlinkt. Daten: SoundCloud-Permalinks + lokale Cover. QR via api.qrserver.com. Nichts hiervon ist auf der Live-Startseite aktiv — sag, welche Module rein sollen, dann integriere ich sie in <code>index.html</code> + <code>tools.html</code>.</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ shared ============ */
+var ART = {
+  spotify: "https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV",
+  apple:   "https://music.apple.com/ch/artist/nulltag",
+  youtube: "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q"
+};
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(function(){t.classList.remove('show');},1800); }
+function track(ev, label){ // demo analytics — fires a real deepaudit hit + counts
+  var rid=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
+  var i=new Image(1,1); i.referrerPolicy='no-referrer-when-downgrade';
+  i.src='https://deepaudit.ch/qt?tid=xs7n6u&rid='+encodeURIComponent(rid)+'&e='+encodeURIComponent(ev)+'&l='+encodeURIComponent(label||'');
+  console.log('[track]', ev, label, 'rid='+rid);
+}
+
+/* ============ SL · Smart-Link ============ */
+var RELEASES = [
+  { id:"higher-ground",      title:"Higher Ground",      eye:"NULLTAG-16 · STANDALONE", cover:"covers/higher_ground.jpg" },
+  { id:"microwave",          title:"Microwave",          eye:"LJ-11 · LICHTJAHR VOL.2", cover:"covers/microwave.jpg" },
+  { id:"supernova",          title:"Supernova",          eye:"LJ-10 · LICHTJAHR VOL.2", cover:"covers/supernova.jpg" },
+  { id:"andromeda-approach", title:"Andromeda Approach", eye:"LJ-09 · LICHTJAHR VOL.2", cover:"covers/andromeda_approach.jpg" },
+  { id:"trappist-loop",      title:"Trappist Loop",      eye:"LJ-07 · LICHTJAHR VOL.2", cover:"covers/trappist_loop.jpg" }
+];
+(function(){
+  var chips=document.getElementById('sl-chips'), btns=document.getElementById('sl-btns');
+  var elCover=document.getElementById('sl-cover'), elTitle=document.getElementById('sl-title'),
+      elEye=document.getElementById('sl-eye'), elUrl=document.getElementById('sl-url'),
+      elQr=document.getElementById('sl-qr'), elCount=document.getElementById('sl-count');
+  var clicks=0;
+  function scUrl(id){ return "https://soundcloud.com/nulltag/"+id; }
+  function render(r){
+    elCover.src=r.cover; elCover.alt=r.title+" Cover";
+    elTitle.textContent=r.title; elEye.textContent=r.eye;
+    var url=scUrl(r.id); elUrl.textContent=url.replace(/^https:\/\//,'');
+    elQr.src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&color=0a0a0a&bgcolor=e8e3da&data="+encodeURIComponent(url);
+    btns.innerHTML="";
+    [["SoundCloud",url,"Primary"],["Spotify",ART.spotify,"Pre-Save"],["Apple Music",ART.apple,"DSP"],["YouTube",ART.youtube,"DSP"]].forEach(function(p){
+      var a=document.createElement('a'); a.href=p[1]; a.target="_blank"; a.rel="noopener";
+      a.innerHTML="<span>"+p[0]+"</span><span class='p'>"+p[2]+" ↗</span>";
+      a.addEventListener('click', function(){ clicks++; elCount.textContent=clicks; track('smartlink_click', r.id+':'+p[0]); });
+      btns.appendChild(a);
+    });
+  }
+  RELEASES.forEach(function(r,i){
+    var b=document.createElement('button'); b.className="chip"+(i===0?" on":""); b.textContent=r.title;
+    b.addEventListener('click', function(){ [].forEach.call(chips.children,function(c){c.classList.remove('on');}); b.classList.add('on'); render(r); track('smartlink_view', r.id); });
+    chips.appendChild(b);
+  });
+  document.getElementById('sl-copy').addEventListener('click', function(){
+    var url="https://"+elUrl.textContent;
+    (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){toast('Link kopiert');},function(){toast(url);});
+    track('smartlink_copy', elUrl.textContent);
+  });
+  render(RELEASES[0]);
+})();
+
+/* ============ CD · Countdown ============ */
+var DROPS = [
+  { title:"Vol.2 EP",     eye:"LICHTJAHR VOL.2 · EP",        sub:"Full EP · alle Streaming-Dienste", cover:"covers/lichtjahr_vol2.jpg", t:Date.UTC(2026,5,26,8,0,0), loc:"Streaming weltweit" },
+  { title:"Showroom",     eye:"LICHTJAHR VOL.2 · EVENT",     sub:"Lichtjahr Vol.2 · Showroom",       cover:"covers/lichtjahr_vol2.jpg", t:Date.UTC(2026,6,3,8,0,0),  loc:"Showroom" },
+  { title:"Higher Ground",eye:"NULLTAG-16 · STANDALONE",     sub:"Cinematic Frenchcore · 184 BPM",   cover:"covers/higher_ground.jpg",  t:Date.UTC(2026,6,10,8,0,0), loc:"Alle DSPs" }
+];
+(function(){
+  var elT=document.getElementById('cd-title'), elE=document.getElementById('cd-eye'),
+      elS=document.getElementById('cd-sub'), elC=document.getElementById('cd-cover'), elW=document.getElementById('cd-when');
+  var d=document.getElementById('cd-d'),h=document.getElementById('cd-h'),m=document.getElementById('cd-m'),s=document.getElementById('cd-s');
+  var MONTHS=["Jan.","Feb.","März","Apr.","Mai","Juni","Juli","Aug.","Sept.","Okt.","Nov.","Dez."];
+  function active(){ var now=Date.now(); for(var i=0;i<DROPS.length;i++){ if(DROPS[i].t>now) return DROPS[i]; } return DROPS[DROPS.length-1]; }
+  var cur=null;
+  function paint(){
+    var a=active();
+    if(a!==cur){ cur=a; elT.textContent=a.title; elE.textContent=a.eye; elS.textContent=a.sub; elC.src=a.cover;
+      var dt=new Date(a.t); elW.textContent="Freitag, "+dt.getUTCDate()+". "+MONTHS[dt.getUTCMonth()]+" "+dt.getUTCFullYear()+" · 10:00 CEST"; }
+    var diff=Math.max(0,a.t-Date.now()), sec=Math.floor(diff/1000);
+    var dd=Math.floor(sec/86400),hh=Math.floor(sec%86400/3600),mm=Math.floor(sec%3600/60),ss=sec%60;
+    function p(n){return String(n).padStart(2,'0');}
+    d.textContent=p(dd);h.textContent=p(hh);m.textContent=p(mm);s.textContent=p(ss);
+  }
+  paint(); setInterval(paint,1000);
+  function dtStamp(ms){ return new Date(ms).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''); }
+  document.getElementById('cd-ics').addEventListener('click', function(){
+    var a=active(), start=a.t, end=a.t+3600000;
+    var ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NULLTAG//Drop//DE","BEGIN:VEVENT",
+      "UID:"+a.title.replace(/\s/g,'')+"@nulltag.ch","DTSTAMP:"+dtStamp(Date.now()),
+      "DTSTART:"+dtStamp(start),"DTEND:"+dtStamp(end),
+      "SUMMARY:NULLTAG — "+a.title,"DESCRIPTION:"+a.sub+" · "+a.loc,"URL:https://music.nulltag.ch","END:VEVENT","END:VCALENDAR"].join("\r\n");
+    var blob=new Blob([ics],{type:"text/calendar"}), url=URL.createObjectURL(blob), link=document.createElement('a');
+    link.href=url; link.download="NULLTAG-"+a.title.replace(/\s/g,'_')+".ics"; link.click(); URL.revokeObjectURL(url);
+    toast('Kalender-Datei geladen'); track('countdown_ics', a.title);
+  });
+  document.getElementById('cd-share').addEventListener('click', function(){
+    var a=active(), text="NULLTAG — "+a.title+" · "+a.sub+" → music.nulltag.ch";
+    if(navigator.share){ navigator.share({title:"NULLTAG — "+a.title, text:text, url:"https://music.nulltag.ch"}).catch(function(){}); }
+    else { (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){toast('Text kopiert');},function(){toast(text);}); }
+    track('countdown_share', a.title);
+  });
+})();
+
+/* ============ SF · Schiene-Finder ============ */
+var SCHIENEN = {
+  lichtjahr:{ name:"Lichtjahr", desc:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Kicks auf Planetenbewegung getunt.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg", sc:"supernova" },
+  cinetekk:{ name:"Cinetekk", desc:"Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg", sc:"letzter-sommer" },
+  dome:{ name:"Dome EP", desc:"Festival-Frenchcore, euphoric Peaktime-Mainstage als Story-Arc. Hände hoch.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg", sc:"in-the-dome" }
+};
+var SF_Q = [
+  { q:"Wann hörst du am liebsten?", opts:[["Nachts allein, Kopfhörer","cinetekk"],["Peaktime, Mainstage","dome"],["Sonnenaufgang nach der Rave","lichtjahr"]] },
+  { q:"Was soll die Musik mit dir machen?", opts:[["Mich wegtragen, kosmisch","lichtjahr"],["Mich zerlegen, Hände hoch","dome"],["Mich fühlen lassen, Kino im Kopf","cinetekk"]] },
+  { q:"Deine Sprache?", opts:[["Egal, Hauptsache Energie","dome"],["Deutsch, Gänsehaut","cinetekk"],["Englisch, episch","lichtjahr"]] }
+];
+(function(){
+  var step=0, score={lichtjahr:0,cinetekk:0,dome:0};
+  var quiz=document.getElementById('sf-quiz'), res=document.getElementById('sf-res');
+  var qnum=document.getElementById('sf-qnum'), prompt=document.getElementById('sf-prompt'), opts=document.getElementById('sf-opts'), prog=document.getElementById('sf-prog');
+  function render(){
+    var Q=SF_Q[step]; qnum.textContent="Frage "+String(step+1).padStart(2,'0')+" / 03"; prompt.textContent=Q.q; opts.innerHTML="";
+    Q.opts.forEach(function(o){ var b=document.createElement('button'); b.className="sf__opt"; b.textContent=o[0];
+      b.addEventListener('click', function(){ score[o[1]]++; step++; [].forEach.call(prog.children,function(sp,i){ sp.classList.toggle('on', i<=step); });
+        if(step<SF_Q.length) render(); else finish(); }); opts.appendChild(b); });
+  }
+  function finish(){
+    var win=Object.keys(score).sort(function(a,b){return score[b]-score[a];})[0], s=SCHIENEN[win];
+    document.getElementById('sf-cov').src=s.cover; document.getElementById('sf-name').textContent=s.name;
+    document.getElementById('sf-desc').textContent=s.desc; document.getElementById('sf-track').textContent="▶ "+s.track;
+    document.getElementById('sf-pv').src="https://w.soundcloud.com/player/?url="+encodeURIComponent("https://soundcloud.com/nulltag/"+s.sc)+"&color=%23ff2a55&auto_play=false&hide_related=true&show_comments=false&show_user=true&visual=false";
+    quiz.style.display="none"; res.classList.add('show'); track('finder_result', win);
+    document.getElementById('sf-share').onclick=function(){ var text="Meine NULLTAG-Schiene: "+s.name+" → "+s.track+" · music.nulltag.ch";
+      if(navigator.share){navigator.share({text:text,url:"https://music.nulltag.ch"}).catch(function(){});}
+      else {(navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(function(){toast('Ergebnis kopiert');},function(){toast(text);});} track('finder_share', win); };
+  }
+  document.getElementById('sf-restart').addEventListener('click', function(){ step=0; score={lichtjahr:0,cinetekk:0,dome:0};
+    [].forEach.call(prog.children,function(sp,i){ sp.classList.toggle('on', i===0); }); document.getElementById('sf-pv').src=""; res.classList.remove('show'); quiz.style.display="block"; render(); });
+  render();
+})();
+</script>
+</body>
+</html>
