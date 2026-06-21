@@ -145,6 +145,9 @@
   .cat:hover .cat__info { opacity: 1; transform: translateY(0); }
   .cat__title { font-family: var(--font-display); font-size: 24px; line-height: 0.95; text-transform: uppercase; margin: 0 0 6px; color: var(--bone); }
   .cat__m { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .cat__count { position: absolute; top: 10px; right: 10px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--void); background: var(--tiefrot); padding: 4px 7px; font-weight: 700; }
+  .cat--rel .cat__title { font-size: 21px; }
+  .cat__tracks { margin-top: 8px; font-family: var(--font-mono); font-size: 9.5px; line-height: 1.55; letter-spacing: 0.03em; color: var(--bone-dim); max-height: 86px; overflow: hidden; }
 
   /* ===== schienen ===== */
   .rails { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
@@ -597,7 +600,7 @@
         <div class="s__num">§03 · CATALOG · FEATURED ARTWORK</div>
         <h2 class="s__title">Catalog</h2>
       </div>
-      <div class="s__meta">54 TRACKS · 05 SCHIENEN<br/>FEATURED ARTWORK</div>
+      <div class="s__meta">35 RELEASES · 54 TRACKS<br/>GRUPPIERT NACH RELEASE</div>
     </div>
     <div class="filters" role="tablist" id="filters">
       <button class="active" data-rail="ALL">ALL · 54</button>
@@ -892,62 +895,56 @@
   }
   roTick(); setInterval(roTick, 1000);
 
-  // ── catalog data (real covers) ─────────────────────────────
+  // ── catalog data — grouped by release (album / EP / single) ──
+  // Lichtjahr stays per-single (each track has bespoke cover art);
+  // multi-track EPs/albums collapse into one release card + tracklist.
   var CATALOG = [
-    { rail:"LJ", title:"Last Light",         cat:"LJ-12", meta:"188 BPM · Vol.2", img:"covers/last_light.jpg" },
-    { rail:"LJ", title:"Microwave",          cat:"LJ-11", meta:"190 BPM · Vol.2", img:"covers/microwave.jpg" },
-    { rail:"LJ", title:"Supernova",          cat:"LJ-10", meta:"200 BPM · Vol.2", img:"covers/supernova.jpg" },
-    { rail:"LJ", title:"Andromeda Approach", cat:"LJ-09", meta:"190 BPM · Vol.2", img:"covers/andromeda_approach.jpg" },
-    { rail:"LJ", title:"Event Horizon",      cat:"LJ-08", meta:"200 BPM · Vol.2", img:"covers/event_horizon.jpg" },
-    { rail:"LJ", title:"Trappist Loop",      cat:"LJ-07", meta:"195 BPM · Vol.2", img:"covers/trappist_loop.jpg" },
-    { rail:"LJ", title:"Mercury's Burn",     cat:"LJ-06", meta:"200 BPM · Vol.1", img:"covers/mercurys_burn.jpg" },
-    { rail:"LJ", title:"Heat Death",         cat:"LJ-05", meta:"185 BPM · Vol.1", img:"covers/heat_death.jpg" },
-    { rail:"LJ", title:"Jupiter",            cat:"LJ-04", meta:"205 BPM · Vol.1", img:"covers/planet_jupiter.jpg" },
-    { rail:"LJ", title:"Blue Planet",        cat:"LJ-03", meta:"199 BPM · Vol.1", img:"covers/blue_planet.jpg" },
-    { rail:"LJ", title:"The Edge Recedes",   cat:"LJ-02", meta:"200 BPM · Vol.1", img:"covers/the_edge_recedes.jpg" },
-    { rail:"LJ", title:"Cosmic Sea",         cat:"LJ-01", meta:"190 BPM · Vol.1", img:"covers/cosmic_sea.jpg" },
-    { rail:"CT", title:"Eisflug",            cat:"CT-05", meta:"152 BPM · DE",   img:"covers/eisflug.jpg" },
-    { rail:"CT", title:"Letzter Sommer",     cat:"CT-07", meta:"150 BPM · DE",   img:"covers/letzter_sommer.jpg" },
-    { rail:"CT", title:"Nachtfalter",        cat:"CT-09", meta:"156 BPM · EN",   img:"covers/nachtfalter.jpg" },
-    { rail:"CT", title:"Cinetekk",           cat:"CT-01", meta:"152 BPM · DE",   img:"covers/cinetekk.jpg" },
-    { rail:"DM", title:"In The Dome",        cat:"DM-01", meta:"190 BPM · DOME EP", img:"covers/in_the_dome.jpg" },
-    { rail:"ST", title:"Plastic Funeral",    cat:"NULLTAG-09", meta:"170 BPM",   img:"covers/plastic_funeral.jpg" },
-    { rail:"ST", title:"Peace Remains",      cat:"NULLTAG-10", meta:"190 BPM",        img:"covers/peace_remains.jpg" },
-    { rail:"ST", title:"LOVESONG",           cat:"NULLTAG-11", meta:"200 BPM · EN",   img:"covers/lovesong.jpg" },
-    { rail:"ST", title:"Fifteen Years",      cat:"NULLTAG-12", meta:"147 BPM · EN",   img:"covers/fifteen_years.jpg" },
-    { rail:"ST", title:"Freedom",            cat:"NULLTAG-13", meta:"200 BPM · EN",   img:"covers/freedom.jpg" },
-    { rail:"ST", title:"SHOWROOM",           cat:"NULLTAG-14", meta:"200 BPM · EN",   img:"covers/showroom.jpg" },
-    { rail:"ST", title:"Beauty of Music",    cat:"NULLTAG-15", meta:"168 BPM · EN",   img:"covers/beauty_of_music.jpg" },
-    { rail:"ST", title:"Higher Ground",      cat:"NULLTAG-16", meta:"184 BPM · EN",   img:"covers/higher_ground.jpg" },
-    { rail:"DM", title:"God Of Bass", cat:"DOME · EP", meta:"EN", img:"covers/rel_dome.jpg" },
-    { rail:"DM", title:"Stuck On Repeat", cat:"DOME · EP", meta:"EN", img:"covers/rel_dome.jpg" },
-    { rail:"DM", title:"Fell In Love With The Music", cat:"DOME · EP", meta:"EN", img:"covers/rel_dome.jpg" },
-    { rail:"CT", title:"Glassplitter", cat:"CINETEKK · ALBUM", meta:"DE", img:"covers/rel_cinetekk.jpg" },
-    { rail:"CT", title:"Vergessenes Spiegelbild", cat:"CINETEKK · ALBUM", meta:"DE", img:"covers/rel_cinetekk.jpg" },
-    { rail:"CT", title:"Asche In Der Hand", cat:"CINETEKK · ALBUM", meta:"DE", img:"covers/rel_cinetekk.jpg" },
-    { rail:"CT", title:"Schwerkraft", cat:"CINETEKK · ALBUM", meta:"DE", img:"covers/rel_cinetekk.jpg" },
-    { rail:"ND", title:"Bayern Crew", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_bayern_crew.jpg" },
-    { rail:"ND", title:"Swiss Geeman", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_swiss_geeman.jpg" },
-    { rail:"ND", title:"Achthundert Beamte", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_achthundert_beamte.jpg" },
-    { rail:"ND", title:"Sternenstaub", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_sternenstaub.jpg" },
-    { rail:"ND", title:"Einfacher als du denkst!", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_einfacher_als_du_denkst.jpg" },
-    { rail:"ND", title:"Wo ist der Bass?", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_wo_ist_der_bass.jpg" },
-    { rail:"ND", title:"Sandkastenparty", cat:"TONBAND · SINGLE", meta:"DE", img:"covers/rel_sandkastenparty.jpg" },
-    { rail:"ND", title:"TEKKNO TRAIN (Remastered)", cat:"TEKKNO TRAIN · REMASTER", meta:"DE", img:"covers/rel_tekkno_train_remastered.jpg" },
-    { rail:"ND", title:"KILL SWITCH", cat:"BLACKBOX · EP", meta:"EN", img:"covers/rel_blackbox.jpg" },
-    { rail:"ND", title:"GHOST PROTOCOL", cat:"BLACKBOX · EP", meta:"EN", img:"covers/rel_blackbox.jpg" },
-    { rail:"ND", title:"HONEYPOT", cat:"BLACKBOX · EP", meta:"EN", img:"covers/rel_blackbox.jpg" },
-    { rail:"ND", title:"BLACKBOX", cat:"BLACKBOX · EP", meta:"EN", img:"covers/rel_blackbox.jpg" },
-    { rail:"ST", title:"Plastic Paradise", cat:"PLASTIC PARADISE · EP", meta:"EN", img:"covers/rel_plastic_paradise.jpg" },
-    { rail:"ST", title:"Concrete Messiah", cat:"PLASTIC PARADISE · EP", meta:"EN", img:"covers/rel_plastic_paradise.jpg" },
-    { rail:"ST", title:"Nulltag Rising", cat:"PLASTIC PARADISE · EP", meta:"EN", img:"covers/rel_plastic_paradise.jpg" },
-    { rail:"ND", title:"TEKKNO TRAIN", cat:"TEKKNO TRAIN", meta:"DE", img:"covers/rel_tekkno_train.jpg" },
-    { rail:"ND", title:"Thousand Voices Stringtheory", cat:"TAUSEND STIMMEN", meta:"DE · EN", img:"covers/rel_tausend_stimmen_thousand_voices.jpg" },
-    { rail:"ND", title:"Thousand Voices", cat:"TAUSEND STIMMEN", meta:"DE · EN", img:"covers/rel_tausend_stimmen_thousand_voices.jpg" },
-    { rail:"ND", title:"Tausend Stimmen", cat:"TAUSEND STIMMEN", meta:"DE · EN", img:"covers/rel_tausend_stimmen_thousand_voices.jpg" },
-    { rail:"ST", title:"Nulltag Erwacht", cat:"CORONATION · TRILOGY", meta:"EN", img:"covers/rel_coronation_trilogy.jpg" },
-    { rail:"ST", title:"Nulltag S'Éveille", cat:"CORONATION · TRILOGY", meta:"EN", img:"covers/rel_coronation_trilogy.jpg" },
-    { rail:"ST", title:"Vögel Einsneunzig", cat:"NULLTAG · SINGLE", meta:"DE", img:"covers/rel_voegel_einsneunzig.jpg" }
+    // — LICHTJAHR · weekly singles, distinct covers —
+    { rail:"LJ", title:"Last Light",         type:"SINGLE", meta:"LJ-12 · 188 BPM · Vol.2", img:"covers/last_light.jpg" },
+    { rail:"LJ", title:"Microwave",          type:"SINGLE", meta:"LJ-11 · 190 BPM · Vol.2", img:"covers/microwave.jpg" },
+    { rail:"LJ", title:"Supernova",          type:"SINGLE", meta:"LJ-10 · 200 BPM · Vol.2", img:"covers/supernova.jpg" },
+    { rail:"LJ", title:"Andromeda Approach", type:"SINGLE", meta:"LJ-09 · 190 BPM · Vol.2", img:"covers/andromeda_approach.jpg" },
+    { rail:"LJ", title:"Event Horizon",      type:"SINGLE", meta:"LJ-08 · 200 BPM · Vol.2", img:"covers/event_horizon.jpg" },
+    { rail:"LJ", title:"Trappist Loop",      type:"SINGLE", meta:"LJ-07 · 195 BPM · Vol.2", img:"covers/trappist_loop.jpg" },
+    { rail:"LJ", title:"Mercury's Burn",     type:"SINGLE", meta:"LJ-06 · 200 BPM · Vol.1", img:"covers/mercurys_burn.jpg" },
+    { rail:"LJ", title:"Heat Death",         type:"SINGLE", meta:"LJ-05 · 185 BPM · Vol.1", img:"covers/heat_death.jpg" },
+    { rail:"LJ", title:"Jupiter",            type:"SINGLE", meta:"LJ-04 · 205 BPM · Vol.1", img:"covers/planet_jupiter.jpg" },
+    { rail:"LJ", title:"Blue Planet",        type:"SINGLE", meta:"LJ-03 · 199 BPM · Vol.1", img:"covers/blue_planet.jpg" },
+    { rail:"LJ", title:"The Edge Recedes",   type:"SINGLE", meta:"LJ-02 · 200 BPM · Vol.1", img:"covers/the_edge_recedes.jpg" },
+    { rail:"LJ", title:"Cosmic Sea",         type:"SINGLE", meta:"LJ-01 · 190 BPM · Vol.1", img:"covers/cosmic_sea.jpg" },
+    // — CINETEKK · album —
+    { rail:"CT", title:"Cinetekk", type:"ALBUM", meta:"Album · 152–156 BPM · DE", img:"covers/cinetekk.jpg",
+      tracks:["Cinetekk","Glassplitter","Vergessenes Spiegelbild","Eisflug","Asche In Der Hand","Letzter Sommer","Schwerkraft","Nachtfalter"] },
+    // — DOME · EP —
+    { rail:"DM", title:"Dome EP", type:"EP", meta:"EP · 188–200 BPM · EN", img:"covers/in_the_dome.jpg",
+      tracks:["In The Dome","God Of Bass","Stuck On Repeat","Fell In Love With The Music"] },
+    // — DISTRIBUTION —
+    { rail:"ND", title:"Blackbox", type:"EP", meta:"EP · EN", img:"covers/rel_blackbox.jpg",
+      tracks:["Kill Switch","Ghost Protocol","Honeypot","Blackbox"] },
+    { rail:"ND", title:"Tausend Stimmen", type:"EP", meta:"EP · DE · EN", img:"covers/rel_tausend_stimmen_thousand_voices.jpg",
+      tracks:["Thousand Voices Stringtheory","Thousand Voices","Tausend Stimmen"] },
+    { rail:"ND", title:"Tekkno Train", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_tekkno_train.jpg" },
+    { rail:"ND", title:"Tekkno Train", type:"REMASTER", meta:"Remastered · DE", img:"covers/rel_tekkno_train_remastered.jpg" },
+    { rail:"ND", title:"Bayern Crew", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_bayern_crew.jpg" },
+    { rail:"ND", title:"Swiss Geeman", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_swiss_geeman.jpg" },
+    { rail:"ND", title:"Achthundert Beamte", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_achthundert_beamte.jpg" },
+    { rail:"ND", title:"Sternenstaub", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_sternenstaub.jpg" },
+    { rail:"ND", title:"Einfacher als du denkst!", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_einfacher_als_du_denkst.jpg" },
+    { rail:"ND", title:"Wo ist der Bass?", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_wo_ist_der_bass.jpg" },
+    { rail:"ND", title:"Sandkastenparty", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_sandkastenparty.jpg" },
+    // — STANDALONE —
+    { rail:"ST", title:"Plastic Paradise", type:"EP", meta:"EP · EN", img:"covers/rel_plastic_paradise.jpg",
+      tracks:["Plastic Paradise","Concrete Messiah","Nulltag Rising","Plastic Funeral"] },
+    { rail:"ST", title:"Coronation Trilogy", type:"TRILOGY", meta:"Trilogie · EN", img:"covers/rel_coronation_trilogy.jpg",
+      tracks:["Nulltag Rising","Nulltag Erwacht","Nulltag S'Éveille"] },
+    { rail:"ST", title:"Higher Ground",   type:"SINGLE", meta:"NULLTAG-16 · 184 BPM · EN", img:"covers/higher_ground.jpg" },
+    { rail:"ST", title:"Beauty of Music", type:"SINGLE", meta:"NULLTAG-15 · 168 BPM · EN", img:"covers/beauty_of_music.jpg" },
+    { rail:"ST", title:"SHOWROOM",        type:"SINGLE", meta:"NULLTAG-14 · 200 BPM · EN", img:"covers/showroom.jpg" },
+    { rail:"ST", title:"Freedom",         type:"SINGLE", meta:"NULLTAG-13 · 200 BPM · EN", img:"covers/freedom.jpg" },
+    { rail:"ST", title:"Fifteen Years",   type:"SINGLE", meta:"NULLTAG-12 · 147 BPM · EN", img:"covers/fifteen_years.jpg" },
+    { rail:"ST", title:"LOVESONG",        type:"SINGLE", meta:"NULLTAG-11 · 200 BPM · EN", img:"covers/lovesong.jpg" },
+    { rail:"ST", title:"Peace Remains",   type:"SINGLE", meta:"NULLTAG-10 · 190 BPM", img:"covers/peace_remains.jpg" },
+    { rail:"ST", title:"Vögel Einsneunzig", type:"SINGLE", meta:"Single · DE", img:"covers/rel_voegel_einsneunzig.jpg" }
   ];
   var RAIL_NAME = { LJ:"LICHTJAHR", CT:"CINETEKK", DM:"DOME EP", ND:"DISTRIBUTION", ST:"STANDALONE" };
 
@@ -955,14 +952,17 @@
     var grid = document.getElementById("catalog-grid");
     grid.innerHTML = "";
     CATALOG.filter(function(c){ return filter === "ALL" || c.rail === filter; }).forEach(function(c){
+      var multi = c.tracks && c.tracks.length > 1;
       var a = document.createElement("a");
-      a.className = "cat";
+      a.className = "cat" + (multi ? " cat--rel" : "");
       a.href = "https://soundcloud.com/nulltag";
       a.target = "_blank"; a.rel = "noopener";
+      var badge = multi ? '<span class="cat__count">'+c.type+' · '+c.tracks.length+'</span>' : '';
+      var tracks = multi ? '<div class="cat__tracks">'+c.tracks.join(' · ')+'</div>' : '';
       a.innerHTML =
-        '<span class="cat__rail" data-rail="'+c.rail+'">'+RAIL_NAME[c.rail]+'</span>' +
+        '<span class="cat__rail" data-rail="'+c.rail+'">'+RAIL_NAME[c.rail]+'</span>' + badge +
         '<img src="'+c.img+'" alt="'+c.title+' cover" loading="lazy" />' +
-        '<div class="cat__info"><div class="cat__title">'+c.title+'</div><div class="cat__m">'+c.cat+' · '+c.meta+'</div></div>';
+        '<div class="cat__info"><div class="cat__title">'+c.title+'</div><div class="cat__m">'+c.meta+'</div>'+tracks+'</div>';
       grid.appendChild(a);
     });
   }
