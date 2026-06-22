@@ -1237,15 +1237,27 @@
 
 <!-- visitor analytics pixel (deepaudit) — unique RID per page load -->
 <script>
+  // First-party visit beacon (deepaudit.ch). rid = traffic source, derived
+  // from ?utm_source, else the referring host, else "direct" (own-host
+  // referrers count as direct so internal navigation isn't double-counted).
   (function(){
-    var rid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
-            : (Date.now().toString(36) + Math.random().toString(36).slice(2));
-    var img = new Image(1, 1);
-    img.referrerPolicy = 'no-referrer-when-downgrade';
-    img.alt = '';
-    img.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;';
-    img.src = 'https://deepaudit.ch/qt?tid=xs7n6u&rid=' + encodeURIComponent(rid);
-    (document.body || document.documentElement).appendChild(img);
+    try {
+      var here = location.hostname.replace(/^www\./, '');
+      var src = new URLSearchParams(location.search).get('utm_source');
+      if (!src && document.referrer) {
+        try {
+          var rh = new URL(document.referrer).hostname.replace(/^www\./, '');
+          if (rh && rh !== here) src = rh;
+        } catch (e) {}
+      }
+      var rid = (src || 'direct').toLowerCase();
+      var img = new Image(1, 1);
+      img.referrerPolicy = 'no-referrer-when-downgrade';
+      img.alt = '';
+      img.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;';
+      img.src = 'https://deepaudit.ch/qt?tid=xs7n6u&rid=' + encodeURIComponent(rid);
+      (document.body || document.documentElement).appendChild(img);
+    } catch (e) {}
   })();
 </script>
 <div class="tbtoast" id="tb-toast"></div>
