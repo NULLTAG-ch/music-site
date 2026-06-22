@@ -146,8 +146,21 @@
   .cat__title { font-family: var(--font-display); font-size: 24px; line-height: 0.95; text-transform: uppercase; margin: 0 0 6px; color: var(--bone); }
   .cat__m { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
   .cat__count { position: absolute; top: 10px; right: 10px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--void); background: var(--tiefrot); padding: 4px 7px; font-weight: 700; }
-  .cat--rel .cat__title { font-size: 21px; }
-  .cat__tracks { margin-top: 8px; font-family: var(--font-mono); font-size: 9.5px; line-height: 1.55; letter-spacing: 0.03em; color: var(--bone-dim); max-height: 86px; overflow: hidden; }
+  /* grouped release (EP / album / trilogy): full-width card, cover + always-visible indented tracklist */
+  .cat--rel { grid-column: 1 / -1; aspect-ratio: auto; display: grid; grid-template-columns: clamp(92px,22vw,128px) minmax(0,1fr); gap: var(--s-5); align-items: center; padding: var(--s-5); }
+  .cat--rel:hover { transform: none; }
+  .cat--rel .rel__cover { position: relative; display: block; aspect-ratio: 1/1; overflow: hidden; border: 1px solid var(--border); }
+  .cat--rel:hover .rel__cover img { transform: scale(1.04); filter: brightness(0.6); }
+  .cat--rel .rel__body { min-width: 0; }
+  .cat--rel .rel__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-4); margin-bottom: 4px; }
+  .cat--rel .cat__title { font-size: clamp(22px,4.5vw,30px); margin: 0; }
+  .cat--rel:hover .cat__title { color: var(--tiefrot); }
+  .cat--rel .cat__count { position: static; flex: 0 0 auto; }
+  .cat--rel .cat__m { display: block; margin: 0 0 10px; }
+  .cat--rel .cat__tracks { margin: 0; padding: 0; list-style: none; columns: 2; column-gap: var(--s-6); font-family: var(--font-mono); font-size: 11px; line-height: 1.85; letter-spacing: 0.02em; color: var(--bone-dim); counter-reset: trk; }
+  .cat--rel .cat__tracks li { break-inside: avoid; counter-increment: trk; padding-left: 1.9em; text-indent: -1.9em; }
+  .cat--rel .cat__tracks li::before { content: counter(trk, decimal-leading-zero) "  "; color: var(--muted-deep); }
+  @media (max-width: 720px){ .cat--rel { grid-template-columns: 76px minmax(0,1fr); gap: var(--s-4); padding: var(--s-4); } .cat--rel .cat__tracks { columns: 1; font-size: 10.5px; line-height: 1.8; } }
 
   /* ===== schienen ===== */
   .rails { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
@@ -867,7 +880,7 @@
     </div>
     <div class="foot__bottom">
       <span>NULLTAG · MMXXVI · BUCHS SG · CH</span>
-      <span>music.nulltag.ch</span>
+      <span><a href="impressum.html">Impressum &amp; Datenschutz</a> · music.nulltag.ch</span>
     </div>
   </div>
 </footer>
@@ -949,21 +962,33 @@
   ];
   var RAIL_NAME = { LJ:"LICHTJAHR", CT:"CINETEKK", DM:"DOME EP", ND:"DISTRIBUTION", ST:"STANDALONE" };
 
+  function catEsc(s){ return String(s).replace(/[&<>"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
   function renderCatalog(filter) {
     var grid = document.getElementById("catalog-grid");
     grid.innerHTML = "";
     CATALOG.filter(function(c){ return filter === "ALL" || c.rail === filter; }).forEach(function(c){
       var multi = c.tracks && c.tracks.length > 1;
       var a = document.createElement("a");
-      a.className = "cat" + (multi ? " cat--rel" : "");
       a.href = "https://soundcloud.com/nulltag";
       a.target = "_blank"; a.rel = "noopener";
-      var badge = multi ? '<span class="cat__count">'+c.type+' · '+c.tracks.length+'</span>' : '';
-      var tracks = multi ? '<div class="cat__tracks">'+c.tracks.join(' · ')+'</div>' : '';
-      a.innerHTML =
-        '<span class="cat__rail" data-rail="'+c.rail+'">'+RAIL_NAME[c.rail]+'</span>' + badge +
-        '<img src="'+c.img+'" alt="'+c.title+' cover" loading="lazy" />' +
-        '<div class="cat__info"><div class="cat__title">'+c.title+'</div><div class="cat__m">'+c.meta+'</div>'+tracks+'</div>';
+      var rail = '<span class="cat__rail" data-rail="'+c.rail+'">'+RAIL_NAME[c.rail]+'</span>';
+      var img = '<img src="'+c.img+'" alt="'+catEsc(c.title)+' cover" loading="lazy" />';
+      if (multi) {
+        a.className = "cat cat--rel";
+        var lis = c.tracks.map(function(t){ return '<li>'+catEsc(t)+'</li>'; }).join('');
+        a.innerHTML =
+          '<span class="rel__cover">'+rail+img+'</span>' +
+          '<span class="rel__body">' +
+            '<span class="rel__head"><span class="cat__title">'+catEsc(c.title)+'</span>' +
+            '<span class="cat__count">'+catEsc(c.type)+' · '+c.tracks.length+'</span></span>' +
+            '<span class="cat__m">'+catEsc(c.meta)+'</span>' +
+            '<ol class="cat__tracks">'+lis+'</ol>' +
+          '</span>';
+      } else {
+        a.className = "cat";
+        a.innerHTML = rail + img +
+          '<div class="cat__info"><div class="cat__title">'+catEsc(c.title)+'</div><div class="cat__m">'+catEsc(c.meta)+'</div></div>';
+      }
       grid.appendChild(a);
     });
   }
