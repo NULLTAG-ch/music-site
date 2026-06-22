@@ -614,7 +614,7 @@
         <div class="s__num">§03 · CATALOG · FEATURED ARTWORK</div>
         <h2 class="s__title">Catalog</h2>
       </div>
-      <div class="s__meta">35 RELEASES · 54 TRACKS<br/>GRUPPIERT NACH RELEASE</div>
+      <div class="s__meta">25 RELEASES · 54 TRACKS<br/>GRUPPIERT NACH RELEASE</div>
     </div>
     <div class="filters" role="tablist" id="filters">
       <button class="active" data-rail="ALL">ALL · 54</button>
@@ -910,22 +910,15 @@
   roTick(); setInterval(roTick, 1000);
 
   // ── catalog data — grouped by release (album / EP / single) ──
-  // Lichtjahr stays per-single (each track has bespoke cover art);
-  // multi-track EPs/albums collapse into one release card + tracklist.
+  // multi-track EPs / albums / Vol-EPs collapse into one release card + tracklist;
+  // standalone singles stay as individual cover tiles. (Lichtjahr single covers
+  // are still used in the hero / latest / rollout sections.)
   var CATALOG = [
-    // — LICHTJAHR · weekly singles, distinct covers —
-    { rail:"LJ", title:"Last Light",         type:"SINGLE", meta:"LJ-12 · 188 BPM · Vol.2", img:"covers/last_light.jpg" },
-    { rail:"LJ", title:"Microwave",          type:"SINGLE", meta:"LJ-11 · 190 BPM · Vol.2", img:"covers/microwave.jpg" },
-    { rail:"LJ", title:"Supernova",          type:"SINGLE", meta:"LJ-10 · 200 BPM · Vol.2", img:"covers/supernova.jpg" },
-    { rail:"LJ", title:"Andromeda Approach", type:"SINGLE", meta:"LJ-09 · 190 BPM · Vol.2", img:"covers/andromeda_approach.jpg" },
-    { rail:"LJ", title:"Event Horizon",      type:"SINGLE", meta:"LJ-08 · 200 BPM · Vol.2", img:"covers/event_horizon.jpg" },
-    { rail:"LJ", title:"Trappist Loop",      type:"SINGLE", meta:"LJ-07 · 195 BPM · Vol.2", img:"covers/trappist_loop.jpg" },
-    { rail:"LJ", title:"Mercury's Burn",     type:"SINGLE", meta:"LJ-06 · 200 BPM · Vol.1", img:"covers/mercurys_burn.jpg" },
-    { rail:"LJ", title:"Heat Death",         type:"SINGLE", meta:"LJ-05 · 185 BPM · Vol.1", img:"covers/heat_death.jpg" },
-    { rail:"LJ", title:"Jupiter",            type:"SINGLE", meta:"LJ-04 · 205 BPM · Vol.1", img:"covers/planet_jupiter.jpg" },
-    { rail:"LJ", title:"Blue Planet",        type:"SINGLE", meta:"LJ-03 · 199 BPM · Vol.1", img:"covers/blue_planet.jpg" },
-    { rail:"LJ", title:"The Edge Recedes",   type:"SINGLE", meta:"LJ-02 · 200 BPM · Vol.1", img:"covers/the_edge_recedes.jpg" },
-    { rail:"LJ", title:"Cosmic Sea",         type:"SINGLE", meta:"LJ-01 · 190 BPM · Vol.1", img:"covers/cosmic_sea.jpg" },
+    // — LICHTJAHR · Vol.2 + Vol.1 as EPs —
+    { rail:"LJ", title:"Lichtjahr Vol.2", type:"EP", meta:"EP · 188–200 BPM · Vol.2", img:"covers/lichtjahr_vol2.jpg",
+      tracks:["Trappist Loop","Event Horizon","Andromeda Approach","Supernova","Microwave","Last Light"] },
+    { rail:"LJ", title:"Lichtjahr Vol.1", type:"EP", meta:"EP · 185–205 BPM · Vol.1", img:"covers/lichtjahre.jpg",
+      tracks:["Cosmic Sea","The Edge Recedes","Blue Planet","Jupiter","Heat Death","Mercury's Burn"] },
     // — CINETEKK · album —
     { rail:"CT", title:"Cinetekk", type:"ALBUM", meta:"Album · 152–156 BPM · DE", img:"covers/cinetekk.jpg",
       tracks:["Cinetekk","Glassplitter","Vergessenes Spiegelbild","Eisflug","Asche In Der Hand","Letzter Sommer","Schwerkraft","Nachtfalter"] },
