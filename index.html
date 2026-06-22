@@ -237,11 +237,12 @@
   .ro-lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--muted-deep); text-transform: uppercase; margin-top: 5px; }
   .ro-when { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: var(--s-5); }
   .ro-sched { border: 1px solid var(--border); }
-  .ro-row { display: grid; grid-template-columns: 60px 78px 1fr 88px; gap: var(--s-4); align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 12.5px; text-decoration: none; }
+  .ro-row { display: grid; grid-template-columns: 60px 78px minmax(0,1fr) auto; gap: var(--s-4); align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 12.5px; text-decoration: none; }
   .ro-row:last-child { border-bottom: 0; }
   .ro-row.ep { background: rgba(255,42,85,0.05); }
-  .ro-grp { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 16px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.018); font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted-deep); }
-  .ro-grp b { color: var(--bone-dim); font-weight: 500; }
+  .ro-grp { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-4); padding: 11px 16px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.018); font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted-deep); }
+  .ro-grp > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ro-grp b { color: var(--bone-dim); font-weight: 500; white-space: nowrap; flex: 0 0 auto; }
   .ro-grp.real { background: rgba(255,42,85,0.06); }
   .ro-grp.real b { color: var(--tiefrot); }
   .ro-row .d { color: var(--muted); letter-spacing: 0.04em; }
@@ -570,7 +571,7 @@
         <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">12.06</span><span class="c">LJ-09</span><span class="t">Andromeda Approach</span><span class="st l">● live</span></a>
         <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">12.06</span><span class="c">LJ-10</span><span class="t">Supernova</span><span class="st l">● live</span></a>
         <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">12.06</span><span class="c">LJ-11</span><span class="t">Microwave</span><span class="st l">● live · früher Drop</span></a>
-        <div class="ro-row"><span class="d">19.06</span><span class="c">LJ-12</span><span class="t">Last Light</span><span class="st n">◷ Fr · letzte Single</span></div>
+        <a class="ro-row" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span class="d">19.06</span><span class="c">LJ-12</span><span class="t">Last Light</span><span class="st l">● live · letzte Single</span></a>
         <div class="ro-grp real"><span>② Echte Veröffentlichung · Streaming-Distribution</span><b>ab 26.06</b></div>
         <div class="ro-row ep"><span class="d">26.06</span><span class="c">EP</span><span class="t">Vol.2 — Full EP · alle Streaming-Dienste</span><span class="st n">◷ Release · Fr</span></div>
         <div class="ro-row ep"><span class="d">03.07</span><span class="c">SHOW</span><span class="t">Showroom</span><span class="st w">◷ Event</span></div>
