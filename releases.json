@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-30T14:45:00.578Z",
+  "generated": "2026-06-30T21:02:35.430Z",
   "artist": "388775221",
   "count": 23,
   "albums": [
@@ -14,32 +14,32 @@
       "tracks": [
         {
           "title": "Trappist Loop",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/b/a/0/5ba633b39e27af4dbc6ae631308aa1e8.mp3?hdnea=exp=1782831596~acl=/api/1/1/5/b/a/0/5ba633b39e27af4dbc6ae631308aa1e8.mp3*~data=user_id=0,application_id=42~hmac=ab4e1e72b6778c84ff58f2a6d9bd7c6df94b38b9598cce9510d3633a1658d07f",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/b/a/0/5ba633b39e27af4dbc6ae631308aa1e8.mp3?hdnea=exp=1782854252~acl=/api/1/1/5/b/a/0/5ba633b39e27af4dbc6ae631308aa1e8.mp3*~data=user_id=0,application_id=42~hmac=0dc10a612456417f603b2e26e364786a6890ae600415dbd90cd08a29b4432989",
           "duration": 180
         },
         {
           "title": "Event Horizon",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/a/1/0/aa1d7e0acbb0f58840a2d8824a7df9c7.mp3?hdnea=exp=1782831596~acl=/api/1/1/a/a/1/0/aa1d7e0acbb0f58840a2d8824a7df9c7.mp3*~data=user_id=0,application_id=42~hmac=4221669a3b2397fc5979d2a6011a1020459460ae104d12a27254899a5beaccd7",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/a/1/0/aa1d7e0acbb0f58840a2d8824a7df9c7.mp3?hdnea=exp=1782854252~acl=/api/1/1/a/a/1/0/aa1d7e0acbb0f58840a2d8824a7df9c7.mp3*~data=user_id=0,application_id=42~hmac=805077ba3b5e52ca816f9fe7ad2463c4a683c7b134e2fea7f962082b71963a4c",
           "duration": 264
         },
         {
           "title": "Andromeda Approach",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/9/9/c/0/99cc840a0e508bc3664d501856b9278f.mp3?hdnea=exp=1782831596~acl=/api/1/1/9/9/c/0/99cc840a0e508bc3664d501856b9278f.mp3*~data=user_id=0,application_id=42~hmac=bcb3d78fe16a75a017052f0ccec89a599869fd9fcca676eeacb8113183265cfc",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/9/9/c/0/99cc840a0e508bc3664d501856b9278f.mp3?hdnea=exp=1782854252~acl=/api/1/1/9/9/c/0/99cc840a0e508bc3664d501856b9278f.mp3*~data=user_id=0,application_id=42~hmac=3a4251a8e95376882685823162003a3f8225c9f0795501f50709c806362b995b",
           "duration": 169
         },
         {
           "title": "Supernova",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/7/f/0/57fed38aa26653933d0d2d8e5da23b3f.mp3?hdnea=exp=1782831596~acl=/api/1/1/5/7/f/0/57fed38aa26653933d0d2d8e5da23b3f.mp3*~data=user_id=0,application_id=42~hmac=23ce65743a58f99018aa9028dcc88449c8206621171228399ae748f5134d2788",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/7/f/0/57fed38aa26653933d0d2d8e5da23b3f.mp3?hdnea=exp=1782854252~acl=/api/1/1/5/7/f/0/57fed38aa26653933d0d2d8e5da23b3f.mp3*~data=user_id=0,application_id=42~hmac=d119d398a331954eb715580758be58cef4d5f91f9dd2c5d976f6a06f02a4451e",
           "duration": 264
         },
         {
           "title": "Microwave",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/6/9/0/769eed06edff4cf6fbf3dad641268298.mp3?hdnea=exp=1782831596~acl=/api/1/1/7/6/9/0/769eed06edff4cf6fbf3dad641268298.mp3*~data=user_id=0,application_id=42~hmac=2a7731aef44ea13c352b00a09f2336488ce3fc8af19dfed88570edd8f949dcfd",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/6/9/0/769eed06edff4cf6fbf3dad641268298.mp3?hdnea=exp=1782854252~acl=/api/1/1/7/6/9/0/769eed06edff4cf6fbf3dad641268298.mp3*~data=user_id=0,application_id=42~hmac=a0567dd664d5769eef7006ecc9450c140883ab5c46f85a42ab8c7ac879289191",
           "duration": 175
         },
         {
           "title": "Last Light",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/3/8/0/0/380c70cda658a166c2b5509b008e79c9.mp3?hdnea=exp=1782831596~acl=/api/1/1/3/8/0/0/380c70cda658a166c2b5509b008e79c9.mp3*~data=user_id=0,application_id=42~hmac=5961077e2f96ba12cedbcd1fae0ad8f861b48ee897d16e65ea073d0b6ca2e364",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/3/8/0/0/380c70cda658a166c2b5509b008e79c9.mp3?hdnea=exp=1782854252~acl=/api/1/1/3/8/0/0/380c70cda658a166c2b5509b008e79c9.mp3*~data=user_id=0,application_id=42~hmac=668ab303847c66fce1eb94b8e4860b66a735552dcfec763a4cbc95dff3ebdd32",
           "duration": 301
         }
       ]
@@ -55,7 +55,7 @@
       "tracks": [
         {
           "title": "Fifteen Years",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/f/b/9/0/fb920c02f1e0eaa6f843fcbe9986676e.mp3?hdnea=exp=1782831596~acl=/api/1/1/f/b/9/0/fb920c02f1e0eaa6f843fcbe9986676e.mp3*~data=user_id=0,application_id=42~hmac=7bc9034019b83d93c3ffc7c6c67e2251f3ec21104f7d8079d98a1f57fc1b6da1",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/f/b/9/0/fb920c02f1e0eaa6f843fcbe9986676e.mp3?hdnea=exp=1782854252~acl=/api/1/1/f/b/9/0/fb920c02f1e0eaa6f843fcbe9986676e.mp3*~data=user_id=0,application_id=42~hmac=95621af7821760004a62f8ec48bc0d6d885fb5e8f7486dcb6e167f5818e32d5e",
           "duration": 297
         }
       ]
@@ -71,7 +71,7 @@
       "tracks": [
         {
           "title": "Freedom",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/0/c/c/0/0ccc14c56327c4786b09e9946946b181.mp3?hdnea=exp=1782831596~acl=/api/1/1/0/c/c/0/0ccc14c56327c4786b09e9946946b181.mp3*~data=user_id=0,application_id=42~hmac=df1fe5c0142b938af0d8a0069e4c8faac385e86db6f617e5b9d70f843806f5f4",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/0/c/c/0/0ccc14c56327c4786b09e9946946b181.mp3?hdnea=exp=1782854252~acl=/api/1/1/0/c/c/0/0ccc14c56327c4786b09e9946946b181.mp3*~data=user_id=0,application_id=42~hmac=fb2e7a5247b542bbf33cb48dfaaef5b768ca1c69a9279e4897e2f2236775c1ea",
           "duration": 273
         }
       ]
@@ -87,7 +87,7 @@
       "tracks": [
         {
           "title": "Beauty of Music",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/0/f/a/0/0fa38b250abb43f527b39d43c4e94f1c.mp3?hdnea=exp=1782831596~acl=/api/1/1/0/f/a/0/0fa38b250abb43f527b39d43c4e94f1c.mp3*~data=user_id=0,application_id=42~hmac=8372c773dc9d7871e2882c86200de3c77d0018ccbaa962deb1bd4f0ff7e7a418",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/0/f/a/0/0fa38b250abb43f527b39d43c4e94f1c.mp3?hdnea=exp=1782854252~acl=/api/1/1/0/f/a/0/0fa38b250abb43f527b39d43c4e94f1c.mp3*~data=user_id=0,application_id=42~hmac=270fd019978e9703d3cc49942c9e2f6ef5db14c88b8a14e9c6a0ed5b85be7f05",
           "duration": 202
         }
       ]
@@ -103,22 +103,22 @@
       "tracks": [
         {
           "title": "In The Dome",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/3/a/0/73af8cd1e5bd11c62cfe568faa421082.mp3?hdnea=exp=1782831597~acl=/api/1/1/7/3/a/0/73af8cd1e5bd11c62cfe568faa421082.mp3*~data=user_id=0,application_id=42~hmac=f2d4d6901424970431ec09a2fb444f43b94fb8871a47c1a59b2cc08ad3dedff5",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/3/a/0/73af8cd1e5bd11c62cfe568faa421082.mp3?hdnea=exp=1782854253~acl=/api/1/1/7/3/a/0/73af8cd1e5bd11c62cfe568faa421082.mp3*~data=user_id=0,application_id=42~hmac=9000bc92f05af05bd66eb2442a77c63ffd5ee3b27e7f21171f734ccbe524e8c2",
           "duration": 210
         },
         {
           "title": "God Of Bass",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/c/d/d/0/cdd7eb187244e099ddd75af836f20511.mp3?hdnea=exp=1782831597~acl=/api/1/1/c/d/d/0/cdd7eb187244e099ddd75af836f20511.mp3*~data=user_id=0,application_id=42~hmac=648552dd32d562b94b34a61d4205daa6af10b58a7b429758b09c5b097b5ec1fe",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/c/d/d/0/cdd7eb187244e099ddd75af836f20511.mp3?hdnea=exp=1782854253~acl=/api/1/1/c/d/d/0/cdd7eb187244e099ddd75af836f20511.mp3*~data=user_id=0,application_id=42~hmac=15e0de42ece601f3fedf02f45948d11c200b35249edf3b62f6b1d875cb6994b2",
           "duration": 257
         },
         {
           "title": "Stuck On Repeat",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/9/6/4/0/96404bc590be7cb3562e2968e8cf4549.mp3?hdnea=exp=1782831597~acl=/api/1/1/9/6/4/0/96404bc590be7cb3562e2968e8cf4549.mp3*~data=user_id=0,application_id=42~hmac=f3c65c3e00efb2edf8d583a2ac4d7ed59d1232224625340dd60956f85b9b9a07",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/9/6/4/0/96404bc590be7cb3562e2968e8cf4549.mp3?hdnea=exp=1782854253~acl=/api/1/1/9/6/4/0/96404bc590be7cb3562e2968e8cf4549.mp3*~data=user_id=0,application_id=42~hmac=c711b1851673ab9f82b27cbd7fa91f2a0e18d14e14f261fb28f80a66b65a2b9d",
           "duration": 229
         },
         {
           "title": "Fell In Love With The Music",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/d/b/2/0/db209a62a70a3f2e1ac9b9f72d5e05d8.mp3?hdnea=exp=1782831597~acl=/api/1/1/d/b/2/0/db209a62a70a3f2e1ac9b9f72d5e05d8.mp3*~data=user_id=0,application_id=42~hmac=1c50fef63fe892af4fa30366965a2b32d453b5fcfeef4d7b94623aeb45f9cf32",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/d/b/2/0/db209a62a70a3f2e1ac9b9f72d5e05d8.mp3?hdnea=exp=1782854253~acl=/api/1/1/d/b/2/0/db209a62a70a3f2e1ac9b9f72d5e05d8.mp3*~data=user_id=0,application_id=42~hmac=018d7980fe680c34560059a400e3f74496a3a4e163b4be00092ba0e33850eb1c",
           "duration": 209
         }
       ]
@@ -134,42 +134,42 @@
       "tracks": [
         {
           "title": "CINETEKK",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/8/0/e/0/80ed2b048f083974f170036eb4745ec8.mp3?hdnea=exp=1782831597~acl=/api/1/1/8/0/e/0/80ed2b048f083974f170036eb4745ec8.mp3*~data=user_id=0,application_id=42~hmac=c1e54ae7fc504b7152229d14c1fdd8ec5272e7fb458e8b3d3bcc2bc67e2a757f",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/8/0/e/0/80ed2b048f083974f170036eb4745ec8.mp3?hdnea=exp=1782854253~acl=/api/1/1/8/0/e/0/80ed2b048f083974f170036eb4745ec8.mp3*~data=user_id=0,application_id=42~hmac=27d0d4fb413c401ce7ae39dc59ab48f8c6af7ffa1718b5ba7a759f2eb4447d14",
           "duration": 163
         },
         {
           "title": "Glassplitter",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/d/9/0/4d90cadd1c686b3702b562c1a488401c.mp3?hdnea=exp=1782831597~acl=/api/1/1/4/d/9/0/4d90cadd1c686b3702b562c1a488401c.mp3*~data=user_id=0,application_id=42~hmac=8076e4c3f7bec8bd4ec4a1106128daa70bd97314a66a5e54653a3d8fe04a6ecb",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/d/9/0/4d90cadd1c686b3702b562c1a488401c.mp3?hdnea=exp=1782854253~acl=/api/1/1/4/d/9/0/4d90cadd1c686b3702b562c1a488401c.mp3*~data=user_id=0,application_id=42~hmac=6b37bf563043dfafa4394a721a5c9f1757b480e89396ad835883d9ed282931c8",
           "duration": 194
         },
         {
           "title": "Vergessenes Spiegelbild",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/2/9/e/0/29ea09ca21b2d65b5cdbea9dbb3f4812.mp3?hdnea=exp=1782831597~acl=/api/1/1/2/9/e/0/29ea09ca21b2d65b5cdbea9dbb3f4812.mp3*~data=user_id=0,application_id=42~hmac=e470615f23946831c3880938a3bad139b424a5bcd2ddd46b5aa445c42581333a",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/2/9/e/0/29ea09ca21b2d65b5cdbea9dbb3f4812.mp3?hdnea=exp=1782854253~acl=/api/1/1/2/9/e/0/29ea09ca21b2d65b5cdbea9dbb3f4812.mp3*~data=user_id=0,application_id=42~hmac=8d2e25993a64228a7e8e5df14f360677a682762a84b48364988458f37dab21e5",
           "duration": 273
         },
         {
           "title": "Eisflug",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/3/0/0/a30a6fee3c27ac7929cd00ed2fcae43e.mp3?hdnea=exp=1782831597~acl=/api/1/1/a/3/0/0/a30a6fee3c27ac7929cd00ed2fcae43e.mp3*~data=user_id=0,application_id=42~hmac=6de02710f85482151c58a5748a6c951f34375e8575476adb27278bde73565ad0",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/3/0/0/a30a6fee3c27ac7929cd00ed2fcae43e.mp3?hdnea=exp=1782854253~acl=/api/1/1/a/3/0/0/a30a6fee3c27ac7929cd00ed2fcae43e.mp3*~data=user_id=0,application_id=42~hmac=e8ec6c1e039b44676f45c6aa6d73989a62842890da7edea2edc6a1a4af834716",
           "duration": 213
         },
         {
           "title": "Asche In Der Hand",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/0/6/8/0/068bf0c031e350e11fa1e5bc267c61be.mp3?hdnea=exp=1782831597~acl=/api/1/1/0/6/8/0/068bf0c031e350e11fa1e5bc267c61be.mp3*~data=user_id=0,application_id=42~hmac=c68ecfb4709b2866b65ac7100c2ea12081b94ac0cfb722932f0fbfef6aaea2a8",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/0/6/8/0/068bf0c031e350e11fa1e5bc267c61be.mp3?hdnea=exp=1782854253~acl=/api/1/1/0/6/8/0/068bf0c031e350e11fa1e5bc267c61be.mp3*~data=user_id=0,application_id=42~hmac=6841c33e748901337203a0b1b288d11f894553956b2a1da4898f90b644013bee",
           "duration": 254
         },
         {
           "title": "Letzter Sommer",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/c/a/0/4ca16403acdd8c666b807d964ac202be.mp3?hdnea=exp=1782831597~acl=/api/1/1/4/c/a/0/4ca16403acdd8c666b807d964ac202be.mp3*~data=user_id=0,application_id=42~hmac=79cb63f04b62e2077545b7fae70bab996e32e6d54cb492e4fb58b0845e81ece0",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/c/a/0/4ca16403acdd8c666b807d964ac202be.mp3?hdnea=exp=1782854253~acl=/api/1/1/4/c/a/0/4ca16403acdd8c666b807d964ac202be.mp3*~data=user_id=0,application_id=42~hmac=b05c69da8659e67d4cbd84d8a4dbddb8c248c7a6d7369fb0567eccbf3aac9b04",
           "duration": 162
         },
         {
           "title": "Schwerkraft",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/6/1/3/0/613fe99158a66a7206ad53100cccf405.mp3?hdnea=exp=1782831597~acl=/api/1/1/6/1/3/0/613fe99158a66a7206ad53100cccf405.mp3*~data=user_id=0,application_id=42~hmac=480afd0ffaa9926e667596f1edcb68ee22a4cd99588881ee96bc6da1ad99f094",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/6/1/3/0/613fe99158a66a7206ad53100cccf405.mp3?hdnea=exp=1782854253~acl=/api/1/1/6/1/3/0/613fe99158a66a7206ad53100cccf405.mp3*~data=user_id=0,application_id=42~hmac=71566fa7a45177bbb65894f9c3824d661e4e507eec8dfe04f82979ae7de0e42b",
           "duration": 189
         },
         {
           "title": "Nachtfalter",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/8/2/a/0/82a33c32773be0cbc4733fc86eb8e774.mp3?hdnea=exp=1782831597~acl=/api/1/1/8/2/a/0/82a33c32773be0cbc4733fc86eb8e774.mp3*~data=user_id=0,application_id=42~hmac=bc072da3fed48783b36cd42228f8400852ce27d31cb5aa26113533f55cfdfd5e",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/8/2/a/0/82a33c32773be0cbc4733fc86eb8e774.mp3?hdnea=exp=1782854253~acl=/api/1/1/8/2/a/0/82a33c32773be0cbc4733fc86eb8e774.mp3*~data=user_id=0,application_id=42~hmac=36caf7004c1ab79ff4baf734025d0b98fb1201f0836785923463f60c0b812376",
           "duration": 246
         }
       ]
@@ -185,7 +185,7 @@
       "tracks": [
         {
           "title": "Vögel Einsneunzig",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/8/3/6/0/836d90a15ed24624c4808e38cee851f3.mp3?hdnea=exp=1782831597~acl=/api/1/1/8/3/6/0/836d90a15ed24624c4808e38cee851f3.mp3*~data=user_id=0,application_id=42~hmac=32c68e9a14d0ca1531ea62aac3910d37f13b51fa26e247e4caefe3075b9e7c99",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/8/3/6/0/836d90a15ed24624c4808e38cee851f3.mp3?hdnea=exp=1782854253~acl=/api/1/1/8/3/6/0/836d90a15ed24624c4808e38cee851f3.mp3*~data=user_id=0,application_id=42~hmac=283522217a7c3c532009e0e8109c445e17ea3cdfc72642a37d22ac5cdfd6150f",
           "duration": 204
         }
       ]
@@ -201,7 +201,7 @@
       "tracks": [
         {
           "title": "Bayern Crew",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/6/5/0/a65dc2fd24a54ab69e8aadb55a2d7398.mp3?hdnea=exp=1782831597~acl=/api/1/1/a/6/5/0/a65dc2fd24a54ab69e8aadb55a2d7398.mp3*~data=user_id=0,application_id=42~hmac=fcc181ce42cdb11db9d0c1b042124f69bc7d2d4981430fb299cd5ad056f80010",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/6/5/0/a65dc2fd24a54ab69e8aadb55a2d7398.mp3?hdnea=exp=1782854253~acl=/api/1/1/a/6/5/0/a65dc2fd24a54ab69e8aadb55a2d7398.mp3*~data=user_id=0,application_id=42~hmac=6e10c2cdff3df2f33b6e669b5b6ff213cc3a90b3ec85a0369fab45f0fb40ba8c",
           "duration": 259
         }
       ]
@@ -217,7 +217,7 @@
       "tracks": [
         {
           "title": "Swiss Geeman",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/9/5/1/0/951386c0f536d333c6bcb5114a1459d5.mp3?hdnea=exp=1782831597~acl=/api/1/1/9/5/1/0/951386c0f536d333c6bcb5114a1459d5.mp3*~data=user_id=0,application_id=42~hmac=481a63bb6afa94fac2d50ac636e2f31607c4e102ec95fcc0d38fe7e1a94c9ff8",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/9/5/1/0/951386c0f536d333c6bcb5114a1459d5.mp3?hdnea=exp=1782854253~acl=/api/1/1/9/5/1/0/951386c0f536d333c6bcb5114a1459d5.mp3*~data=user_id=0,application_id=42~hmac=e65a270c98b81bb8d4d11d1970bde00141540ac782eb12453b8805239b37a371",
           "duration": 204
         }
       ]
@@ -233,7 +233,7 @@
       "tracks": [
         {
           "title": "Achthundert Beamte",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/3/0/0/430721c6af615f44b4f983d1d054418a.mp3?hdnea=exp=1782831598~acl=/api/1/1/4/3/0/0/430721c6af615f44b4f983d1d054418a.mp3*~data=user_id=0,application_id=42~hmac=d37ea8746af70178cb1cba52bee68d1f7e37df5e93ec22a5a07eb84a4c4f441c",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/3/0/0/430721c6af615f44b4f983d1d054418a.mp3?hdnea=exp=1782854253~acl=/api/1/1/4/3/0/0/430721c6af615f44b4f983d1d054418a.mp3*~data=user_id=0,application_id=42~hmac=b7885d7a99c2564ecdbc4445d9da6bc082f307b2b61419cd6829b7b3bfc03bf8",
           "duration": 227
         }
       ]
@@ -249,7 +249,7 @@
       "tracks": [
         {
           "title": "Sternenstaub",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/d/a/9/0/da95cbc7f4e1a94bdd7020b062e14ca5.mp3?hdnea=exp=1782831598~acl=/api/1/1/d/a/9/0/da95cbc7f4e1a94bdd7020b062e14ca5.mp3*~data=user_id=0,application_id=42~hmac=5005db1947fd203e1355017e3341fa47a3b77613bc1ada14143369278ca954b4",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/d/a/9/0/da95cbc7f4e1a94bdd7020b062e14ca5.mp3?hdnea=exp=1782854253~acl=/api/1/1/d/a/9/0/da95cbc7f4e1a94bdd7020b062e14ca5.mp3*~data=user_id=0,application_id=42~hmac=5885bb22e4448bea4fcddb2b65b1cecc52b9cfea6723f15d5491e108d28f2a35",
           "duration": 162
         }
       ]
@@ -265,7 +265,7 @@
       "tracks": [
         {
           "title": "Einfacher als du denkst!",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/f/6/0/0/f60b79893aa42080ebc621d96ba1253b.mp3?hdnea=exp=1782831598~acl=/api/1/1/f/6/0/0/f60b79893aa42080ebc621d96ba1253b.mp3*~data=user_id=0,application_id=42~hmac=7dc253702475868b13d927c88c3b9f05f77c4e175012f2b03ece7b831abff705",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/f/6/0/0/f60b79893aa42080ebc621d96ba1253b.mp3?hdnea=exp=1782854254~acl=/api/1/1/f/6/0/0/f60b79893aa42080ebc621d96ba1253b.mp3*~data=user_id=0,application_id=42~hmac=1d074acbededbb74db94df1379fc39bf48e58eb9583b3bb4ba0e58c9791f5080",
           "duration": 203
         }
       ]
@@ -281,7 +281,7 @@
       "tracks": [
         {
           "title": "Wo ist der Bass?",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/f/b/f/0/fbf16036c8f42cae134f1ff7dd60e9c5.mp3?hdnea=exp=1782831598~acl=/api/1/1/f/b/f/0/fbf16036c8f42cae134f1ff7dd60e9c5.mp3*~data=user_id=0,application_id=42~hmac=b052b5abd09d21a022bc18c444fefb3839cfba56720985365497047d092130e9",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/f/b/f/0/fbf16036c8f42cae134f1ff7dd60e9c5.mp3?hdnea=exp=1782854254~acl=/api/1/1/f/b/f/0/fbf16036c8f42cae134f1ff7dd60e9c5.mp3*~data=user_id=0,application_id=42~hmac=a2b5ab397201a85bfeffa1d302f6b26274c6b5912d646d14a8ad8b1c57302f08",
           "duration": 199
         }
       ]
@@ -297,7 +297,7 @@
       "tracks": [
         {
           "title": "Sandkastenparty",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/1/0/0/7105785df39f1ad6926df8af6c753e5c.mp3?hdnea=exp=1782831598~acl=/api/1/1/7/1/0/0/7105785df39f1ad6926df8af6c753e5c.mp3*~data=user_id=0,application_id=42~hmac=f8903b1cb4ec84d0730314922eecda34f2a475922ae709823b173c8da43475b3",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/1/0/0/7105785df39f1ad6926df8af6c753e5c.mp3?hdnea=exp=1782854254~acl=/api/1/1/7/1/0/0/7105785df39f1ad6926df8af6c753e5c.mp3*~data=user_id=0,application_id=42~hmac=f0ab42dbd0cc919c6c9517fb04a77f51ef3375c69615bcd0116827354b8d2a61",
           "duration": 235
         }
       ]
@@ -313,7 +313,7 @@
       "tracks": [
         {
           "title": "Peace Remains",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/e/4/0/5e460481dd38afd93ea998ebfdd01b52.mp3?hdnea=exp=1782831599~acl=/api/1/1/5/e/4/0/5e460481dd38afd93ea998ebfdd01b52.mp3*~data=user_id=0,application_id=42~hmac=bee9ca1608f01038a56b8b2f741faac5c2d0866dcd44a1a659496feb5c6a137c",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/e/4/0/5e460481dd38afd93ea998ebfdd01b52.mp3?hdnea=exp=1782854254~acl=/api/1/1/5/e/4/0/5e460481dd38afd93ea998ebfdd01b52.mp3*~data=user_id=0,application_id=42~hmac=837baf7b59e001ec9dfa6bac3448f22c4f54729b0b93f600de446a71c6a9638d",
           "duration": 229
         }
       ]
@@ -329,7 +329,7 @@
       "tracks": [
         {
           "title": "LOVESONG",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/9/a/0/e9a9a2fa85b01cdb1af8b13d4170aa28.mp3?hdnea=exp=1782831599~acl=/api/1/1/e/9/a/0/e9a9a2fa85b01cdb1af8b13d4170aa28.mp3*~data=user_id=0,application_id=42~hmac=09f2ecc694c0ed58ed160fc3c38e829fa76804f96efa14e786a87b92338304de",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/9/a/0/e9a9a2fa85b01cdb1af8b13d4170aa28.mp3?hdnea=exp=1782854254~acl=/api/1/1/e/9/a/0/e9a9a2fa85b01cdb1af8b13d4170aa28.mp3*~data=user_id=0,application_id=42~hmac=26bee5c4273b2e47e3856425880fec7aeeed42f5a01045712a81f70312320908",
           "duration": 268
         }
       ]
@@ -345,7 +345,7 @@
       "tracks": [
         {
           "title": "TEKKNO TRAIN (Remastered)",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/e/e/0/7ee3379ad4401d47c227305df90a8b4f.mp3?hdnea=exp=1782831599~acl=/api/1/1/7/e/e/0/7ee3379ad4401d47c227305df90a8b4f.mp3*~data=user_id=0,application_id=42~hmac=31a97ead17702fa6bcc2b5093dad9e37134e376bbd75c9d2a891b7829385bb5d",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/e/e/0/7ee3379ad4401d47c227305df90a8b4f.mp3?hdnea=exp=1782854254~acl=/api/1/1/7/e/e/0/7ee3379ad4401d47c227305df90a8b4f.mp3*~data=user_id=0,application_id=42~hmac=6872eab06e996a09b17cf8126036a378328daacd07b5dba6870eaec07e119553",
           "duration": 266
         }
       ]
@@ -361,22 +361,22 @@
       "tracks": [
         {
           "title": "KILL SWITCH",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/a/a/0/4aafca4bde65badfde1ad6254d3313c0.mp3?hdnea=exp=1782831599~acl=/api/1/1/4/a/a/0/4aafca4bde65badfde1ad6254d3313c0.mp3*~data=user_id=0,application_id=42~hmac=a360ce69df521e9138a8bc8b053df2e1eb12c1e6ed256cd65f91b3c99db0f998",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/a/a/0/4aafca4bde65badfde1ad6254d3313c0.mp3?hdnea=exp=1782854254~acl=/api/1/1/4/a/a/0/4aafca4bde65badfde1ad6254d3313c0.mp3*~data=user_id=0,application_id=42~hmac=804ec1c3f4ad2c975828821c1a1183d050ad6c1919f01ec77367bf01ee891167",
           "duration": 209
         },
         {
           "title": "GHOST PROTOCOL",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/3/5/0/a35f2183f47493c48cdb4ba63f316711.mp3?hdnea=exp=1782831599~acl=/api/1/1/a/3/5/0/a35f2183f47493c48cdb4ba63f316711.mp3*~data=user_id=0,application_id=42~hmac=1d39b3509aa424c33fb095a5f35eff702983d88de8f82a8ff319fbbaf1947540",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/3/5/0/a35f2183f47493c48cdb4ba63f316711.mp3?hdnea=exp=1782854254~acl=/api/1/1/a/3/5/0/a35f2183f47493c48cdb4ba63f316711.mp3*~data=user_id=0,application_id=42~hmac=641703c5972ea1a186fc99bd51180414ba94b141ff6a6a4b0eaef0a9b7dde731",
           "duration": 268
         },
         {
           "title": "HONEYPOT",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/d/d/c/0/ddc476247625f32815a6671cfa95ff98.mp3?hdnea=exp=1782831599~acl=/api/1/1/d/d/c/0/ddc476247625f32815a6671cfa95ff98.mp3*~data=user_id=0,application_id=42~hmac=5ff55856537b42df7397745838aac29f5ef531ab8f300f1dd5e9185b8a1fad2c",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/d/d/c/0/ddc476247625f32815a6671cfa95ff98.mp3?hdnea=exp=1782854254~acl=/api/1/1/d/d/c/0/ddc476247625f32815a6671cfa95ff98.mp3*~data=user_id=0,application_id=42~hmac=480435a3863b28c31080c35c9a60aca55cbc6309e53bda62acfd4f008b9e8a54",
           "duration": 274
         },
         {
           "title": "BLACKBOX",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/d/b/6/0/db610e4383c7178ab89fce6981975146.mp3?hdnea=exp=1782831599~acl=/api/1/1/d/b/6/0/db610e4383c7178ab89fce6981975146.mp3*~data=user_id=0,application_id=42~hmac=cbab240531e7a0585b9a60d17199ed90f2d5958304a056fb943be57ca61ff736",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/d/b/6/0/db610e4383c7178ab89fce6981975146.mp3?hdnea=exp=1782854254~acl=/api/1/1/d/b/6/0/db610e4383c7178ab89fce6981975146.mp3*~data=user_id=0,application_id=42~hmac=5dbe7b2269588062d123391044059fae2e201ef5093736307e76e8e02611d024",
           "duration": 323
         }
       ]
@@ -392,22 +392,22 @@
       "tracks": [
         {
           "title": "Plastic Paradise",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/0/0/0/e004dd4c471846eb0e3b2aca8e8f3895.mp3?hdnea=exp=1782831599~acl=/api/1/1/e/0/0/0/e004dd4c471846eb0e3b2aca8e8f3895.mp3*~data=user_id=0,application_id=42~hmac=4c6c5dc33ab3f9357551a6c936e42491186040b230917b4ec4586ddff9583a9d",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/0/0/0/e004dd4c471846eb0e3b2aca8e8f3895.mp3?hdnea=exp=1782854254~acl=/api/1/1/e/0/0/0/e004dd4c471846eb0e3b2aca8e8f3895.mp3*~data=user_id=0,application_id=42~hmac=e313967d86fb821b0f09ee4004a4c8b4d6a135c9b2e0ee4c7907c635d4028105",
           "duration": 293
         },
         {
           "title": "Concrete Messiah",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/c/5/0/5c5549b1ad6f9ec51b7ae31a06f683b6.mp3?hdnea=exp=1782831599~acl=/api/1/1/5/c/5/0/5c5549b1ad6f9ec51b7ae31a06f683b6.mp3*~data=user_id=0,application_id=42~hmac=6ad15455008a7ece32c9db3f11bdbfbc70936c01ccc20f06be8a02ec84d5da72",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/c/5/0/5c5549b1ad6f9ec51b7ae31a06f683b6.mp3?hdnea=exp=1782854254~acl=/api/1/1/5/c/5/0/5c5549b1ad6f9ec51b7ae31a06f683b6.mp3*~data=user_id=0,application_id=42~hmac=f1751bd3d67290075ca8710d9791a3c6513e141406294b22a5750c6eb35c342c",
           "duration": 212
         },
         {
           "title": "Nulltag Rising",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/8/f/0/e8f82ac8e483ba1a142a1ec2953b4fe1.mp3?hdnea=exp=1782831599~acl=/api/1/1/e/8/f/0/e8f82ac8e483ba1a142a1ec2953b4fe1.mp3*~data=user_id=0,application_id=42~hmac=81ed0a788d2388f71efbbbeedfdcb741b99c67c7e44509702e80a82c8d0e98f7",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/8/f/0/e8f82ac8e483ba1a142a1ec2953b4fe1.mp3?hdnea=exp=1782854254~acl=/api/1/1/e/8/f/0/e8f82ac8e483ba1a142a1ec2953b4fe1.mp3*~data=user_id=0,application_id=42~hmac=6dfc2b530e2e39fff279642c23441806b050621a7921f6540ef75d91260e9030",
           "duration": 189
         },
         {
           "title": "Plastic Funeral",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/8/0/f/0/80f1ac71f9e25db51135359d5e6594ac.mp3?hdnea=exp=1782831599~acl=/api/1/1/8/0/f/0/80f1ac71f9e25db51135359d5e6594ac.mp3*~data=user_id=0,application_id=42~hmac=71175e1fac0bfbaf66baa5ea4611efd3929ec3e2902e8272c2fa113b6750a54e",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/8/0/f/0/80f1ac71f9e25db51135359d5e6594ac.mp3?hdnea=exp=1782854254~acl=/api/1/1/8/0/f/0/80f1ac71f9e25db51135359d5e6594ac.mp3*~data=user_id=0,application_id=42~hmac=d8c24a78399ea68a91ce4e2027b81f709b8252f71603cd88a2e9b579b0073397",
           "duration": 236
         }
       ]
@@ -423,7 +423,7 @@
       "tracks": [
         {
           "title": "TEKKNO TRAIN",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/e/e/0/7ee3379ad4401d47c227305df90a8b4f.mp3?hdnea=exp=1782831599~acl=/api/1/1/7/e/e/0/7ee3379ad4401d47c227305df90a8b4f.mp3*~data=user_id=0,application_id=42~hmac=31a97ead17702fa6bcc2b5093dad9e37134e376bbd75c9d2a891b7829385bb5d",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/7/e/e/0/7ee3379ad4401d47c227305df90a8b4f.mp3?hdnea=exp=1782854254~acl=/api/1/1/7/e/e/0/7ee3379ad4401d47c227305df90a8b4f.mp3*~data=user_id=0,application_id=42~hmac=6872eab06e996a09b17cf8126036a378328daacd07b5dba6870eaec07e119553",
           "duration": 266
         }
       ]
@@ -439,17 +439,17 @@
       "tracks": [
         {
           "title": "Thousand Voices Stringtheory",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/8/7/0/4873baea26b57794d6da35e9f8ccaaff.mp3?hdnea=exp=1782831600~acl=/api/1/1/4/8/7/0/4873baea26b57794d6da35e9f8ccaaff.mp3*~data=user_id=0,application_id=42~hmac=7a6148daf345bfef3ec7642302a667ca7c34c90b900a98ea74ec3ba84bbb6a0e",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/8/7/0/4873baea26b57794d6da35e9f8ccaaff.mp3?hdnea=exp=1782854255~acl=/api/1/1/4/8/7/0/4873baea26b57794d6da35e9f8ccaaff.mp3*~data=user_id=0,application_id=42~hmac=ab015ce72f59d2487459b5af610932d933568c85255c7d8d463da84f4b8d98a3",
           "duration": 239
         },
         {
           "title": "Thousand Voices",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/9/2/8/0/928249dee6c9dfcb2884c2d1fe083a11.mp3?hdnea=exp=1782831600~acl=/api/1/1/9/2/8/0/928249dee6c9dfcb2884c2d1fe083a11.mp3*~data=user_id=0,application_id=42~hmac=a6a6bd30979f7a1ddf0555109a2071e763488cdcc07ab3c5f53f3b3bf8586da6",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/9/2/8/0/928249dee6c9dfcb2884c2d1fe083a11.mp3?hdnea=exp=1782854255~acl=/api/1/1/9/2/8/0/928249dee6c9dfcb2884c2d1fe083a11.mp3*~data=user_id=0,application_id=42~hmac=5cd9b49b0c991ff3f7d8925ad6f19bb910761736ae6ef673883f7dc4c76b3bab",
           "duration": 332
         },
         {
           "title": "Tausend Stimmen",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/2/3/0/423859c56675d6c9465a588d00586dfd.mp3?hdnea=exp=1782831600~acl=/api/1/1/4/2/3/0/423859c56675d6c9465a588d00586dfd.mp3*~data=user_id=0,application_id=42~hmac=432aaef8f31fd8a8a7030d1caaa263337acb9d42b98cdb6b1a5396f42d6a7cf7",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/4/2/3/0/423859c56675d6c9465a588d00586dfd.mp3?hdnea=exp=1782854255~acl=/api/1/1/4/2/3/0/423859c56675d6c9465a588d00586dfd.mp3*~data=user_id=0,application_id=42~hmac=b03042754d0421aca5c6ace06871de80d9f8f9d997c74406a0a4d7e7aa5048ea",
           "duration": 305
         }
       ]
@@ -465,17 +465,17 @@
       "tracks": [
         {
           "title": "Nulltag Rising",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/8/f/0/e8f82ac8e483ba1a142a1ec2953b4fe1.mp3?hdnea=exp=1782831600~acl=/api/1/1/e/8/f/0/e8f82ac8e483ba1a142a1ec2953b4fe1.mp3*~data=user_id=0,application_id=42~hmac=f3f00f73b95616179baf470a1d7db8b8b20444a7610cb1937e39874c37379410",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/8/f/0/e8f82ac8e483ba1a142a1ec2953b4fe1.mp3?hdnea=exp=1782854255~acl=/api/1/1/e/8/f/0/e8f82ac8e483ba1a142a1ec2953b4fe1.mp3*~data=user_id=0,application_id=42~hmac=f884c9ba5fff2497ef1148f02622e551b8784b4e0354179467bcf951b6431cfd",
           "duration": 189
         },
         {
           "title": "Nulltag Erwacht",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/6/b/7/0/6b7c7f6feb96e433f79dadfc47889037.mp3?hdnea=exp=1782831600~acl=/api/1/1/6/b/7/0/6b7c7f6feb96e433f79dadfc47889037.mp3*~data=user_id=0,application_id=42~hmac=b308c5556463e531bc9e5a520627bc78b9194e41c89b599831bde44cfafe60bf",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/6/b/7/0/6b7c7f6feb96e433f79dadfc47889037.mp3?hdnea=exp=1782854255~acl=/api/1/1/6/b/7/0/6b7c7f6feb96e433f79dadfc47889037.mp3*~data=user_id=0,application_id=42~hmac=c0c4d52f9afcd624485010be10b31c236c1828e4a86125741e8a95a6b0d060de",
           "duration": 128
         },
         {
           "title": "Nulltag S'Éveille",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/d/b/0/edb088f45303753a8093ef6c611995b5.mp3?hdnea=exp=1782831600~acl=/api/1/1/e/d/b/0/edb088f45303753a8093ef6c611995b5.mp3*~data=user_id=0,application_id=42~hmac=e47366ff2e9771e6ac792521591e9a28ab2d5d4f44c17c713654c0d4df83f3c0",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/d/b/0/edb088f45303753a8093ef6c611995b5.mp3?hdnea=exp=1782854255~acl=/api/1/1/e/d/b/0/edb088f45303753a8093ef6c611995b5.mp3*~data=user_id=0,application_id=42~hmac=d75f05a6c8311e6d998da65011fa42dac0d7d2f84708a64f6ebeff289330f3e4",
           "duration": 128
         }
       ]
@@ -491,38 +491,44 @@
       "tracks": [
         {
           "title": "Cosmic Sea",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/b/7/a/0/b7aab430f8ae43c58ac8148e884b4adc.mp3?hdnea=exp=1782831600~acl=/api/1/1/b/7/a/0/b7aab430f8ae43c58ac8148e884b4adc.mp3*~data=user_id=0,application_id=42~hmac=6eba3e56fad48cde5a70c8ae625793dc49868dbb3a85338d26c4ff9a272dd587",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/b/7/a/0/b7aab430f8ae43c58ac8148e884b4adc.mp3?hdnea=exp=1782854255~acl=/api/1/1/b/7/a/0/b7aab430f8ae43c58ac8148e884b4adc.mp3*~data=user_id=0,application_id=42~hmac=063325dbd46f888dee0e75cbbc7ed0a0004626cab08b7d5ea46a5b5516e81634",
           "duration": 229
         },
         {
           "title": "The Edge Recedes",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/e/0/0/5e02c032aff84f493eb665dda3950bb7.mp3?hdnea=exp=1782831600~acl=/api/1/1/5/e/0/0/5e02c032aff84f493eb665dda3950bb7.mp3*~data=user_id=0,application_id=42~hmac=fbb675b840a8baad960a13e404767c2c8cb3f17da40147a3b3af7dba396aedd3",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/5/e/0/0/5e02c032aff84f493eb665dda3950bb7.mp3?hdnea=exp=1782854255~acl=/api/1/1/5/e/0/0/5e02c032aff84f493eb665dda3950bb7.mp3*~data=user_id=0,application_id=42~hmac=88d480692d112f28550c43c34091f3da71c2a53f5fb756bff8e878a9cfc24b00",
           "duration": 289
         },
         {
           "title": "Blue Planet",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/b/5/0/ab5fedd37726204fe3c7ac65419b8fd7.mp3?hdnea=exp=1782831600~acl=/api/1/1/a/b/5/0/ab5fedd37726204fe3c7ac65419b8fd7.mp3*~data=user_id=0,application_id=42~hmac=39db8657b58ea0c6b2b1a4418d806cb21553ac28ecef2834f1605cffe5d5c38c",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/a/b/5/0/ab5fedd37726204fe3c7ac65419b8fd7.mp3?hdnea=exp=1782854255~acl=/api/1/1/a/b/5/0/ab5fedd37726204fe3c7ac65419b8fd7.mp3*~data=user_id=0,application_id=42~hmac=9a0b5011350bebbc367da1eaa083a5008fce4afbc94f6261445268959a915686",
           "duration": 228
         },
         {
           "title": "Jupiter",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/3/a/a/0/3aaf26638e3df4d478cf869ade0104ce.mp3?hdnea=exp=1782831600~acl=/api/1/1/3/a/a/0/3aaf26638e3df4d478cf869ade0104ce.mp3*~data=user_id=0,application_id=42~hmac=479f52ee4eeeb9a95da752f0a57b88f290842c29483ff7e6b515f6cd33a66340",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/3/a/a/0/3aaf26638e3df4d478cf869ade0104ce.mp3?hdnea=exp=1782854255~acl=/api/1/1/3/a/a/0/3aaf26638e3df4d478cf869ade0104ce.mp3*~data=user_id=0,application_id=42~hmac=f15339e6a91855d4206e9176998bbf8f6cb13f5a9f51e0391e8baef2c496ba66",
           "duration": 189
         },
         {
           "title": "Mercury’s Burn",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/c/1/0/ec155a9de6f850174c2a26a5cd5ff1a0.mp3?hdnea=exp=1782831600~acl=/api/1/1/e/c/1/0/ec155a9de6f850174c2a26a5cd5ff1a0.mp3*~data=user_id=0,application_id=42~hmac=d579680b8a7ea919c234d7306f3786a1eabbaf1ae6c7e2ee9240b28026043222",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/e/c/1/0/ec155a9de6f850174c2a26a5cd5ff1a0.mp3?hdnea=exp=1782854255~acl=/api/1/1/e/c/1/0/ec155a9de6f850174c2a26a5cd5ff1a0.mp3*~data=user_id=0,application_id=42~hmac=56e83327e61d24361d38529a723779c17170171dd5cefe7c298fa2b80b8561b4",
           "duration": 292
         },
         {
           "title": "Heat Death",
-          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/2/3/1/0/231893454c9166db27a390309da5c30d.mp3?hdnea=exp=1782831600~acl=/api/1/1/2/3/1/0/231893454c9166db27a390309da5c30d.mp3*~data=user_id=0,application_id=42~hmac=15f7b096b02c77cb15e866b3fe25747f6130347dfeb1fe2ef267a58b8257a2eb",
+          "preview": "https://cdnt-preview.dzcdn.net/api/1/1/2/3/1/0/231893454c9166db27a390309da5c30d.mp3?hdnea=exp=1782854255~acl=/api/1/1/2/3/1/0/231893454c9166db27a390309da5c30d.mp3*~data=user_id=0,application_id=42~hmac=c57d54657ba95eb5e3f58f15ff94ddee7613fb82b9019e89e7bccf0995cc7f5c",
           "duration": 273
         }
       ]
     }
   ],
   "updates": [
+    {
+      "date": "2026-06-30",
+      "platform": "SoundCloud",
+      "text": "Paper Kings",
+      "url": "https://soundcloud.com/nulltag/paper-kings"
+    },
     {
       "date": "2026-06-25",
       "platform": "YouTube",
