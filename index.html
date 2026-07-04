@@ -514,7 +514,7 @@
     <div class="hero__meta" id="hero-stats">
       <div class="cell"><div class="k">Tracks</div><div class="v">54 <small>live</small></div></div>
       <div class="cell"><div class="k">Schienen</div><div class="v">05 <small>rails</small></div></div>
-      <div class="cell"><div class="k">Latest</div><div class="v">VOL.2 EP <small>LICHTJAHR</small></div></div>
+      <div class="cell"><div class="k">Latest</div><div class="v" id="hero-latest">VOL.2 EP <small>LICHTJAHR</small></div></div>
       <div class="cell"><div class="k">Origin</div><div class="v">BUCHS SG <small>· CH</small></div></div>
     </div>
   </div>
@@ -998,6 +998,67 @@
     renderCatalog(btn.dataset.rail);
   });
 
+</script>
+
+<script>
+  // ── feed hydration — releases.json (built by the feed Action) ──────
+  // Progressive enhancement over the curated CATALOG above: the static
+  // page stays the no-JS fallback. Two jobs:
+  //  1. hero "Latest" cell ← newest feed release (kills manual staleness)
+  //  2. feed releases newer than CATALOG_AS_OF → auto-prepended "NEU"
+  //     cards in the ALL view, so new drops appear before curation.
+  // When you curate a new release into CATALOG, bump CATALOG_AS_OF.
+  var CATALOG_AS_OF = "2026-07-04";
+
+  function hydrateFromFeed(feed){
+    if (!feed || !feed.albums || !feed.albums.length) return;
+    var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+    var albums = feed.albums.slice().sort(function(a,b){
+      return (b.release_date||"").localeCompare(a.release_date||""); });
+
+    // 1 — hero Latest cell
+    var newest = albums[0], hero = document.getElementById('hero-latest');
+    if (newest && hero) {
+      var t = newest.title.toUpperCase(); if (t.length > 18) t = t.slice(0,17) + '…';
+      hero.innerHTML = esc(t) + ' <small>' + esc((newest.record_type||'').toUpperCase()) + '</small>';
+    }
+
+    // 2 — releases newer than the curated catalog → NEU cards
+    var fresh = albums.filter(function(a){
+      return (a.release_date||"") > CATALOG_AS_OF; });
+    if (fresh.length) {
+      RAIL_NAME.NEW = "NEU";
+      fresh.reverse().forEach(function(a){
+        CATALOG.unshift({ rail:"NEW", title:esc(a.title),
+          type:esc((a.record_type||"release").toUpperCase()),
+          meta:esc((a.record_type||"") + " · " + (a.release_date||"")),
+          img:esc(a.cover||"assets/cover-placeholder.svg"),
+          tracks:(a.nb_tracks>1 && a.tracks) ? a.tracks.map(function(tr){ return esc(tr.title); }) : null });
+      });
+      var allBtn = document.querySelector('#filters button[data-rail="ALL"]');
+      if (allBtn) allBtn.textContent = "ALL · " + CATALOG.length;
+      if (document.querySelector('#filters button.active[data-rail="ALL"]')) renderCatalog("ALL");
+    }
+  }
+
+  fetch('releases.json', { cache: 'no-cache' })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(hydrateFromFeed)
+    .catch(function(){ /* static fallback stands */ });
+
+  // ── rollout auto-status: any .ro-row with data-ts (ms epoch) flips its
+  //    ◷ pending status to ● live once the moment passes. Existing rows
+  //    are already hand-marked; give FUTURE rows a data-ts and forget them.
+  (function(){
+    var now = Date.now();
+    document.querySelectorAll('.ro-sched .ro-row[data-ts]').forEach(function(row){
+      var st = row.querySelector('.st');
+      if (st && now >= +row.dataset.ts && !/●/.test(st.textContent)) {
+        st.textContent = '● live'; st.className = 'st l';
+      }
+    });
+  })();
 </script>
 
 <script>
