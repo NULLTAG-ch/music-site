@@ -174,14 +174,25 @@
   --s-8:  48px;
   --s-9:  64px;
   --s-10: 96px;
+  --s-11: 120px;   /* generous section rhythm — modern breathing room */
+  --s-12: 160px;
 
-  --site-max: 1280px;   /* max content width — .container on the landing page */
+  --site-max: 1200px;   /* max content width — slightly tighter for a calmer measure */
 
-  --r-0:  0px;      /* default — most surfaces are sharp */
-  --r-sm: 3px;      /* code badges */
-  --r-md: 4px;      /* buttons, copy-blocks */
-  --r-lg: 6px;      /* track cards */
-  --r-pill: 999px;  /* rare — tag chips only */
+  --r-0:  0px;      /* structural grids stay sharp */
+  --r-sm: 4px;      /* code badges */
+  --r-md: 8px;      /* buttons, controls — softened for a cleaner, modern feel */
+  --r-lg: 12px;     /* cards / panels */
+  --r-xl: 16px;     /* hero-scale surfaces */
+  --r-pill: 999px;  /* tag chips */
+
+  /* Modern refresh layer — subtle elevation + a focus ring, kept quiet */
+  --surface:     #101010;   /* raised panel, a hair above the void */
+  --surface-2:   #161616;   /* hover / nested surface */
+  --hairline:    rgba(232,227,218,0.08);  /* softer than --border, for calm dividers */
+  --glass:       rgba(12,12,12,0.72);      /* blurred nav / overlays */
+  --focus:       var(--tiefrot);
+  --shadow-soft: 0 18px 40px -24px rgba(0,0,0,0.7);
 
   --bw:   1px;      /* hairline default */
   --bw-2: 1.5px;    /* corner ticks on covers */
@@ -226,6 +237,14 @@ body {
   background: var(--void);
   color: var(--bone);
 }
+
+/* Modern polish: a single, consistent focus ring across every control. */
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+:where(a, button):focus:not(:focus-visible) { outline: none; }
 
 /* ---- HEADINGS ---- */
 
