@@ -968,7 +968,7 @@
     CATALOG.filter(function(c){ return filter === "ALL" || c.rail === filter; }).forEach(function(c){
       var multi = c.tracks && c.tracks.length > 1;
       var a = document.createElement("a");
-      a.href = "https://soundcloud.com/nulltag";
+      a.href = c.href || "https://soundcloud.com/nulltag";
       a.target = "_blank"; a.rel = "noopener";
       var rail = '<span class="cat__rail" data-rail="'+c.rail+'">'+RAIL_NAME[c.rail]+'</span>';
       var img = '<img src="'+c.img+'" alt="'+catEsc(c.title)+' cover" loading="lazy" decoding="async" />';
@@ -1008,8 +1008,9 @@
   // Progressive enhancement over the curated CATALOG above: the static
   // page stays the no-JS fallback. Two jobs:
   //  1. hero "Latest" cell ← newest feed release (kills manual staleness)
-  //  2. feed releases newer than CATALOG_AS_OF → auto-prepended "NEU"
-  //     cards in the ALL view, so new drops appear before curation.
+  //  2. anything newer than CATALOG_AS_OF that isn't curated yet →
+  //     auto-prepended "NEU" cards: distributed releases (feed.albums,
+  //     Deezer) AND SoundCloud-only uploads (feed.updates, SC API).
   // When you curate a new release into CATALOG, bump CATALOG_AS_OF.
   var CATALOG_AS_OF = "2026-07-04";
 
@@ -1017,6 +1018,9 @@
     if (!feed || !feed.albums || !feed.albums.length) return;
     var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){
       return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+    // fuzzy title key, mirrors tools/feed-merge.mjs normTitle()
+    var normT = function(s){ return String(s).toLowerCase()
+      .replace(/\([^)]*\)|\[[^\]]*\]/g,' ').replace(/[^a-z0-9]+/g,' ').trim(); };
     var albums = feed.albums.slice().sort(function(a,b){
       return (b.release_date||"").localeCompare(a.release_date||""); });
 
@@ -1027,17 +1031,32 @@
       hero.innerHTML = esc(t) + ' <small>' + esc((newest.record_type||'').toUpperCase()) + '</small>';
     }
 
-    // 2 — releases newer than the curated catalog → NEU cards
-    var fresh = albums.filter(function(a){
-      return (a.release_date||"") > CATALOG_AS_OF; });
+    // 2 — anything newer than the curated catalog → NEU cards
+    var known = {};
+    CATALOG.forEach(function(c){ known[normT(c.title)] = 1; });
+    var fresh = [];
+    albums.forEach(function(a){
+      if ((a.release_date||"") > CATALOG_AS_OF && !known[normT(a.title)]) fresh.push({
+        title:a.title, date:a.release_date||"", href:a.link||"",
+        type:(a.record_type||"release").toUpperCase(),
+        meta:(a.record_type||"") + " · " + (a.release_date||""),
+        img:a.cover||"assets/cover-placeholder.svg",
+        tracks:(a.nb_tracks>1 && a.tracks) ? a.tracks.map(function(tr){ return tr.title; }) : null });
+    });
+    (feed.updates||[]).forEach(function(u){
+      if (u.platform === "SoundCloud" && (u.date||"") > CATALOG_AS_OF && !known[normT(u.text)]) fresh.push({
+        title:u.text, date:u.date||"", href:u.url||"",
+        type:"SINGLE", meta:"SoundCloud · " + (u.date||""),
+        img:u.artwork||"assets/cover-placeholder.svg", tracks:null });
+    });
     if (fresh.length) {
       RAIL_NAME.NEW = "NEU";
-      fresh.reverse().forEach(function(a){
-        CATALOG.unshift({ rail:"NEW", title:esc(a.title),
-          type:esc((a.record_type||"release").toUpperCase()),
-          meta:esc((a.record_type||"") + " · " + (a.release_date||"")),
-          img:esc(a.cover||"assets/cover-placeholder.svg"),
-          tracks:(a.nb_tracks>1 && a.tracks) ? a.tracks.map(function(tr){ return esc(tr.title); }) : null });
+      fresh.sort(function(a,b){ return a.date.localeCompare(b.date); }); // oldest first → newest ends on top
+      fresh.forEach(function(f){
+        known[normT(f.title)] = 1;
+        CATALOG.unshift({ rail:"NEW", title:esc(f.title), type:esc(f.type), meta:esc(f.meta),
+          img:esc(f.img), href:f.href,
+          tracks:f.tracks ? f.tracks.map(esc) : null });
       });
       var allBtn = document.querySelector('#filters button[data-rail="ALL"]');
       if (allBtn) allBtn.textContent = "ALL · " + CATALOG.length;

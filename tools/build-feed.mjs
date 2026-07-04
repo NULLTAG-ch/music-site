@@ -117,7 +117,9 @@ const scUpdates = await source("SoundCloud", async () => {
     if (!name || !url) continue;
     out.push({
       date: String(t.created_at || "").slice(0, 10).replace(/\//g, "-"),
-      platform: "SoundCloud", text: name, url
+      platform: "SoundCloud", text: name, url,
+      // 500px artwork so the site can render SC-only uploads as catalog cards
+      artwork: t.artwork_url ? String(t.artwork_url).replace("-large.", "-t500x500.") : ""
     });
   }
   return out;
@@ -167,7 +169,7 @@ function fingerprint(metaList, ups) {
     .map((x) => [norm(x.id), norm(x.title), norm(x.release_date), norm(x.record_type)])
     .sort((p, q) => p[0].localeCompare(q[0]));
   const u = ups
-    .map((x) => [norm(x.platform), norm(x.text), norm(x.url), norm(x.date)])
+    .map((x) => [norm(x.platform), norm(x.text), norm(x.url), norm(x.date), norm(x.artwork)])
     .sort((p, q) => (p[2] + p[1]).localeCompare(q[2] + q[1]));
   return JSON.stringify({ a, u });
 }
