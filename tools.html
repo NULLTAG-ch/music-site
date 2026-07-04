@@ -95,6 +95,7 @@
   .btn-x--primary { background: var(--tiefrot); border-color: var(--tiefrot); color: var(--void); font-weight:700; }
   .btn-x--primary:hover { background: var(--bone); border-color: var(--bone); color: var(--void); }
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -137,11 +138,11 @@
         <button class="gadget__embed" data-embed="smartlink">&lt;/&gt; Embed</button>
       </div>
       <div class="sl">
-        <div class="sl__cover"><img src="covers/supernova.jpg" alt="Supernova cover" /></div>
+        <div class="sl__cover"><img id="slg-cover" src="covers/supernova.jpg" alt="Supernova cover" /></div>
         <div>
-          <div class="sl__eye">LJ-10 · LICHTJAHRE · SINGLE</div>
-          <h3 class="sl__title">Supernova</h3>
-          <div class="sl__meta">200 BPM · A♭m · 03:48 · WAV · MP3-320</div>
+          <div class="sl__eye" id="slg-eye">LJ-10 · LICHTJAHRE · SINGLE</div>
+          <h3 class="sl__title" id="slg-title">Supernova</h3>
+          <div class="sl__meta" id="slg-meta">200 BPM · A♭m · 03:48 · WAV · MP3-320</div>
           <div class="sl__platforms">
             <a href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span>SoundCloud</span><span>↗</span></a>
             <a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><span>Spotify</span><span>↗</span></a>
@@ -151,7 +152,7 @@
           </div>
           <div class="sl__copy">
             <button class="btn-x btn-x--primary" id="sl-copy">⧉ Link kopieren</button>
-            <span class="sl__meta" style="margin:0">music.nulltag.ch/s/supernova</span>
+            <span class="sl__meta" style="margin:0" id="slg-url">music.nulltag.ch/s/supernova</span>
           </div>
         </div>
       </div>
@@ -213,7 +214,10 @@
     { cat:"EVENT · LICHTJAHR VOL.2", title:"Showroom",   sub:"Lichtjahr Vol.2 · Showroom",                          cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 3. Juli 2026", t:Date.UTC(2026,6,3,8,0,0) },
     { cat:"NULLTAG-16 · STANDALONE · STREAMING", title:"Higher Ground", sub:"Cinematic Frenchcore · 184 BPM · EN", cover:"covers/higher_ground.jpg", when:"Freitag, 10. Juli 2026 · 10:00 CEST", t:Date.UTC(2026,6,10,8,0,0) }
   ];
-  function activeDrop(){ var now=Date.now(); for (var i=0;i<DROPS.length;i++){ if (DROPS[i].t > now) return DROPS[i]; } return DROPS[DROPS.length-1]; }
+  // All drops passed → TBA card instead of a frozen countdown (keep in
+  // sync with index.html). New DROPS entries pick it back up.
+  var DROP_TBA = { cat:"NULLTAG · NÄCHSTER DROP", title:"TBA", sub:"Nächste Single in Arbeit — folge SoundCloud für die Ankündigung", cover:"covers/one_man_owns_the_sky.jpg", when:"Ankündigung folgt", t:0 };
+  function activeDrop(){ var now=Date.now(); for (var i=0;i<DROPS.length;i++){ if (DROPS[i].t > now) return DROPS[i]; } return DROP_TBA; }
   function pad(n){ return (n<10?"0":"")+n; }
   function tickCountdown(){
     var d = activeDrop();
@@ -231,12 +235,32 @@
   }
   tickCountdown(); setInterval(tickCountdown, 1000);
 
-  // ===== G-02 · SMART LINK copy =====
+  // ===== G-02 · SMART LINK =====
+  // Hydrates to the newest release from releases.json (feed Action).
+  // The static Supernova markup is the no-JS fallback. Copy-URL prefers a
+  // /s/ short link when the slug exists in CONFIG.shortlinks, else the
+  // release's own store link.
+  var SL_URL = "https://music.nulltag.ch/s/supernova";
   document.getElementById("sl-copy").addEventListener("click", function(){
-    var url = "https://music.nulltag.ch/s/supernova";
-    if (navigator.clipboard) navigator.clipboard.writeText(url);
+    if (navigator.clipboard) navigator.clipboard.writeText(SL_URL);
     var b = this; var t = b.textContent; b.textContent = "✓ Kopiert"; setTimeout(function(){ b.textContent = t; }, 1400);
   });
+  fetch('releases.json', { cache: 'no-cache' })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(feed){
+      if (!feed || !feed.albums || !feed.albums.length) return;
+      var a = feed.albums.slice().sort(function(x,y){ return (y.release_date||"").localeCompare(x.release_date||""); })[0];
+      var slug = a.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      var links = (window.CONFIG && window.CONFIG.shortlinks) || {};
+      SL_URL = links[slug] ? "https://music.nulltag.ch/s/" + slug : (a.link || SL_URL);
+      document.getElementById("slg-cover").src = a.cover;
+      document.getElementById("slg-cover").alt = a.title + " cover";
+      document.getElementById("slg-eye").textContent = "NEUESTER RELEASE · " + (a.record_type||"single").toUpperCase();
+      document.getElementById("slg-title").textContent = a.title;
+      document.getElementById("slg-meta").textContent = (a.nb_tracks>1 ? a.nb_tracks+" Tracks · " : "") + "seit " + (a.release_date||"") + " · alle DSPs";
+      document.getElementById("slg-url").textContent = SL_URL.replace(/^https:\/\//,'');
+    })
+    .catch(function(){ /* static fallback stands */ });
 
   // ===== G-03 · SCHIENE FINDER =====
   var QUESTIONS = [

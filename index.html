@@ -505,12 +505,12 @@
       <p class="hero__sub">A one-person Swiss music label working across five <b>Schienen</b> — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key and ISRC are <b>treated as design</b>, not metadata to hide.</p>
       <div class="hero__cta">
         <a href="#latest" class="btn-hero">▶ Play latest release</a>
-        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 54 Tracks</a>
+        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 56 Tracks</a>
       </div>
     </div>
 
     <div class="hero__meta" id="hero-stats">
-      <div class="cell"><div class="k">Tracks</div><div class="v">54 <small>live</small></div></div>
+      <div class="cell"><div class="k">Tracks</div><div class="v">56 <small>live</small></div></div>
       <div class="cell"><div class="k">Schienen</div><div class="v">05 <small>rails</small></div></div>
       <div class="cell"><div class="k">Latest</div><div class="v" id="hero-latest">VOL.2 EP <small>LICHTJAHR</small></div></div>
       <div class="cell"><div class="k">Origin</div><div class="v">BUCHS SG <small>· CH</small></div></div>
@@ -615,15 +615,15 @@
         <div class="s__num">§03 · CATALOG · FEATURED ARTWORK</div>
         <h2 class="s__title">Catalog</h2>
       </div>
-      <div class="s__meta">25 RELEASES · 54 TRACKS<br/>GRUPPIERT NACH RELEASE</div>
+      <div class="s__meta">27 RELEASES · 56 TRACKS<br/>GRUPPIERT NACH RELEASE</div>
     </div>
     <div class="filters" role="tablist" id="filters">
-      <button class="active" data-rail="ALL">ALL · 25</button>
+      <button class="active" data-rail="ALL">ALL · 27</button>
       <button data-rail="LJ">LICHTJAHR · 02</button>
       <button data-rail="CT">CINETEKK · 01</button>
       <button data-rail="DM">DOME · 01</button>
       <button data-rail="ND">DISTRIBUTION · 11</button>
-      <button data-rail="ST">STANDALONE · 10</button>
+      <button data-rail="ST">STANDALONE · 12</button>
     </div>
     <div class="catalog" id="catalog-grid"></div>
   </div>
@@ -895,8 +895,11 @@
     { t: Date.UTC(2026,6,10,8,0,0), title:"Higher Ground",  cat:"NULLTAG-16 · Standalone · alle DSPs", when:"Freitag, 10. Juli 2026 · 10:00 CEST" }
   ];
   function roPad(n){ return (n<10?"0":"")+n; }
+  // After the last scheduled drop passes, show a TBA card instead of a
+  // frozen countdown — new entries in RO_DROPS pick it back up.
+  var RO_TBA = { t: 0, title:"Nächster Drop", cat:"TBA · folge SoundCloud für die Ankündigung", when:"Termin folgt" };
   function roTick(){
-    var now = Date.now(), d = RO_DROPS[RO_DROPS.length-1];
+    var now = Date.now(), d = RO_TBA;
     for (var i=0;i<RO_DROPS.length;i++){ if (RO_DROPS[i].t > now){ d = RO_DROPS[i]; break; } }
     var t = document.getElementById("ro-title"); if (!t) return;
     t.textContent = d.title;
@@ -941,6 +944,8 @@
     { rail:"ND", title:"Wo ist der Bass?", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_wo_ist_der_bass.jpg" },
     { rail:"ND", title:"Sandkastenparty", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_sandkastenparty.jpg" },
     // — STANDALONE —
+    { rail:"ST", title:"One Man Owns the Sky", type:"SINGLE", meta:"SoundCloud · 03.07.2026 · EN", img:"covers/one_man_owns_the_sky.jpg" },
+    { rail:"ST", title:"Paper Kings", type:"SINGLE", meta:"SoundCloud · 30.06.2026 · EN", img:"covers/paper_kings.jpg" },
     { rail:"ST", title:"Plastic Paradise", type:"EP", meta:"EP · EN", img:"covers/rel_plastic_paradise.jpg",
       tracks:["Plastic Paradise","Concrete Messiah","Nulltag Rising","Plastic Funeral"] },
     { rail:"ST", title:"Coronation Trilogy", type:"TRILOGY", meta:"Trilogie · EN", img:"covers/rel_coronation_trilogy.jpg",
@@ -1068,7 +1073,10 @@
     { cat:"EVENT · LICHTJAHR VOL.2", title:"Showroom", sub:"Lichtjahr Vol.2 · Showroom", cover:"covers/lichtjahr_vol2.jpg", when:"Freitag, 3. Juli 2026", t:Date.UTC(2026,6,3,8,0,0) },
     { cat:"NULLTAG-16 · STANDALONE · STREAMING", title:"Higher Ground", sub:"Cinematic Frenchcore · 184 BPM · EN", cover:"covers/higher_ground.jpg", when:"Freitag, 10. Juli 2026 · 10:00 CEST", t:Date.UTC(2026,6,10,8,0,0) }
   ];
-  function activeDrop(){ var now=Date.now(); for (var i=0;i<DROPS.length;i++){ if (DROPS[i].t > now) return DROPS[i]; } return DROPS[DROPS.length-1]; }
+  // All drops passed → TBA card (t:0 flags "no date yet" for ics/share).
+  // Newest cover art keeps the slot alive until the next DROPS entry.
+  var DROP_TBA = { cat:"NULLTAG · NÄCHSTER DROP", title:"TBA", sub:"Nächste Single in Arbeit — folge SoundCloud für die Ankündigung", cover:"covers/one_man_owns_the_sky.jpg", when:"Ankündigung folgt", t:0 };
+  function activeDrop(){ var now=Date.now(); for (var i=0;i<DROPS.length;i++){ if (DROPS[i].t > now) return DROPS[i]; } return DROP_TBA; }
   function tpad(n){ return (n<10?"0":"")+n; }
   function tickCountdown(){
     var d = activeDrop();
@@ -1093,7 +1101,9 @@
   // ----- Countdown: .ics + share -----
   function tbDtStamp(ms){ return new Date(ms).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''); }
   document.getElementById("cd-ics").addEventListener("click", function(){
-    var a=activeDrop(), ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NULLTAG//Drop//DE","BEGIN:VEVENT",
+    var a=activeDrop();
+    if (!a.t) { tbToast('Noch kein Termin — TBA'); return; }
+    var ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NULLTAG//Drop//DE","BEGIN:VEVENT",
       "UID:"+a.title.replace(/\s/g,'')+"@nulltag.ch","DTSTAMP:"+tbDtStamp(Date.now()),
       "DTSTART:"+tbDtStamp(a.t),"DTEND:"+tbDtStamp(a.t+3600000),
       "SUMMARY:NULLTAG — "+a.title,"DESCRIPTION:"+a.sub,"URL:https://music.nulltag.ch","END:VEVENT","END:VCALENDAR"].join("\r\n");

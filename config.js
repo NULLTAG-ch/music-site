@@ -106,7 +106,9 @@ window.CONFIG = {
     "cinetekk":             "https://soundcloud.com/nulltag/cinetekk",
     "eisflug":              "https://soundcloud.com/nulltag/eisflug",
     "nachtfalter":          "https://soundcloud.com/nulltag/nachtfalter",
-    "one-man-owns-the-sky": "https://soundcloud.com/nulltag/one-man-owns-the-sky"
+    "one-man-owns-the-sky": "https://soundcloud.com/nulltag/one-man-owns-the-sky",
+    "showroom":             "https://soundcloud.com/nulltag/showroom",
+    "paper-kings":          "https://soundcloud.com/nulltag/paper-kings"
   },
 
   // Where the music lives — prioritised: SoundCloud, Apple Music, Spotify.
