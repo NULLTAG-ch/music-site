@@ -77,6 +77,11 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Prune non-site files from artifact
+        # Mirror of deploy.yml — runs AFTER build-feed.mjs used tools/,
+        # and only touches the worktree, never the commit above.
+        run: rm -rf assets/proto tools docs
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:

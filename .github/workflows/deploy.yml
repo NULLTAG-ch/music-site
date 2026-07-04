@@ -35,6 +35,10 @@ jobs:
           # Idempotent; ensures the Pages site exists (Actions source).
           enablement: true
 
+      - name: Prune non-site files from artifact
+        # Keep the repo as-is; just don't ship prototypes/tooling to Pages.
+        run: rm -rf assets/proto tools docs
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
