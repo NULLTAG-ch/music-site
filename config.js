@@ -82,6 +82,33 @@ window.CONFIG = {
     "voegel einsneunzig": "standalone", "tekkno train": "standalone"
   },
 
+  // ── SHORT LINKS ───────────────────────────────────────────────────────
+  // music.nulltag.ch/s/<slug> → target URL, resolved by 404.html on
+  // GitHub Pages. Every slug below is a verified SoundCloud permalink —
+  // check https://soundcloud.com/nulltag/<slug> returns 200 before adding.
+  // Unknown slugs fall back to the SoundCloud profile.
+  shortlinks: {
+    "supernova":            "https://soundcloud.com/nulltag/supernova",
+    "microwave":            "https://soundcloud.com/nulltag/microwave",
+    "last-light":           "https://soundcloud.com/nulltag/last-light",
+    "higher-ground":        "https://soundcloud.com/nulltag/higher-ground",
+    "andromeda-approach":   "https://soundcloud.com/nulltag/andromeda-approach",
+    "trappist-loop":        "https://soundcloud.com/nulltag/trappist-loop",
+    "event-horizon":        "https://soundcloud.com/nulltag/event-horizon",
+    "mercurys-burn":        "https://soundcloud.com/nulltag/mercurys-burn",
+    "heat-death":           "https://soundcloud.com/nulltag/heat-death",
+    "blue-planet":          "https://soundcloud.com/nulltag/blue-planet",
+    "cosmic-sea":           "https://soundcloud.com/nulltag/cosmic-sea",
+    "the-edge-recedes":     "https://soundcloud.com/nulltag/the-edge-recedes",
+    "letzter-sommer":       "https://soundcloud.com/nulltag/letzter-sommer",
+    "tekkno-train":         "https://soundcloud.com/nulltag/tekkno-train",
+    "in-the-dome":          "https://soundcloud.com/nulltag/in-the-dome",
+    "cinetekk":             "https://soundcloud.com/nulltag/cinetekk",
+    "eisflug":              "https://soundcloud.com/nulltag/eisflug",
+    "nachtfalter":          "https://soundcloud.com/nulltag/nachtfalter",
+    "one-man-owns-the-sky": "https://soundcloud.com/nulltag/one-man-owns-the-sky"
+  },
+
   // Where the music lives — prioritised: SoundCloud, Apple Music, Spotify.
   streaming: [
     { label: "SoundCloud",    url: "https://soundcloud.com/nulltag" },

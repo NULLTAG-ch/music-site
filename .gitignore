@@ -3,3 +3,6 @@ covers/*.png
 .playwright-mcp/
 .DS_Store
 **/.DS_Store
+
+# Local Claude Code dev tooling (preview launch config)
+.claude/
