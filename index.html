@@ -91,7 +91,16 @@
   .hero__meta .k { color: var(--muted); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 10px; }
   .hero__meta .v { color: var(--bone); font-family: var(--font-mono); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; }
   .hero__meta .v small { color: var(--muted); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; margin-left: 6px; font-weight: 400; }
-  @media (max-width: 720px) { .hero__meta { grid-template-columns: 1fr 1fr; } .hero__inner { padding-top: 80px; } }
+  @media (max-width: 720px) {
+    .hero__meta { grid-template-columns: 1fr 1fr; }
+    .hero__inner { padding-top: 80px; gap: var(--s-5); }
+    /* stack the cramped top-metadata into clean single lines */
+    .hero__top { flex-direction: column; gap: 6px; }
+    .hero__top .corners { flex-direction: column; gap: 6px; }
+    /* full-width, equal-width CTAs */
+    .hero__cta { flex-direction: column; align-items: stretch; gap: var(--s-3); }
+    .btn-hero { justify-content: center; }
+  }
 
   /* ===== sections ===== */
   section.s { padding: var(--s-11) 0; border-bottom: 1px solid var(--hairline); position: relative; }
