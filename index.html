@@ -468,6 +468,52 @@
   @media (prefers-reduced-motion: no-preference){ .hero__cue-line { animation: cue 1.9s var(--ease) infinite; } }
   @keyframes cue { 0%{transform:scaleY(0);opacity:0} 30%{opacity:1} 100%{transform:scaleY(1);opacity:0} }
   @media (max-width: 720px){ .hero__cue { display: none; } }
+
+  /* ---------- Mobile 2c: Akkordeon, kompakter Hero, Menü, Now-Playing-Leiste ---------- */
+  .acc-row, .npbar, .mnav-btn, .mnav-panel { display: none; }
+  @media (max-width: 720px){
+    /* Hero kompakt: Wortmarke 34px, zwei gleich breite Buttons */
+    .hero__title { font-size: 34px; letter-spacing: -0.04em; }
+    .hero__cta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .hero__cta .btn-hero { text-align: center; }
+    /* §-Akkordeon statt Langseite */
+    body.m-acc section.s.acc { padding: 0; border-bottom: 0; }
+    body.m-acc section.s.acc > .container { display: none; }
+    body.m-acc section.s.acc.open > .container { display: block; padding-top: var(--s-6); padding-bottom: var(--s-8); }
+    .acc-row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 50px; padding: 0 20px;
+      background: none; border: 0; border-bottom: 1px solid var(--border); color: var(--bone); cursor: pointer; text-align: left;
+      transition: background 160ms var(--ease, ease); }
+    .acc-row:active { transform: translateY(1px); }
+    .acc-row:focus-visible { outline: 2px solid var(--tiefrot); outline-offset: 2px; }
+    .acc-row .n { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--muted); width: 36px; flex: none; }
+    .acc-row .t { font-family: var(--font-brutal); font-weight: 700; font-size: 13px; flex: 1; }
+    .acc-row .m { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .acc-row .x { font-family: var(--font-mono); font-size: 12px; color: var(--muted); width: 16px; text-align: center; flex: none; }
+    section.s.acc.open .acc-row { background: var(--panel); }
+    /* ≡ Menü */
+    .mnav-btn { display: inline-flex; align-items: center; gap: 7px; background: none; border: 1px solid var(--border);
+      border-radius: 4px; padding: 6px 11px; color: var(--bone); font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; }
+    .mnav-btn:focus-visible { outline: 2px solid var(--tiefrot); outline-offset: 2px; }
+    .mnav-panel { position: fixed; top: 52px; left: 0; right: 0; z-index: 70; background: var(--void);
+      border-bottom: 1px solid var(--border); flex-direction: column; }
+    body.mnav-open .mnav-panel { display: flex; }
+    .mnav-panel a { display: flex; align-items: center; min-height: 46px; padding: 0 20px; border-bottom: 1px solid #1c1c1c;
+      color: var(--bone); text-decoration: none; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+    .mnav-panel a:last-child { border-bottom: 0; }
+    /* Now-Playing-Leiste fix unten */
+    .npbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: flex; align-items: center; gap: 10px;
+      background: var(--panel); border-top: 1px solid var(--border);
+      padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px)); text-decoration: none; }
+    .npbar img { width: 38px; height: 38px; object-fit: cover; border-radius: 3px; flex: none; }
+    .npbar .tt { flex: 1; min-width: 0; }
+    .npbar .tt b { display: block; font-family: var(--font-brutal); font-weight: 700; font-size: 12px; color: var(--bone);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .npbar .tt small { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tiefrot); }
+    .npbar .pp { font-family: var(--font-mono); font-size: 12px; color: var(--bone); border: 1px solid var(--border);
+      border-radius: 4px; padding: 8px 11px; flex: none; }
+    body.m-acc { padding-bottom: 62px; }
+  }
 </style>
 </head>
 <body id="top">
@@ -1371,5 +1417,105 @@
   })();
 </script>
 <div class="tbtoast" id="tb-toast"></div>
+<script>
+/* Mobile 2c: Akkordeon + ≡ Menü + Now-Playing-Leiste (nur <=720px, additiv) */
+(function(){
+  var mq = window.matchMedia('(max-width: 720px)');
+  var built = false;
+  var SECTIONS = [
+    ['latest', '§01', 'Latest', 'Now Playing'],
+    ['rollout', '§02', 'Rollout', 'Kalender'],
+    ['catalog', '§03', 'Katalog', '56 Tracks'],
+    ['schienen', '§04', 'Schienen', '5 Rails'],
+    ['lineage', '§05', 'Family Tree', 'interaktiv'],
+    ['tools', '§06', 'Tools', 'beta'],
+    ['facts', '§07', 'Facts', 'Video'],
+    ['manifest', '§08', 'Manifest', ''],
+    ['listen', '§09', 'Listen', 'Plattformen']
+  ];
+  function build(){
+    if (built || !mq.matches) return;
+    built = true;
+    document.body.classList.add('m-acc');
+    SECTIONS.forEach(function(cfg){
+      var s = document.getElementById(cfg[0]);
+      if (!s) return;
+      s.classList.add('acc');
+      var b = document.createElement('button');
+      b.className = 'acc-row';
+      b.setAttribute('aria-expanded', 'false');
+      b.innerHTML = '<span class="n"></span><span class="t"></span><span class="m"></span><span class="x">＋</span>';
+      b.querySelector('.n').textContent = cfg[1];
+      b.querySelector('.t').textContent = cfg[2];
+      b.querySelector('.m').textContent = cfg[3];
+      b.addEventListener('click', function(){
+        var open = s.classList.toggle('open');
+        b.setAttribute('aria-expanded', open ? 'true' : 'false');
+        b.querySelector('.x').textContent = open ? '−' : '＋';
+      });
+      s.insertBefore(b, s.firstElementChild);
+    });
+    // Latest + Katalog starten offen (Primärinhalte)
+    ['latest', 'catalog'].forEach(function(id){
+      var s = document.getElementById(id);
+      if (s && s.classList.contains('acc')) {
+        s.classList.add('open');
+        var r = s.querySelector('.acc-row');
+        if (r) { r.setAttribute('aria-expanded', 'true'); r.querySelector('.x').textContent = '−'; }
+      }
+    });
+    // ≡ Menü in der Nav
+    var navInner = document.querySelector('.nav__inner');
+    if (navInner && !document.querySelector('.mnav-btn')) {
+      var mb = document.createElement('button');
+      mb.className = 'mnav-btn';
+      mb.setAttribute('aria-label', 'Menü öffnen');
+      mb.textContent = '≡ Menü';
+      var panel = document.createElement('div');
+      panel.className = 'mnav-panel';
+      SECTIONS.forEach(function(cfg){
+        if (!document.getElementById(cfg[0])) return;
+        var a = document.createElement('a');
+        a.href = '#' + cfg[0];
+        a.textContent = cfg[1] + ' · ' + cfg[2];
+        a.addEventListener('click', function(){
+          document.body.classList.remove('mnav-open');
+          var s = document.getElementById(cfg[0]);
+          if (s && s.classList.contains('acc') && !s.classList.contains('open')) s.querySelector('.acc-row').click();
+        });
+        panel.appendChild(a);
+      });
+      mb.addEventListener('click', function(){ document.body.classList.toggle('mnav-open'); });
+      navInner.appendChild(mb);
+      document.body.appendChild(panel);
+    }
+    // Now-Playing-Leiste
+    if (!document.querySelector('.npbar')) {
+      var np = document.createElement('a');
+      np.className = 'npbar';
+      np.href = '#latest';
+      var cov = document.getElementById('latest-cover-img');
+      var tit = document.getElementById('latest-title');
+      np.innerHTML = '<img alt=""><span class="tt"><b></b><small>● Now Playing · SoundCloud</small></span><span class="pp">❚❚</span>';
+      np.querySelector('img').src = cov ? cov.src : 'assets/cover-placeholder.svg';
+      np.querySelector('b').textContent = tit ? tit.innerText.replace(/\s+/g, ' ').trim() : 'Neueste Single';
+      np.addEventListener('click', function(){
+        var s = document.getElementById('latest');
+        if (s && s.classList.contains('acc') && !s.classList.contains('open')) s.querySelector('.acc-row').click();
+      });
+      document.body.appendChild(np);
+      // Titel nachziehen, sobald config.js den Latest-Release gesetzt hat
+      var sync = function(){
+        if (tit) np.querySelector('b').textContent = tit.innerText.replace(/\s+/g, ' ').trim();
+        if (cov) np.querySelector('img').src = cov.src;
+      };
+      setTimeout(sync, 1500); setTimeout(sync, 4000);
+    }
+  }
+  build();
+  if (mq.addEventListener) mq.addEventListener('change', build);
+  else if (mq.addListener) mq.addListener(build);
+})();
+</script>
 </body>
 </html>
