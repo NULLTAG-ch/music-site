@@ -611,13 +611,13 @@
       <p class="hero__sub">A one-person Swiss music label working across five <b>Schienen</b> — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key and ISRC are <b>treated as design</b>, not metadata to hide.</p>
       <div class="hero__cta">
         <a href="#latest" class="btn-hero">▶ Play latest release</a>
-        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · 56 Tracks</a>
+        <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · <span data-count="tracks">56</span> Tracks</a>
       </div>
     </div>
 
     <div class="hero__meta" id="hero-stats">
-      <div class="cell"><div class="k">Tracks</div><div class="v">56 <small>live</small></div></div>
-      <div class="cell"><div class="k">Schienen</div><div class="v">05 <small>rails</small></div></div>
+      <div class="cell"><div class="k">Tracks</div><div class="v"><span data-count="tracks">56</span> <small>live</small></div></div>
+      <div class="cell"><div class="k">Schienen</div><div class="v"><span data-count="rails">05</span> <small>rails</small></div></div>
       <div class="cell"><div class="k">Latest</div><div class="v" id="hero-latest">VOL.2 EP <small>LICHTJAHR</small></div></div>
       <div class="cell"><div class="k">Origin</div><div class="v">BUCHS SG <small>· CH</small></div></div>
     </div>
@@ -667,7 +667,7 @@
         <div class="s__num">§02 · ROLLOUT · LICHTJAHR VOL.2</div>
         <h2 class="s__title">Rollout</h2>
       </div>
-      <div class="s__meta">VOL.2 KOMPLETT · EP LIVE SEIT 26.06<br/>NÄCHSTER DROP: HIGHER GROUND · 10.07</div>
+      <div class="s__meta" id="ro-meta">VOL.2 KOMPLETT · EP LIVE SEIT 26.06<br/>ROLLOUT ABGESCHLOSSEN</div>
     </div>
 
     <div class="rollout">
@@ -771,10 +771,10 @@
         <div class="s__num">§04 · CATALOG · FEATURED ARTWORK</div>
         <h2 class="s__title">Catalog</h2>
       </div>
-      <div class="s__meta">27 RELEASES · 56 TRACKS<br/>GRUPPIERT NACH RELEASE</div>
+      <div class="s__meta"><span data-count="releases">27</span> RELEASES · <span data-count="tracks">56</span> TRACKS<br/>GRUPPIERT NACH RELEASE</div>
     </div>
     <div class="filters" role="tablist" id="filters">
-      <button class="active" data-rail="ALL">ALL · 27</button>
+      <button class="active" data-rail="ALL">ALL · <span data-count="releases">27</span></button>
       <button data-rail="LJ">LICHTJAHR · 02</button>
       <button data-rail="CT">CINETEKK · 01</button>
       <button data-rail="DM">DOME · 01</button>
@@ -861,7 +861,7 @@
         <div class="rail__head"><span class="rail__cat"><b>LJ-NN</b> · EP-RAIL</span><span class="rail__num">01 / 05</span></div>
         <h3 class="rail__title">Lichtjahr</h3>
         <div class="rail__sub">Cosmic frenchcore</div>
-        <p class="rail__desc">Uplifting-to-symphonic Frenchcore zu Himmelskörper-Bildern. Aeolian / Phrygian-Dom. Vol.1 komplett (6 Tracks), Vol.2 im wöchentlichen Rollout (5/6 live).</p>
+        <p class="rail__desc">Uplifting-to-symphonic Frenchcore zu Himmelskörper-Bildern. Aeolian / Phrygian-Dom. Vol.1 komplett (6 Tracks), Vol.2 seit 26.06 vollständig auf allen Diensten (6 Tracks).</p>
         <div class="rail__foot"><span><b>188–205</b> BPM</span><span>EN</span></div>
       </article>
       <article class="rail" data-rail="CT">
@@ -1255,6 +1255,51 @@
     });
   }
 
+  // ── Zahlen aus den Daten, nicht danebengeschrieben ────────────────
+  // Jede Zahl auf dieser Seite stand bisher als Literal im Markup: "56
+  // Tracks", "27 RELEASES", "ALL · 27", "05 rails". Sie stimmten am Tag,
+  // an dem sie getippt wurden, und danach nie wieder von selbst. Jetzt
+  // trägt jede Stelle ein data-count und wird aus CATALOG gerechnet —
+  // inklusive der Releases, die die Feed-Hydration gerade erst
+  // vorangestellt hat.
+  function stampCounts(){
+    var releases = CATALOG.length;
+    var tracks = CATALOG.reduce(function(n, c){
+      return n + (c.tracks && c.tracks.length ? c.tracks.length : 1);
+    }, 0);
+    var rails = {};
+    CATALOG.forEach(function(c){ if (c.rail && c.rail !== "NEW") rails[c.rail] = 1; });
+    var pad = function(n){ return (n < 10 ? "0" : "") + n; };
+    var values = {
+      releases: String(releases),
+      tracks: String(tracks),
+      rails: pad(Object.keys(rails).length)
+    };
+    document.querySelectorAll("[data-count]").forEach(function(el){
+      var v = values[el.dataset.count];
+      if (v) el.textContent = v;
+    });
+  }
+
+  // ── Rollout-Kopfzeile aus dem Terminplan ──────────────────────────
+  // Stand fest als "NÄCHSTER DROP: HIGHER GROUND · 10.07" im Markup und
+  // war damit über einen Monat nach dem Termin noch zu lesen, während
+  // der Countdown daneben längst auf TBA stand. Dieselbe Liste, eine
+  // Wahrheit.
+  function stampRollout(){
+    var el = document.getElementById("ro-meta");
+    if (!el || typeof RO_DROPS === "undefined") return;
+    var now = Date.now(), next = null;
+    for (var i = 0; i < RO_DROPS.length; i++) {
+      if (RO_DROPS[i].t > now) { next = RO_DROPS[i]; break; }
+    }
+    el.innerHTML = next
+      ? "VOL.2 KOMPLETT · EP LIVE SEIT 26.06<br/>NÄCHSTER DROP: " +
+        String(next.title).toUpperCase() + " · " +
+        new Date(next.t).toLocaleDateString("de-CH", { day: "2-digit", month: "2-digit" })
+      : "VOL.2 KOMPLETT · EP LIVE SEIT 26.06<br/>ROLLOUT ABGESCHLOSSEN · NÄCHSTER DROP TBA";
+  }
+
   // ── §03 news ← CONFIG.updates (kuratiert) + feed.updates (automatisch) ──
   // Beide Quellen liefern {date, platform, text, url}. Zusammenführen,
   // nach URL deduplizieren (ein kuratierter Eintrag darf denselben Link
@@ -1310,6 +1355,8 @@
   // Curated entries are available immediately — config.js is a blocking
   // script — so the list is correct before the feed ever answers.
   renderNews(null);
+  stampCounts();
+  stampRollout();
 
   function hydrateFromFeed(feed){
     renderNews(feed);
@@ -1357,8 +1404,9 @@
           img:esc(f.img), href:f.href,
           tracks:f.tracks ? f.tracks.map(esc) : null });
       });
-      var allBtn = document.querySelector('#filters button[data-rail="ALL"]');
-      if (allBtn) allBtn.textContent = "ALL · " + CATALOG.length;
+      // Alle Zahlen neu stempeln, nicht nur den ALL-Filter: die frischen
+      // Releases zählen genauso in Hero und Katalogkopf.
+      stampCounts();
       if (document.querySelector('#filters button.active[data-rail="ALL"]')) renderCatalog("ALL");
     }
   }
@@ -1667,7 +1715,7 @@
   var SECTIONS = [
     ['latest', '§01', 'Latest', 'Now Playing'],
     ['rollout', '§02', 'Rollout', 'Kalender'],
-    ['catalog', '§03', 'Katalog', '56 Tracks'],
+    ['catalog', '§04', 'Katalog', 'alle Releases'],
     ['schienen', '§04', 'Schienen', '5 Rails'],
     ['lineage', '§05', 'Family Tree', 'interaktiv'],
     ['tools', '§06', 'Tools', 'beta'],
