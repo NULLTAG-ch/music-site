@@ -73,7 +73,11 @@ jobs:
 
       - name: Commit changed assets
         run: |
-          if git diff --quiet; then
+          # `git status --porcelain`, not `git diff --quiet`: the first run of a
+          # new manifest entry produces an UNTRACKED file, which git diff does
+          # not see at all — the commit would be skipped and the run would still
+          # report success with nothing in the repo.
+          if [ -z "$(git status --porcelain)" ]; then
             echo "No asset changes."
           else
             git config user.name "github-actions[bot]"
