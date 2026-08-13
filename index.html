@@ -88,7 +88,11 @@
     .hero__vignette { background: linear-gradient(180deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.5) 26%, rgba(10,10,10,0.72) 62%, rgba(10,10,10,0.95) 100%); }
   }
   .hero__grid { position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%); }
-  .hero__inner { position: relative; z-index: 2; min-height: 88vh; display: grid; grid-template-rows: 1fr auto auto; padding: 96px 0 var(--s-8); gap: var(--s-6); }
+  /* padding-block, NICHT die padding-Kurzform: .hero__inner ist zugleich
+     .container, und die Kurzform loeschte dessen seitliche Polsterung.
+     Auf dem Desktop faellt das nicht auf, weil die auto-Raender des
+     Containers ohnehin Platz lassen — auf 390px klebte der Text am Rand. */
+  .hero__inner { position: relative; z-index: 2; min-height: 88vh; display: grid; grid-template-rows: 1fr auto auto; padding-block: 96px var(--s-8); gap: var(--s-6); }
   .hero__top { display: flex; justify-content: space-between; align-items: flex-start; color: var(--muted); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; }
   .hero__top .corners { display: flex; gap: var(--s-6); }
   .hero__title { font-family: var(--font-display); font-size: clamp(64px, 14vw, 220px); line-height: 0.82; letter-spacing: -0.01em; color: var(--bone); margin: 0; text-shadow: 0 0 80px rgba(0,0,0,0.5); }
@@ -114,15 +118,30 @@
   .hero__meta .k { color: var(--muted); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 10px; }
   .hero__meta .v { color: var(--bone); font-family: var(--font-mono); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; }
   .hero__meta .v small { color: var(--muted); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; margin-left: 6px; font-weight: 400; }
+  /* ---------- Handy-Hero ----------
+     Es gab hier zwei Mobile-Bloecke, die sich widersprachen: dieser setzte
+     die CTAs auf eine Spalte, ein zweiter weiter unten machte daraus wieder
+     ein 1fr-1fr-Raster und schrumpfte die Wortmarke auf 34px. Ergebnis auf
+     dem Geraet: zwei gequetschte Buttons, die ueber drei Zeilen umbrachen,
+     und ein Wortmarken-Schriftzug, der kleiner wirkte als der Fliesstext
+     darunter. Es gibt jetzt nur noch diesen Block. */
   @media (max-width: 720px) {
+    .hero { min-height: 0; }
+    /* Die 1fr-Zeile schob den Inhalt ans untere Ende und hinterliess oben
+       ein knappes Drittel Bildschirm Leere. Auf dem Handy zaehlt der obere
+       Bildschirmrand, nicht die vertikale Mitte. */
+    .hero__inner { min-height: 0; grid-template-rows: auto auto auto; padding-block: var(--s-6) var(--s-8); gap: var(--s-6); }
+    /* Drei Zeilen weitgesperrtes Mono waren oben nur Rauschen. Enger
+       gesperrt und kleiner passt jede Zeile einmal quer. */
+    .hero__top { flex-direction: column; gap: 4px; font-size: 9.5px; letter-spacing: 0.14em; }
+    .hero__top .corners { flex-direction: column; gap: 4px; }
+    .hero__title { font-size: clamp(56px, 16vw, 88px); letter-spacing: -0.03em; }
+    .hero__sub { font-size: 15px; line-height: 1.5; margin-top: var(--s-4); }
+    /* Eine Spalte. Zwei nebeneinander heisst bei 390px drei Zeilen Umbruch
+       pro Button — und der Trenner faellt allein auf die letzte. */
+    .hero__cta { display: flex; flex-direction: column; align-items: stretch; gap: var(--s-3); margin-top: var(--s-6); }
+    .btn-hero { justify-content: center; text-align: center; padding: 16px 20px; }
     .hero__meta { grid-template-columns: 1fr 1fr; }
-    .hero__inner { padding-top: 80px; gap: var(--s-5); }
-    /* stack the cramped top-metadata into clean single lines */
-    .hero__top { flex-direction: column; gap: 6px; }
-    .hero__top .corners { flex-direction: column; gap: 6px; }
-    /* full-width, equal-width CTAs */
-    .hero__cta { flex-direction: column; align-items: stretch; gap: var(--s-3); }
-    .btn-hero { justify-content: center; }
   }
 
   /* ===== sections ===== */
@@ -519,10 +538,25 @@
   /* ---------- Mobile 2c: Akkordeon, kompakter Hero, Menü, Now-Playing-Leiste ---------- */
   .acc-row, .npbar, .mnav-btn, .mnav-panel { display: none; }
   @media (max-width: 720px){
-    /* Hero kompakt: Wortmarke 34px, zwei gleich breite Buttons */
-    .hero__title { font-size: 34px; letter-spacing: -0.04em; }
-    .hero__cta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .hero__cta .btn-hero { text-align: center; }
+    /* Der Hero wird oben im Hero-Block gesetzt — hier stand frueher eine
+       zweite, widersprechende Fassung davon. */
+
+    /* ---- Trefferflaechen ----
+       Auf dem Handy waren die Werkzeuge nicht bedienbar, nicht weil sie
+       falsch aussahen, sondern weil man sie nicht traf: der BPM-Regler hat
+       eine 4px hohe Spur — mit der Maus reicht das, mit dem Daumen nicht.
+       Chips und Buttons lagen bei 32–35px.
+       Der Regler behaelt seine duenne Spur (die ist das Design) und bekommt
+       die Hoehe ueber transparente Polsterung, damit die Trefferflaeche
+       waechst, ohne dass sich etwas sichtbar aendert. */
+    .tbt-range { height: 44px; background-color: transparent; background-clip: content-box;
+      padding-block: 20px; box-sizing: border-box; margin-block: 12px 2px; }
+    .tbchip { min-height: 44px; display: inline-flex; align-items: center; padding: 10px 14px; }
+    .tbbtn { min-height: 44px; padding: 12px 16px; }
+    /* Die Now-Playing-Leiste liegt fix ueber dem Inhalt und verdeckte sonst
+       die letzte Zeile jeder Seite (im Footer die Domain, im Hero die
+       untere Kennzahlen-Reihe). */
+    body.m-acc { padding-bottom: 96px; }
     /* §-Akkordeon statt Langseite */
     body.m-acc section.s.acc { padding: 0; border-bottom: 0; }
     body.m-acc section.s.acc > .container { display: none; }
@@ -919,7 +953,7 @@
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§08 · TOOLS · <span class="tb-beta">● BETA</span></div>
+        <div class="s__num">§08 · TOOLS · WERKZEUGE</div>
         <h2 class="s__title">Tools</h2>
       </div>
       <div class="s__meta">SOUND · QR · KALENDER<br/>LIVE-DATEN</div>
@@ -1712,21 +1746,41 @@
 (function(){
   var mq = window.matchMedia('(max-width: 720px)');
   var built = false;
-  var SECTIONS = [
-    ['latest', '§01', 'Latest', 'Now Playing'],
-    ['rollout', '§02', 'Rollout', 'Kalender'],
-    ['catalog', '§04', 'Katalog', 'alle Releases'],
-    ['schienen', '§04', 'Schienen', '5 Rails'],
-    ['lineage', '§05', 'Family Tree', 'interaktiv'],
-    ['tools', '§06', 'Tools', 'beta'],
-    ['facts', '§07', 'Facts', 'Video'],
-    ['manifest', '§08', 'Manifest', ''],
-    ['listen', '§09', 'Listen', 'Plattformen']
-  ];
+  // Die Liste wird aus dem Dokument gelesen, nicht danebengepflegt.
+  // Vorher stand sie als Literal hier — und driftete: NEWS und VIDEO
+  // fehlten ganz (die Sektionen bekamen also gar keine Akkordeon-Zeile),
+  // Katalog und Schienen trugen beide "§04", und alles danach war um zwei
+  // Paragrafen verschoben. Jede Sektion kennt ihre Nummer bereits in
+  // .s__num ("§05 · VIDEO · YOUTUBE · AUTO") und ihren Titel in .s__title.
+  // Eine neue Sektion taucht damit von selbst auf, mit der richtigen Nummer.
+  function readSections(){
+    var out = [];
+    document.querySelectorAll('section.s[id]').forEach(function(s){
+      var num = s.querySelector('.s__num');
+      var title = s.querySelector('.s__title');
+      if (!num || !title) return;
+      var parts = num.textContent.split('·');
+      // Titel enthalten <br/> ("Latest<br/>Release"). textContent liefert
+      // dort keinen Weissraum und klebte die Woerter zusammen.
+      var t = title.innerHTML.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]*>/g, '');
+      out.push([
+        s.id,
+        parts[0].trim(),                            // "§05"
+        t.replace(/\s+/g, ' ').trim(),              // "Video"
+        // Der dritte Teil ist die Beschreibung ("NOW PLAYING", "YOUTUBE"),
+        // der zweite nur der Sektionsname — als Meta waere das eine
+        // Wiederholung des Titels daneben.
+        (parts[2] || parts[1] || '').trim().toLowerCase()
+      ]);
+    });
+    return out;
+  }
+  var SECTIONS = [];
   function build(){
     if (built || !mq.matches) return;
     built = true;
     document.body.classList.add('m-acc');
+    SECTIONS = readSections();
     SECTIONS.forEach(function(cfg){
       var s = document.getElementById(cfg[0]);
       if (!s) return;

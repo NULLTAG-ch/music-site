@@ -21,16 +21,23 @@ permissions:
   pages: write
   id-token: write
 
+# Der Datenteil darf NICHT in der `pages`-Gruppe haengen.
+# Vorher stand hier `group: pages` fuer den ganzen Workflow — mit dem
+# Ergebnis, dass jeder geplante Lauf in der Gruppe wartete und exakt in
+# dem Moment abgebrochen wurde, in dem der naechste startete. 30 von 30
+# Laeufen "cancelled", releases.json seit 2026-08-06 unveraendert: kein
+# neuer Release, kein neues Video, kein Feed. Genau daher kam der
+# veraltete Stand auf der ganzen Seite.
+# Jetzt hat der Build seine eigene Spur; nur der Deploy-Job teilt sich
+# die `pages`-Gruppe (siehe unten). Wird der Deploy verdraengt, sind die
+# Daten trotzdem committet und gehen mit dem naechsten Lauf raus.
 concurrency:
-  group: pages
+  group: feed-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   feed:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -74,12 +81,30 @@ jobs:
             git push
           fi
 
+  # Veroeffentlichen ist ein eigener Job — er darf verdraengt werden,
+  # ohne den Datenstand mitzureissen.
+  publish:
+    needs: feed
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        # Nach dem Commit des Feed-Jobs auschecken, sonst ginge der alte
+        # Stand ins Artefakt.
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Prune non-site files from artifact
-        # Mirror of deploy.yml — runs AFTER build-feed.mjs used tools/,
-        # and only touches the worktree, never the commit above.
+        # Mirror of deploy.yml — only touches the worktree, never a commit.
         run: rm -rf assets/proto tools docs
 
       - name: Upload site artifact
