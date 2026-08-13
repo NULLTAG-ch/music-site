@@ -407,6 +407,73 @@
 .nt-badge--audio { color: var(--cold-blue); border-color: var(--cold); }
 
 /* ============================================================
+   FEED
+   A dated list of things that happened — a release, an upload, a
+   piece of press. Two columns: the date carries the rhythm on the
+   left, everything else reads as one line on the right.
+   Pairs with .nt-badge, which is what tells the kinds apart.
+   ============================================================ */
+
+.nt-feed { list-style: none; margin: 0; padding: 0; }
+
+.nt-feed__item {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: baseline;
+  padding: var(--s-4) 0;
+  border-bottom: var(--bw) solid var(--hairline);
+}
+.nt-feed__item:last-child { border-bottom: 0; }
+@media (max-width: 620px) {
+  .nt-feed__item { grid-template-columns: 1fr; gap: var(--s-2); }
+}
+
+.nt-feed__date {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-eye);
+  color: var(--muted-deep);
+  white-space: nowrap;
+}
+
+.nt-feed__body { min-width: 0; }
+
+.nt-feed__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.nt-feed__text {
+  font-family: var(--font-grotesk);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--bone);
+  text-decoration: none;
+  transition: color var(--t-base) var(--ease);
+}
+a.nt-feed__text:hover { color: var(--tiefrot); text-decoration: none; }
+
+/* The arrow only appears on rows that actually lead somewhere. */
+a.nt-feed__text::after {
+  content: " ↗";
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.nt-feed__note {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+
+/* ============================================================
    EMPTY / LOADING STATE
    Never an invented number, never a broken grid — a stated
    state instead.
