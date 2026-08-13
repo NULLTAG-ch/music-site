@@ -33,7 +33,7 @@
   "sameAs": [
     "https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV",
     "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431",
-    "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q",
+    "https://www.youtube.com/@realnulltag",
     "https://soundcloud.com/nulltag",
     "https://www.instagram.com/nulltag.ch/",
     "https://groover.co/de/band/profile/fd5c6b.nulltag/"
@@ -42,7 +42,10 @@
 </script>
 
 <link rel="stylesheet" href="fonts/fonts.css" />
-<link rel="stylesheet" href="colors_and_type.css?v=2" />
+<link rel="stylesheet" href="colors_and_type.css?v=3" />
+<!-- Shared NULLTAG web layer — edited in nulltag-cd, vendored here. -->
+<link rel="stylesheet" href="web.css?v=1" />
+<script src="web.js?v=1" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js" defer></script>
 <style>
@@ -70,14 +73,31 @@
   /* ===== hero ===== */
   .hero { position: relative; min-height: 88vh; overflow: hidden; border-bottom: 1px solid var(--border); background: radial-gradient(ellipse at 78% 50%, #1a0e02 0%, #050505 55%, #020202 100%); }
   .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; opacity: 0.95; pointer-events: none; z-index: 0; }
-  .hero__vignette { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(10,10,10,0.7) 0%, transparent 18%, transparent 75%, rgba(10,10,10,0.95) 100%), linear-gradient(90deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 35%, transparent 65%); }
+  .hero__vignette { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(10,10,10,0.7) 0%, transparent 18%, transparent 75%, rgba(10,10,10,0.95) 100%), linear-gradient(90deg, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.78) 38%, rgba(10,10,10,0.34) 58%, transparent 78%); }
+  /* The copy column runs to roughly 52% of the viewport, so the scrim has to
+     hold that far — the hero plate's laser crosses exactly there and was
+     cutting through the paragraph. Past 58% it clears, and the beam stays the
+     brightest thing on the right where nothing is set.
+     Below 900px there is no "right where nothing is set": the copy runs the
+     full width and the beam runs straight through it, so the scrim goes
+     vertical and simply damps the whole plate. */
+  @media (max-width: 900px) {
+    .hero__vignette { background: linear-gradient(180deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.5) 26%, rgba(10,10,10,0.72) 62%, rgba(10,10,10,0.95) 100%); }
+  }
   .hero__grid { position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%); }
   .hero__inner { position: relative; z-index: 2; min-height: 88vh; display: grid; grid-template-rows: 1fr auto auto; padding: 96px 0 var(--s-8); gap: var(--s-6); }
   .hero__top { display: flex; justify-content: space-between; align-items: flex-start; color: var(--muted); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; }
   .hero__top .corners { display: flex; gap: var(--s-6); }
   .hero__title { font-family: var(--font-display); font-size: clamp(64px, 14vw, 220px); line-height: 0.82; letter-spacing: -0.01em; color: var(--bone); margin: 0; text-shadow: 0 0 80px rgba(0,0,0,0.5); }
-  .hero__title em { font-style: normal; position: relative; }
-  .hero__title em::after { content: ""; position: absolute; left: 0; right: 25%; bottom: -0.14em; height: 4px; background: var(--tiefrot); }
+  /* The accent rule under "TAG" is anchored to an inline-BLOCK em on purpose.
+     As a plain inline box the em inherits the h1's 0.82 line-height, so its
+     box overflows ~37px past the title at desktop size and `bottom: -0.14em`
+     landed the rule in the middle of the paragraph below, reading as a
+     strikethrough. An inline-block's bottom edge sits on the baseline, which
+     is where a rule under the word belongs at every width.
+     Height in em too, so it does not thin out to a hair at 220px. */
+  .hero__title em { font-style: normal; position: relative; display: inline-block; vertical-align: baseline; }
+  .hero__title em::after { content: ""; position: absolute; left: 0; right: 25%; bottom: -0.06em; height: 0.035em; min-height: 3px; background: var(--tiefrot); }
   .hero__sub { max-width: 620px; color: var(--bone-dim); font-family: var(--font-grotesk); font-size: 17px; line-height: 1.55; margin: var(--s-5) 0 0; }
   .hero__sub b { color: var(--bone); font-weight: 600; }
   .hero__cta { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-7); }
@@ -174,10 +194,34 @@
   @media (max-width: 720px){ .cat--rel { grid-template-columns: 76px minmax(0,1fr); gap: var(--s-4); padding: var(--s-4); } .cat--rel .cat__tracks { columns: 1; font-size: 10.5px; line-height: 1.8; } }
 
   /* ===== schienen ===== */
+  /* §04 ground — a screen-wall plate behind the split view, kept far enough
+     down in the mix that it reads as atmosphere, not as content. */
+  .s--video { position: relative; overflow: hidden; }
+  .s--video::before { content: ""; position: absolute; inset: 0; z-index: 0; background-image: url("assets/video-poster.jpg"); background-size: cover; background-position: center; opacity: 0.14; pointer-events: none; mask-image: radial-gradient(ellipse at 50% 40%, #000 0%, transparent 72%); -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 0%, transparent 72%); }
+  .s--video > .container { position: relative; z-index: 1; }
+
   .rails { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--s-3); }
   .rail { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: var(--s-7) var(--s-6); position: relative; overflow: hidden; min-height: 300px; display: flex; flex-direction: column; transition: border-color var(--t-base) var(--ease); }
   .rail:hover { border-color: var(--border-warm); }
-  .rail::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, var(--glow, transparent) 0%, transparent 55%); opacity: 0.15; pointer-events: none; }
+  .rail::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, var(--glow, transparent) 0%, transparent 55%); opacity: 0.15; pointer-events: none; z-index: 1; }
+  /* Rail plate — the photographic signature of each Schiene, sunk into the
+     void so the copy stays the loudest thing in the card. Painted as a
+     background, not an <img>: a plate that has not been fetched yet simply
+     does not paint, instead of leaving a broken-image box. */
+  /* The plate is masked to peak in the card's empty middle-bottom and fade out
+     before both the head and the foot rule — those carry mono meta at 10–11px,
+     which is the first thing a bright ground makes unreadable.
+     --plate-dim damps the plates that are simply brighter photographs; the
+     dome starburst and the bone card would otherwise out-shout their copy. */
+  .rail::after { content: ""; position: absolute; inset: 0; background-image: var(--plate, none); background-size: cover; background-position: center; opacity: calc(0.22 * var(--plate-dim, 1)); pointer-events: none; z-index: 0; mask-image: linear-gradient(to bottom, transparent 24%, #000 62%, rgba(0,0,0,0.45) 100%); -webkit-mask-image: linear-gradient(to bottom, transparent 24%, #000 62%, rgba(0,0,0,0.45) 100%); transition: opacity var(--t-slow) var(--ease); }
+  .rail:hover::after { opacity: calc(0.32 * var(--plate-dim, 1)); }
+  .rail > * { position: relative; z-index: 2; }
+  .rail[data-rail="LJ"] { --plate: url("covers/rail_lichtjahr.jpg"); }
+  .rail[data-rail="CT"] { --plate: url("covers/rail_cinetekk.jpg"); }
+  .rail[data-rail="DM"] { --plate: url("covers/rail_dome.jpg"); --plate-dim: 0.5; }
+  .rail[data-rail="ND"] { --plate: url("covers/rail_distribution.jpg"); --plate-dim: 0.45; }
+  .rail[data-rail="ST"] { --plate: url("covers/rail_standalone.jpg"); }
+  @media (prefers-reduced-motion: reduce) { .rail::after { transition: none; } }
   .rail[data-rail="LJ"] { --glow: var(--cosmic-glow); }
   .rail[data-rail="CT"] { --glow: var(--nachtblau-glow); }
   .rail[data-rail="DM"] { --glow: var(--glut-glow); }
@@ -532,6 +576,7 @@
       <a href="#latest">Latest</a>
       <a href="#rollout">Rollout</a>
       <a href="#catalog">Catalog</a>
+      <a href="#video">Video</a>
       <a href="#schienen">Schienen</a>
       <a href="#lineage">Lineage</a>
       <a href="#facts">Facts</a>
@@ -598,7 +643,7 @@
           <a href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span>SoundCloud</span><span>↗</span></a>
           <a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><span>Spotify</span><span>↗</span></a>
           <a href="https://music.apple.com/ch/artist/nulltag" target="_blank" rel="noopener"><span>Apple Music</span><span>↗</span></a>
-          <a href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" target="_blank" rel="noopener"><span>YouTube</span><span>↗</span></a>
+          <a href="https://www.youtube.com/@realnulltag" target="_blank" rel="noopener"><span>YouTube</span><span>↗</span></a>
         </div>
         <div class="latest__player">
           <iframe id="sc-widget" allow="autoplay; encrypted-media" loading="lazy" scrolling="no" frameborder="0"
@@ -655,7 +700,7 @@
         <a href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><span>SoundCloud</span><span class="s">PRIMARY ↗</span></a>
         <a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><span>Spotify</span><span>↗</span></a>
         <a href="https://music.apple.com/ch/artist/nulltag" target="_blank" rel="noopener"><span>Apple Music</span><span>↗</span></a>
-        <a href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" target="_blank" rel="noopener"><span>YouTube</span><span>↗</span></a>
+        <a href="https://www.youtube.com/@realnulltag" target="_blank" rel="noopener"><span>YouTube</span><span>↗</span></a>
         <a href="https://www.deezer.com/artist/388775221" target="_blank" rel="noopener"><span>Deezer</span><span>↗</span></a>
       </div>
       <div style="margin-top:var(--s-4); display:flex; gap:14px; flex-wrap:wrap;">
@@ -686,11 +731,73 @@
   </div>
 </section>
 
-<section class="s" id="schienen" data-screen-label="05 Schienen">
+<!-- ===== §04 · VIDEO ==========================================
+     Split view: the newest upload plays on the stage, every other
+     upload waits in the index beside it. Fed from releases.json
+     (`videos`, built from the channel RSS by the feed Action).
+
+     The markup below is the no-JS / feed-down fallback, and it names
+     NO individual video on purpose. Baking in a list would mean
+     asserting which videos are on @realnulltag from a page that
+     cannot know — the last list we had was read off a different
+     channel. A link to the channel is true whatever it contains, and
+     stays true for visitors without JS, whom an emptied list would
+     leave with nothing at all.
+     Nothing is requested from youtube.com until play is pressed.
+     ============================================================ -->
+<section class="s s--video" id="video" data-screen-label="05 Video">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§04 · RELEASE RAILS · 05</div>
+        <div class="s__num">§04 · VIDEO · YOUTUBE · AUTO</div>
+        <h2 class="s__title">Video</h2>
+      </div>
+      <div class="s__meta">@REALNULLTAG<br/>KLICK LÄDT YOUTUBE</div>
+    </div>
+
+    <div class="nt-split">
+      <div class="nt-split__stage">
+        <a class="nt-vid" id="vid-stage" href="https://www.youtube.com/@realnulltag"
+           target="_blank" rel="noopener"
+           data-poster="assets/video-poster.jpg"
+           aria-label="Kanal @realnulltag auf YouTube öffnen">
+          <span class="nt-vid__stamp">§ KANAL</span>
+          <img src="assets/video-poster.jpg" alt="" loading="lazy" decoding="async" />
+          <span class="nt-vid__veil"></span>
+          <span class="nt-vid__play"><span class="nt-vid__disc" aria-hidden="true">▶</span></span>
+        </a>
+        <div class="nt-vid__cap">
+          <h3 class="nt-vid__title" id="vid-title">NULLTAG auf YouTube</h3>
+          <div class="nt-vid__meta">
+            <span id="vid-meta">@realnulltag</span>
+            <a id="vid-link" href="https://www.youtube.com/@realnulltag"
+               target="_blank" rel="noopener" style="margin-left:12px">Auf YouTube ↗</a>
+          </div>
+        </div>
+        <p class="muted-copy" style="margin-top:var(--s-4); max-width:60ch">
+          Der Kanal <a href="https://www.youtube.com/@realnulltag" target="_blank" rel="noopener">@realnulltag</a>
+          ist die Videoseite des Labels — Visualizer, Stripped-Fassungen und
+          Videos zu Tracks, die es sonst nur als Audio gibt. Die Liste hier
+          aktualisiert sich mit jedem Upload von selbst.
+        </p>
+      </div>
+
+      <div class="nt-split__index" id="vid-index">
+        <div class="nt-split__indexhead"><span>Uploads</span><span>LIVE</span></div>
+        <div class="nt-empty">
+          Uploads werden direkt vom Kanal geladen<br/>
+          <a href="https://www.youtube.com/@realnulltag" target="_blank" rel="noopener">@realnulltag ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="s" id="schienen" data-screen-label="06 Schienen">
+  <div class="container">
+    <div class="s__head">
+      <div>
+        <div class="s__num">§05 · RELEASE RAILS · 05</div>
         <h2 class="s__title">Schienen</h2>
       </div>
       <div class="s__meta">FIVE WORLDS<br/>ONE WORDMARK</div>
@@ -735,11 +842,11 @@
   </div>
 </section>
 
-<section class="s" id="lineage" data-screen-label="06 Lineage">
+<section class="s" id="lineage" data-screen-label="07 Lineage">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§05 · LINEAGE · TECHNO / EDM</div>
+        <div class="s__num">§06 · LINEAGE · TECHNO / EDM</div>
         <h2 class="s__title">Family Tree</h2>
       </div>
       <div class="s__meta">ROOTS → NULLTAG<br/>INTERACTIVE</div>
@@ -754,11 +861,11 @@
   </div>
 </section>
 
-<section class="s" id="tools" data-screen-label="07 Tools">
+<section class="s" id="tools" data-screen-label="08 Tools">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§06 · TOOLS · <span class="tb-beta">● BETA</span></div>
+        <div class="s__num">§07 · TOOLS · <span class="tb-beta">● BETA</span></div>
         <h2 class="s__title">Tools</h2>
       </div>
       <div class="s__meta">SOUND · QR · KALENDER<br/>LIVE-DATEN</div>
@@ -844,11 +951,11 @@
   </div>
 </section>
 
-<section class="s" id="facts" data-screen-label="08 Facts">
+<section class="s" id="facts" data-screen-label="09 Facts">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§07 · FACTS · PHYSIK-VIDEO</div>
+        <div class="s__num">§08 · FACTS · PHYSIK-VIDEO</div>
         <h2 class="s__title">Die Physik<br/>hinter den Tracks</h2>
       </div>
       <div class="s__meta">LICHTJAHR VOL.2<br/>6 PHÄNOMENE</div>
@@ -872,11 +979,11 @@
   </div>
 </section>
 
-<section class="s" id="manifest" data-screen-label="09 Manifest">
+<section class="s" id="manifest" data-screen-label="10 Manifest">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§08 · MANIFEST · BILINGUAL</div>
+        <div class="s__num">§09 · MANIFEST · BILINGUAL</div>
         <h2 class="s__title">Manifest</h2>
       </div>
       <div class="s__meta">DE · EN<br/>VERBATIM</div>
@@ -905,11 +1012,11 @@
   </div>
 </section>
 
-<section class="s" id="listen" data-screen-label="10 Listen">
+<section class="s" id="listen" data-screen-label="11 Listen">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§09 · LISTEN · CHANNELS</div>
+        <div class="s__num">§10 · LISTEN · CHANNELS</div>
         <h2 class="s__title">Listen</h2>
       </div>
       <div class="s__meta">SIX PLATFORMS<br/>SAME STAMP</div>
@@ -918,7 +1025,7 @@
       <a class="ch" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener"><div class="ch__name">— PRIMARY</div><h4 class="ch__handle">SoundCloud</h4><div class="ch__meta">/nulltag</div></a>
       <a class="ch" href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" target="_blank" rel="noopener"><div class="ch__name">STREAMING</div><h4 class="ch__handle">Spotify</h4><div class="ch__meta">Artist</div></a>
       <a class="ch" href="https://music.apple.com/ch/artist/nulltag" target="_blank" rel="noopener"><div class="ch__name">STREAMING</div><h4 class="ch__handle">Apple</h4><div class="ch__meta">Music</div></a>
-      <a class="ch" href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" target="_blank" rel="noopener"><div class="ch__name">VIDEO</div><h4 class="ch__handle">YouTube</h4><div class="ch__meta">Channel</div></a>
+      <a class="ch" href="https://www.youtube.com/@realnulltag" target="_blank" rel="noopener"><div class="ch__name">VIDEO</div><h4 class="ch__handle">YouTube</h4><div class="ch__meta">Channel</div></a>
       <a class="ch" href="https://www.instagram.com/nulltag.ch/" target="_blank" rel="noopener"><div class="ch__name">SOCIAL</div><h4 class="ch__handle">Instagram</h4><div class="ch__meta">@nulltag.ch</div></a>
       <a class="ch" href="https://www.deezer.com/artist/388775221" target="_blank" rel="noopener"><div class="ch__name">STREAMING</div><h4 class="ch__handle">Deezer</h4><div class="ch__meta">Artist</div></a>
     </div>
@@ -933,7 +1040,7 @@
         <p>Swiss independent electronic music label. Cinematic techno · cosmic frenchcore · German underground from Buchs SG.</p>
       </div>
       <div class="foot__col"><h5>Navigate</h5><ul><li><a href="#latest">Latest</a></li><li><a href="#catalog">Catalog</a></li><li><a href="#schienen">Schienen</a></li><li><a href="#manifest">Manifest</a></li></ul></div>
-      <div class="foot__col"><h5>Listen</h5><ul><li><a href="https://soundcloud.com/nulltag">SoundCloud</a></li><li><a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV">Spotify</a></li><li><a href="https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q">YouTube</a></li></ul></div>
+      <div class="foot__col"><h5>Listen</h5><ul><li><a href="https://soundcloud.com/nulltag">SoundCloud</a></li><li><a href="https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV">Spotify</a></li><li><a href="https://www.youtube.com/@realnulltag">YouTube</a></li></ul></div>
       <div class="foot__col"><h5>Connect</h5><ul><li><a href="https://www.instagram.com/nulltag.ch/">Instagram</a></li><li><a href="mailto:ivan@nulltag.ch">ivan@nulltag.ch</a></li></ul></div>
     </div>
     <div class="foot__bottom">
@@ -1071,7 +1178,31 @@
   // When you curate a new release into CATALOG, bump CATALOG_AS_OF.
   var CATALOG_AS_OF = "2026-07-04";
 
+  // ── §04 video split view ← feed.videos (channel RSS) ──────────────
+  // Runs before the album guard below: the video section must still fill
+  // itself on a day when Deezer is down but the channel is not.
+  function hydrateVideos(feed){
+    var vids = (feed && feed.videos) || [];
+    vids = vids.filter(function(v){ return v && window.NT && NT.isVideoId(v.videoId); });
+    if (!vids.length || !window.NT) return;
+    NT.splitView({
+      stage: "#vid-stage", index: "#vid-index",
+      title: "#vid-title", meta: "#vid-meta", link: "#vid-link",
+      indexLabel: "Uploads",
+      emptyText: "Noch keine Uploads",
+      items: vids.map(function(v, i){
+        return {
+          id: v.videoId,
+          title: v.text || "",
+          meta: "YouTube · " + (v.date || ""),
+          stamp: i === 0 ? "§ NEUESTER UPLOAD" : "§ " + (i < 9 ? "0" : "") + (i + 1)
+        };
+      })
+    });
+  }
+
   function hydrateFromFeed(feed){
+    hydrateVideos(feed);
     if (!feed || !feed.albums || !feed.albums.length) return;
     var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){
       return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
@@ -1172,7 +1303,7 @@
   // ===== Tools Beta — shared helpers =====
   function tbToast(msg){ var t=document.getElementById('tb-toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(function(){t.classList.remove('show');},1800); }
   function tbTrack(ev,label){ try{ var rid=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2); var i=new Image(1,1); i.referrerPolicy='no-referrer-when-downgrade'; i.src='https://deepaudit.ch/qt?tid=xs7n6u&rid='+encodeURIComponent(rid)+'&e='+encodeURIComponent(ev)+'&l='+encodeURIComponent(label||''); }catch(e){} }
-  var TB_ART = { spotify:"https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV", apple:"https://music.apple.com/ch/artist/nulltag", youtube:"https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" };
+  var TB_ART = { spotify:"https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV", apple:"https://music.apple.com/ch/artist/nulltag", youtube:"https://www.youtube.com/@realnulltag" };
 
   // ----- Countdown: .ics + share -----
   function tbDtStamp(ms){ return new Date(ms).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,''); }

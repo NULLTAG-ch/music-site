@@ -1,0 +1,96 @@
+name: Fetch brand assets
+
+# Materialises the images listed in tools/brand-assets.json into the repo.
+#
+# Why a workflow and not a commit from the authoring machine: the sources sit
+# on hosts an agent session cannot reach, while a runner has open network. The
+# manifest is therefore the durable record — the images are just its output.
+#
+# This workflow never deploys. It only writes files and commits them; the
+# resulting commit carries [skip ci] so it does not chain into another run.
+# deploy.yml owns push-to-main deploys and feed.yml owns the scheduled ones,
+# so nothing here touches the shared `pages` concurrency group.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "tools/brand-assets.json"
+      - ".github/workflows/brand-assets.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: brand-assets-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ImageMagick ships on ubuntu-latest; `magick` is v7, `convert` is v6.
+      - name: Resolve ImageMagick
+        id: im
+        run: |
+          if command -v magick >/dev/null; then echo "bin=magick" >> "$GITHUB_OUTPUT"
+          elif command -v convert >/dev/null; then echo "bin=convert" >> "$GITHUB_OUTPUT"
+          else sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick && echo "bin=convert" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fetch and convert
+        env:
+          IM: ${{ steps.im.outputs.bin }}
+        run: |
+          set -uo pipefail
+          failed=0
+          # `resize …^` fills the box (may overflow), then gravity+extent crops
+          # back to it — the standard "cover" crop, centred.
+          while IFS=$'\t' read -r out src resize extent quality; do
+            [ -z "${out:-}" ] && continue
+            echo "── $out"
+            mkdir -p "$(dirname "$out")"
+            if ! curl -fsSL --max-time 120 --retry 3 --retry-delay 2 -o /tmp/src.bin "$src"; then
+              echo "::error title=Download failed::$out ← $src"
+              failed=1
+              continue
+            fi
+            if ! "$IM" /tmp/src.bin \
+                  -auto-orient \
+                  -resize "$resize" -gravity center -extent "$extent" \
+                  -strip -interlace Plane -quality "$quality" \
+                  "$out"; then
+              echo "::error title=Convert failed::$out"
+              failed=1
+              continue
+            fi
+            echo "   $(identify -format '%wx%h %[size]' "$out" 2>/dev/null || stat -c%s "$out")"
+          done < <(jq -r '.assets[] | [.out, .src, .resize, .extent, (.quality|tostring)] | @tsv' tools/brand-assets.json)
+          echo "FAILED=$failed" >> "$GITHUB_ENV"
+
+      - name: Commit changed assets
+        run: |
+          # `git status --porcelain`, not `git diff --quiet`: the first run of a
+          # new manifest entry produces an UNTRACKED file, which git diff does
+          # not see at all — the commit would be skipped and the run would still
+          # report success with nothing in the repo.
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No asset changes."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore: refresh brand assets from manifest [skip ci]"
+            git push
+          fi
+
+      # Fail the run AFTER committing whatever did succeed, so one dead source
+      # never costs the assets that fetched fine.
+      - name: Report source failures
+        if: env.FAILED == '1'
+        run: |
+          echo "At least one asset in tools/brand-assets.json could not be fetched or converted."
+          exit 1

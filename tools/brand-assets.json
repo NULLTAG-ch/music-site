@@ -1,0 +1,83 @@
+{
+  "_comment": [
+    "Brand-asset manifest. Each entry is a source image somewhere on the open",
+    "web plus the file it should become in this repo, at the size and crop the",
+    "site actually uses. .github/workflows/brand-assets.yml fetches, converts",
+    "and commits them — the conversion happens on a runner because the sources",
+    "live on hosts the authoring session cannot reach.",
+    "",
+    "Re-running is safe: a byte-identical result produces no commit. To swap an",
+    "asset, change its `src` and push; to stop managing one, delete its entry",
+    "(the committed file stays).",
+    "",
+    "Sources here are Higgsfield generations (Cinema Studio 2.5 / Nano Banana 2),",
+    "prompted from the NULLTAG palette: void #0a0a0a, bone #e8e3da, tiefrot",
+    "#ff2a55, one red mark per surface."
+  ],
+  "assets": [
+    {
+      "out": "assets/logo-poster.jpg",
+      "note": "Hero plate — dark hall, one red laser through haze",
+      "src": "https://d8j0ntlcm91z4.cloudfront.net/user_3EiC0aoxhHycf13LKgNjWmwzNul/hf_20260813_191727_6f40c732-b3f1-49f2-b394-9dda467661a5.png",
+      "resize": "2400x1030^",
+      "extent": "2400x1030",
+      "quality": 80
+    },
+    {
+      "out": "assets/og-image.jpg",
+      "note": "Open-Graph card — 1200x630 is the size every platform crops to",
+      "src": "https://d8j0ntlcm91z4.cloudfront.net/user_3EiC0aoxhHycf13LKgNjWmwzNul/hf_20260813_191727_82da6aa1-2f2c-4f30-811a-52712116a824.png",
+      "resize": "1200x630^",
+      "extent": "1200x630",
+      "quality": 84
+    },
+    {
+      "out": "assets/video-poster.jpg",
+      "note": "§04 video stage — fallback poster when an upload has no thumbnail",
+      "src": "https://d8j0ntlcm91z4.cloudfront.net/user_3EiC0aoxhHycf13LKgNjWmwzNul/hf_20260813_191727_f9326cff-d5cd-4177-be45-68d0ec913b0a.png",
+      "resize": "1600x900^",
+      "extent": "1600x900",
+      "quality": 80
+    },
+    {
+      "out": "covers/rail_lichtjahr.jpg",
+      "note": "Schiene plate — cosmic magenta nebula",
+      "src": "https://d8j0ntlcm91z4.cloudfront.net/user_3EiC0aoxhHycf13LKgNjWmwzNul/hf_20260813_191727_9e5fb95d-55e7-4cae-a564-ebeb188fda7f.png",
+      "resize": "900x600^",
+      "extent": "900x600",
+      "quality": 78
+    },
+    {
+      "out": "covers/rail_cinetekk.jpg",
+      "note": "Schiene plate — one beam, one red dot, black void",
+      "src": "https://d8j0ntlcm91z4.cloudfront.net/user_3EiC0aoxhHycf13LKgNjWmwzNul/hf_20260813_191727_843c1174-1056-44a2-b7fc-9ae92b95f11a.png",
+      "resize": "900x600^",
+      "extent": "900x600",
+      "quality": 78
+    },
+    {
+      "out": "covers/rail_dome.jpg",
+      "note": "Schiene plate — dome ribs against sodium glow",
+      "src": "https://d8j0ntlcm91z4.cloudfront.net/user_3EiC0aoxhHycf13LKgNjWmwzNul/hf_20260813_191727_bd1a1b10-61ab-4b85-ac16-ab9c22f135f3.png",
+      "resize": "900x600^",
+      "extent": "900x600",
+      "quality": 78
+    },
+    {
+      "out": "covers/rail_distribution.jpg",
+      "note": "Schiene plate — bone parchment index card",
+      "src": "https://d8j0ntlcm91z4.cloudfront.net/user_3EiC0aoxhHycf13LKgNjWmwzNul/hf_20260813_191727_6fa68347-b5b1-4593-96f3-c4d8393c8100.png",
+      "resize": "900x600^",
+      "extent": "900x600",
+      "quality": 78
+    },
+    {
+      "out": "covers/rail_standalone.jpg",
+      "note": "Schiene plate — cold cyan through ice",
+      "src": "https://d8j0ntlcm91z4.cloudfront.net/user_3EiC0aoxhHycf13LKgNjWmwzNul/hf_20260813_191727_35cd877f-1f71-4699-ae5d-5c5fbc515ade.png",
+      "resize": "900x600^",
+      "extent": "900x600",
+      "quality": 78
+    }
+  ]
+}

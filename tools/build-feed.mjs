@@ -22,7 +22,11 @@ const OUT = new URL("../releases.json", import.meta.url);
 const cfgSrc = readFileSync(new URL("../config.js", import.meta.url), "utf8");
 const ARTIST = (cfgSrc.match(/deezerArtistId:\s*"(\d+)"/) || [])[1] || "";
 const LIMIT = Number((cfgSrc.match(/limit:\s*(\d+)/) || [])[1] || 24);
-const YT = (cfgSrc.match(/youtubeChannelId:\s*"([\w-]+)"/) || [])[1] || "";
+// Der Kanal wird per HANDLE adressiert (config.js: youtubeHandle). Ein
+// hart eingetragenes youtubeChannelId wird weiterhin akzeptiert, damit ein
+// Rollback ohne Code-Änderung möglich bleibt.
+const YT_HANDLE = (cfgSrc.match(/youtubeHandle:\s*"@?([\w.-]+)"/) || [])[1] || "";
+const YT_FIXED = (cfgSrc.match(/youtubeChannelId:\s*"(UC[\w-]{22})"/) || [])[1] || "";
 const SC_USER = (cfgSrc.match(/soundcloudUserId:\s*"(\d+)"/) || [])[1] || "";
 const SP_ARTIST = (cfgSrc.match(/spotifyArtistId:\s*"([A-Za-z0-9]+)"/) || [])[1] || "";
 
@@ -75,22 +79,84 @@ async function source(platform, fn) {
   return items;
 }
 
-// YouTube uploads (RSS, kein Key)
-const ytUpdates = await source("YouTube", async () => {
-  if (!YT) throw new Error("no youtubeChannelId");
-  const res = await fetch("https://www.youtube.com/feeds/videos.xml?channel_id=" + YT);
+// ---- YouTube ------------------------------------------------------------
+// Das RSS-Endpoint kennt nur channel_id, die Konfiguration aber nur den
+// Handle. Der Handle wird darum einmal aufgelöst und in releases.json
+// mitgeschrieben; solange er sich nicht ändert, kostet das keinen Request.
+const decodeXml = (s) => String(s)
+  .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+  .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&");
+
+// Wie source(), aber mit der VOLLEN Videoliste als Carry-forward-Quelle:
+// `updates` ist bereits dedupliziert, taugt also nicht als Rückfallebene für
+// den Video-Split-View.
+async function ytSource(fn) {
+  let items = null;
+  try { items = await fn(); }
+  catch (e) { console.warn("YouTube failed: " + String(e)); }
+  if (!items || items.length === 0) {
+    const carried = (prev && Array.isArray(prev.videos) ? prev.videos : [])
+      .filter((v) => v && v.videoId);
+    if (carried.length) {
+      console.warn(`YouTube: carrying over ${carried.length} previous video(s).`);
+      return carried;
+    }
+    return [];
+  }
+  console.log(`YouTube: ${items.length} video(s).`);
+  return items;
+}
+
+async function resolveChannelId() {
+  if (YT_FIXED) return YT_FIXED;
+  if (!YT_HANDLE) throw new Error("no youtubeHandle");
+  const cached = prev && prev.youtube;
+  if (cached && cached.handle === YT_HANDLE && /^UC[\w-]{22}$/.test(cached.channelId || "")) {
+    return cached.channelId;
+  }
+  const res = await fetch("https://www.youtube.com/@" + YT_HANDLE, {
+    headers: { "User-Agent": "Mozilla/5.0 (compatible; nulltag-feed/1.0)" }
+  });
+  if (!res.ok) throw new Error("YT handle page HTTP " + res.status);
+  const html = await res.text();
+  // Beide Formen, die YouTube ausliefert — die kanonische URL zuerst.
+  const id = (html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/(UC[\w-]{22})"/) || [])[1]
+          || (html.match(/"(?:externalId|channelId)":"(UC[\w-]{22})"/) || [])[1] || "";
+  if (!id) throw new Error("could not resolve @" + YT_HANDLE + " to a channel id");
+  console.log(`YouTube: resolved @${YT_HANDLE} → ${id}`);
+  return id;
+}
+
+// Alle Uploads des Kanals, ungefiltert. Diese Liste speist den Video-Split-
+// View; `updates` bekommt weiter unten nur die neuesten davon und wird gegen
+// die Audio-Quellen dedupliziert.
+let ytChannelId = "";
+const ytVideos = await ytSource(async () => {
+  ytChannelId = await resolveChannelId();
+  const res = await fetch("https://www.youtube.com/feeds/videos.xml?channel_id=" + ytChannelId);
   if (!res.ok) throw new Error("YT RSS HTTP " + res.status);
   const xml = await res.text();
   const out = [];
-  for (const e of xml.split("<entry>").slice(1, 7)) {
+  for (const e of xml.split("<entry>").slice(1)) {
+    const id = (e.match(/<yt:videoId>([\w-]{11})<\/yt:videoId>/) || [])[1] || "";
     const title = (e.match(/<title>([^<]*)<\/title>/) || [])[1] || "";
-    const link = (e.match(/<link rel="alternate" href="([^"]+)"/) || [])[1] || "";
     const pub = (e.match(/<published>([^<]+)<\/published>/) || [])[1] || "";
-    const text = title.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
-    if (text && link) out.push({ date: pub.slice(0, 10), platform: "YouTube", text, url: link });
+    const text = decodeXml(title);
+    if (!id || !text) continue;
+    out.push({
+      date: pub.slice(0, 10), platform: "YouTube", text,
+      url: "https://www.youtube.com/watch?v=" + id, videoId: id
+    });
   }
-  return out;
+  return out.slice(0, 24);
 });
+
+// Wenn die Auflösung scheiterte und aus dem vorigen Stand getragen wurde,
+// steht die Kanal-ID noch dort — sonst bliebe sie leer und der nächste Lauf
+// müsste erneut auflösen.
+if (!ytChannelId && prev && prev.youtube) ytChannelId = prev.youtube.channelId || "";
+
+const ytUpdates = ytVideos.slice(0, 6);
 
 // SoundCloud uploads (OAuth client_credentials — stateless app token)
 const scUpdates = await source("SoundCloud", async () => {
@@ -163,7 +229,7 @@ const updates = dedupeUpdates([ytUpdates, scUpdates, spUpdates], albMeta.map((a)
 // Nur Felder aus /artist/{id}/albums (KEIN nb_tracks — das gibt's nur im
 // vollen Album-Objekt) + ohne generated/Preview-Tokens. Reihenfolge-
 // unabhängig, weil Deezer gleich-datierte Alben mal so, mal so liefert.
-function fingerprint(metaList, ups) {
+function fingerprint(metaList, ups, vids) {
   const norm = (v) => String(v == null ? "" : v);
   const a = metaList
     .map((x) => [norm(x.id), norm(x.title), norm(x.release_date), norm(x.record_type)])
@@ -171,10 +237,16 @@ function fingerprint(metaList, ups) {
   const u = ups
     .map((x) => [norm(x.platform), norm(x.text), norm(x.url), norm(x.date), norm(x.artwork)])
     .sort((p, q) => (p[2] + p[1]).localeCompare(q[2] + q[1]));
-  return JSON.stringify({ a, u });
+  // Ein neues Video ändert `updates` nicht zwingend (Dedup gegen die
+  // Audio-Quellen), muss den Feed aber trotzdem neu bauen — sonst bliebe der
+  // Split-View auf dem alten Stand stehen.
+  const v = (vids || [])
+    .map((x) => [norm(x.videoId), norm(x.text), norm(x.date)])
+    .sort((p, q) => p[0].localeCompare(q[0]));
+  return JSON.stringify({ a, u, v });
 }
-const freshFp = fingerprint(albMeta, updates);
-const prevFp = prev ? fingerprint(prev.albums || [], prev.updates || []) : null;
+const freshFp = fingerprint(albMeta, updates, ytVideos);
+const prevFp = prev ? fingerprint(prev.albums || [], prev.updates || [], prev.videos || []) : null;
 const prevAge = prev && prev.generated ? Date.now() - Date.parse(prev.generated) : Infinity;
 
 // Short-Circuit: nichts Bedeutsames geändert + Previews frisch → nichts tun.
@@ -216,7 +288,12 @@ const out = {
   artist: ARTIST,
   count: albums.length,
   albums,
-  updates
+  updates,
+  // Kanal-Identität mitschreiben: der Handle ist die Konfiguration, die
+  // aufgelöste ID der Cache — und die Seite kann daraus Kanal-Links bauen,
+  // ohne selbst auflösen zu müssen.
+  youtube: { handle: YT_HANDLE ? "@" + YT_HANDLE : "", channelId: ytChannelId },
+  videos: ytVideos
 };
 writeFileSync(OUT, JSON.stringify(out, null, 2) + "\n");
 console.log(`Wrote releases.json — ${albums.length} releases, ${updates.length} updates.`);

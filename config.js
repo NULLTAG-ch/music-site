@@ -53,7 +53,11 @@ window.CONFIG = {
     spotifyEmbed: "https://open.spotify.com/embed/artist/5V17xFUuN6H4jqZNChnrdV?utm_source=generator",
     source: "deezer",
     deezerArtistId: "388775221",
-    youtubeChannelId: "UCWl0DW85arbD6uHnD29HA_Q",
+    // The channel is addressed by HANDLE — that is the identity that survives
+    // a channel move. tools/build-feed.mjs resolves the handle to a UC… id at
+    // build time (YouTube's RSS endpoint only speaks channel ids) and caches
+    // the result in releases.json, so a handle change needs one edit here.
+    youtubeHandle: "@realnulltag",
     soundcloudUserId: "1464141647",
     spotifyArtistId: "5V17xFUuN6H4jqZNChnrdV",
     limit: 24
@@ -116,15 +120,17 @@ window.CONFIG = {
     { label: "SoundCloud",    url: "https://soundcloud.com/nulltag" },
     { label: "Apple Music",   url: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" },
     { label: "Spotify",       url: "https://open.spotify.com/artist/5V17xFUuN6H4jqZNChnrdV" },
-    { label: "YouTube Music", url: "https://music.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" },
-    { label: "YouTube",       url: "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" },
+    // No YouTube Music entry: music.youtube.com is addressed by channel id,
+    // not by handle, and the id for @realnulltag is only known after the feed
+    // Action resolves it. A link that certainly works beats one that might.
+    { label: "YouTube",       url: "https://www.youtube.com/@realnulltag" },
     { label: "Deezer",        url: "https://www.deezer.com/artist/388775221" }
   ],
 
   // Social profiles.
   social: [
     { label: "Instagram", url: "https://www.instagram.com/nulltag.ch/" },
-    { label: "YouTube",   url: "https://www.youtube.com/channel/UCWl0DW85arbD6uHnD29HA_Q" },
+    { label: "YouTube",   url: "https://www.youtube.com/@realnulltag" },
     { label: "Groover",   url: "https://groover.co/de/band/profile/fd5c6b.nulltag/?tab=1" }
   ],
 
