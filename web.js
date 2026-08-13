@@ -84,8 +84,14 @@
       '<span class="nt-vid__veil"></span>' +
       '<span class="nt-vid__play"><span class="nt-vid__disc" aria-hidden="true">▶</span></span>';
 
-    el.setAttribute("role", "button");
-    el.setAttribute("tabindex", "0");
+    // An <a> is already focusable and already activates on Enter, and it
+    // carries a real destination for middle-click, "open in new tab", and
+    // anyone browsing without JS. Adding role="button" would only take that
+    // away. Only a non-link needs to be told it behaves like a button.
+    if (el.tagName !== "A") {
+      el.setAttribute("role", "button");
+      el.setAttribute("tabindex", "0");
+    }
     el.setAttribute("aria-label", title + " — Video abspielen" + (isYt ? " (lädt YouTube)" : ""));
     el.dataset.ntFacade = "1";
     return true;
@@ -131,6 +137,13 @@
     if (video.stamp) el.setAttribute("data-stamp", video.stamp);
     if (video.poster) el.setAttribute("data-poster", video.poster);
     else el.removeAttribute("data-poster");
+    // If the stage is a link, keep its destination pointing at whatever it
+    // currently stands for — otherwise a middle-click would open the video
+    // the stage was showing when the page loaded.
+    if (el.tagName === "A") {
+      var href = YT_ID.test(video.id) ? NT.watchUrl(video.id) : (video.src || "");
+      if (href) el.setAttribute("href", href);
+    }
     delete el.dataset.ntPlaying;
     buildFacade(el);
   };

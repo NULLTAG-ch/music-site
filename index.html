@@ -734,9 +734,15 @@
 <!-- ===== §04 · VIDEO ==========================================
      Split view: the newest upload plays on the stage, every other
      upload waits in the index beside it. Fed from releases.json
-     (`videos`, built from the channel RSS by the feed Action); the
-     markup below is the no-JS / feed-down fallback and lists the
-     uploads that were known when this page was written.
+     (`videos`, built from the channel RSS by the feed Action).
+
+     The markup below is the no-JS / feed-down fallback, and it names
+     NO individual video on purpose. Baking in a list would mean
+     asserting which videos are on @realnulltag from a page that
+     cannot know — the last list we had was read off a different
+     channel. A link to the channel is true whatever it contains, and
+     stays true for visitors without JS, whom an emptied list would
+     leave with nothing at all.
      Nothing is requested from youtube.com until play is pressed.
      ============================================================ -->
 <section class="s s--video" id="video" data-screen-label="05 Video">
@@ -751,15 +757,20 @@
 
     <div class="nt-split">
       <div class="nt-split__stage">
-        <div class="nt-vid" id="vid-stage"
-             data-video="BEyrtynPkQ4"
-             data-title="Mein Name ist Hase (Stripped)"
-             data-stamp="§ NEUESTER UPLOAD"></div>
+        <a class="nt-vid" id="vid-stage" href="https://www.youtube.com/@realnulltag"
+           target="_blank" rel="noopener"
+           data-poster="assets/video-poster.jpg"
+           aria-label="Kanal @realnulltag auf YouTube öffnen">
+          <span class="nt-vid__stamp">§ KANAL</span>
+          <img src="assets/video-poster.jpg" alt="" loading="lazy" decoding="async" />
+          <span class="nt-vid__veil"></span>
+          <span class="nt-vid__play"><span class="nt-vid__disc" aria-hidden="true">▶</span></span>
+        </a>
         <div class="nt-vid__cap">
-          <h3 class="nt-vid__title" id="vid-title">Mein Name ist Hase (Stripped)</h3>
+          <h3 class="nt-vid__title" id="vid-title">NULLTAG auf YouTube</h3>
           <div class="nt-vid__meta">
-            <span id="vid-meta">YouTube · 2026-08-06</span>
-            <a id="vid-link" href="https://www.youtube.com/watch?v=BEyrtynPkQ4"
+            <span id="vid-meta">@realnulltag</span>
+            <a id="vid-link" href="https://www.youtube.com/@realnulltag"
                target="_blank" rel="noopener" style="margin-left:12px">Auf YouTube ↗</a>
           </div>
         </div>
@@ -772,19 +783,11 @@
       </div>
 
       <div class="nt-split__index" id="vid-index">
-        <div class="nt-split__indexhead"><span>Uploads</span><span>03</span></div>
-        <a class="nt-row" href="https://www.youtube.com/watch?v=BEyrtynPkQ4" target="_blank" rel="noopener" aria-current="true">
-          <img class="nt-row__thumb" src="https://i.ytimg.com/vi/BEyrtynPkQ4/mqdefault.jpg" alt="" loading="lazy" decoding="async" />
-          <span><span class="nt-row__title">Mein Name ist Hase (Stripped)</span><span class="nt-row__meta">YouTube · 2026-08-06</span></span>
-        </a>
-        <a class="nt-row" href="https://www.youtube.com/watch?v=9juD8g8kExI" target="_blank" rel="noopener">
-          <img class="nt-row__thumb" src="https://i.ytimg.com/vi/9juD8g8kExI/mqdefault.jpg" alt="" loading="lazy" decoding="async" />
-          <span><span class="nt-row__title">One Ball One World</span><span class="nt-row__meta">YouTube · 2026-08-06</span></span>
-        </a>
-        <a class="nt-row" href="https://www.youtube.com/watch?v=SEoyyre5Vck" target="_blank" rel="noopener">
-          <img class="nt-row__thumb" src="https://i.ytimg.com/vi/SEoyyre5Vck/mqdefault.jpg" alt="" loading="lazy" decoding="async" />
-          <span><span class="nt-row__title">One Man Owns the Sky</span><span class="nt-row__meta">YouTube · 2026-08-06</span></span>
-        </a>
+        <div class="nt-split__indexhead"><span>Uploads</span><span>LIVE</span></div>
+        <div class="nt-empty">
+          Uploads werden direkt vom Kanal geladen<br/>
+          <a href="https://www.youtube.com/@realnulltag" target="_blank" rel="noopener">@realnulltag ↗</a>
+        </div>
       </div>
     </div>
   </div>
