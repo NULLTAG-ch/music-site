@@ -73,14 +73,31 @@
   /* ===== hero ===== */
   .hero { position: relative; min-height: 88vh; overflow: hidden; border-bottom: 1px solid var(--border); background: radial-gradient(ellipse at 78% 50%, #1a0e02 0%, #050505 55%, #020202 100%); }
   .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; opacity: 0.95; pointer-events: none; z-index: 0; }
-  .hero__vignette { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(10,10,10,0.7) 0%, transparent 18%, transparent 75%, rgba(10,10,10,0.95) 100%), linear-gradient(90deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 35%, transparent 65%); }
+  .hero__vignette { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(10,10,10,0.7) 0%, transparent 18%, transparent 75%, rgba(10,10,10,0.95) 100%), linear-gradient(90deg, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.78) 38%, rgba(10,10,10,0.34) 58%, transparent 78%); }
+  /* The copy column runs to roughly 52% of the viewport, so the scrim has to
+     hold that far — the hero plate's laser crosses exactly there and was
+     cutting through the paragraph. Past 58% it clears, and the beam stays the
+     brightest thing on the right where nothing is set.
+     Below 900px there is no "right where nothing is set": the copy runs the
+     full width and the beam runs straight through it, so the scrim goes
+     vertical and simply damps the whole plate. */
+  @media (max-width: 900px) {
+    .hero__vignette { background: linear-gradient(180deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.5) 26%, rgba(10,10,10,0.72) 62%, rgba(10,10,10,0.95) 100%); }
+  }
   .hero__grid { position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%); }
   .hero__inner { position: relative; z-index: 2; min-height: 88vh; display: grid; grid-template-rows: 1fr auto auto; padding: 96px 0 var(--s-8); gap: var(--s-6); }
   .hero__top { display: flex; justify-content: space-between; align-items: flex-start; color: var(--muted); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; }
   .hero__top .corners { display: flex; gap: var(--s-6); }
   .hero__title { font-family: var(--font-display); font-size: clamp(64px, 14vw, 220px); line-height: 0.82; letter-spacing: -0.01em; color: var(--bone); margin: 0; text-shadow: 0 0 80px rgba(0,0,0,0.5); }
-  .hero__title em { font-style: normal; position: relative; }
-  .hero__title em::after { content: ""; position: absolute; left: 0; right: 25%; bottom: -0.14em; height: 4px; background: var(--tiefrot); }
+  /* The accent rule under "TAG" is anchored to an inline-BLOCK em on purpose.
+     As a plain inline box the em inherits the h1's 0.82 line-height, so its
+     box overflows ~37px past the title at desktop size and `bottom: -0.14em`
+     landed the rule in the middle of the paragraph below, reading as a
+     strikethrough. An inline-block's bottom edge sits on the baseline, which
+     is where a rule under the word belongs at every width.
+     Height in em too, so it does not thin out to a hair at 220px. */
+  .hero__title em { font-style: normal; position: relative; display: inline-block; vertical-align: baseline; }
+  .hero__title em::after { content: ""; position: absolute; left: 0; right: 25%; bottom: -0.06em; height: 0.035em; min-height: 3px; background: var(--tiefrot); }
   .hero__sub { max-width: 620px; color: var(--bone-dim); font-family: var(--font-grotesk); font-size: 17px; line-height: 1.55; margin: var(--s-5) 0 0; }
   .hero__sub b { color: var(--bone); font-weight: 600; }
   .hero__cta { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-7); }
@@ -191,13 +208,18 @@
      void so the copy stays the loudest thing in the card. Painted as a
      background, not an <img>: a plate that has not been fetched yet simply
      does not paint, instead of leaving a broken-image box. */
-  .rail::after { content: ""; position: absolute; inset: 0; background-image: var(--plate, none); background-size: cover; background-position: center; opacity: 0.3; pointer-events: none; z-index: 0; mask-image: linear-gradient(to top, transparent 12%, #000 78%); -webkit-mask-image: linear-gradient(to top, transparent 12%, #000 78%); transition: opacity var(--t-slow) var(--ease); }
-  .rail:hover::after { opacity: 0.42; }
+  /* The plate is masked to peak in the card's empty middle-bottom and fade out
+     before both the head and the foot rule — those carry mono meta at 10–11px,
+     which is the first thing a bright ground makes unreadable.
+     --plate-dim damps the plates that are simply brighter photographs; the
+     dome starburst and the bone card would otherwise out-shout their copy. */
+  .rail::after { content: ""; position: absolute; inset: 0; background-image: var(--plate, none); background-size: cover; background-position: center; opacity: calc(0.22 * var(--plate-dim, 1)); pointer-events: none; z-index: 0; mask-image: linear-gradient(to bottom, transparent 24%, #000 62%, rgba(0,0,0,0.45) 100%); -webkit-mask-image: linear-gradient(to bottom, transparent 24%, #000 62%, rgba(0,0,0,0.45) 100%); transition: opacity var(--t-slow) var(--ease); }
+  .rail:hover::after { opacity: calc(0.32 * var(--plate-dim, 1)); }
   .rail > * { position: relative; z-index: 2; }
   .rail[data-rail="LJ"] { --plate: url("covers/rail_lichtjahr.jpg"); }
   .rail[data-rail="CT"] { --plate: url("covers/rail_cinetekk.jpg"); }
-  .rail[data-rail="DM"] { --plate: url("covers/rail_dome.jpg"); }
-  .rail[data-rail="ND"] { --plate: url("covers/rail_distribution.jpg"); }
+  .rail[data-rail="DM"] { --plate: url("covers/rail_dome.jpg"); --plate-dim: 0.5; }
+  .rail[data-rail="ND"] { --plate: url("covers/rail_distribution.jpg"); --plate-dim: 0.45; }
   .rail[data-rail="ST"] { --plate: url("covers/rail_standalone.jpg"); }
   @media (prefers-reduced-motion: reduce) { .rail::after { transition: none; } }
   .rail[data-rail="LJ"] { --glow: var(--cosmic-glow); }
