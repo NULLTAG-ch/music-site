@@ -1,0 +1,468 @@
+/* ============================================================
+   NULLTAG · DESIGN SYSTEM · WEB LAYER
+   ------------------------------------------------------------
+   Shared component layer for every NULLTAG web surface
+   (music.nulltag.ch, learn.nulltag.ch, future properties).
+
+   Requires colors_and_type.css to be loaded FIRST — this file
+   only consumes tokens, it never defines colours or type sizes
+   of its own.
+
+       <link rel="stylesheet" href="colors_and_type.css">
+       <link rel="stylesheet" href="web.css">
+
+   Every class is namespaced `nt-` so this layer can be adopted
+   incrementally next to a site's existing page CSS without
+   collisions. Nothing here is site-specific.
+   ============================================================ */
+
+/* ---- shared primitives ------------------------------------ */
+
+.nt-container {
+  width: 100%;
+  max-width: var(--site-max);
+  margin: 0 auto;
+  padding: 0 var(--s-7);
+}
+@media (max-width: 720px) { .nt-container { padding: 0 var(--s-5); } }
+
+/* ============================================================
+   CROSS-PROPERTY BAR
+   The one element that must look identical on every NULLTAG
+   domain: wordmark, the property you are on, and the way over
+   to the other properties.
+   ============================================================ */
+
+.nt-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  min-height: 40px;
+  padding: 0 var(--s-7);
+  background: var(--void-deep);
+  border-bottom: var(--bw) solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+@media (max-width: 720px) { .nt-bar { padding: 0 var(--s-5); gap: var(--s-3); } }
+
+.nt-bar__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--bone);
+  letter-spacing: var(--ls-mono-wide);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nt-bar__mark:hover { text-decoration: none; color: var(--bone); }
+
+/* the live dot — one red mark, pulsing slowly */
+.nt-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--tiefrot);
+  box-shadow: 0 0 0 1px var(--tiefrot), 0 0 10px var(--tiefrot);
+  animation: nt-pulse 2.4s ease-in-out infinite;
+  flex: none;
+}
+@keyframes nt-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* Property switcher — MUSIC / LEARN / …
+   It is a <nav>, and host pages often style bare `nav` (the trainer app
+   gives every nav padding and a bottom rule). Reset those here so the
+   switcher looks the same wherever the layer is dropped in. */
+.nt-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  flex-wrap: nowrap;
+}
+.nt-switch a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: var(--r-sm);
+  border: var(--bw) solid transparent;
+  transition: color var(--t-base) var(--ease),
+              border-color var(--t-base) var(--ease),
+              background var(--t-base) var(--ease);
+}
+.nt-switch a:hover { color: var(--bone); background: var(--surface-2); text-decoration: none; }
+.nt-switch a[aria-current="page"] {
+  color: var(--bone);
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+/* ============================================================
+   SECTION HEAD
+   §NN · LABEL  ——  big title  ——  right-aligned meta stamp
+   ============================================================ */
+
+.nt-sec { padding: var(--s-11) 0; border-top: var(--bw) solid var(--hairline); }
+@media (max-width: 720px) { .nt-sec { padding: var(--s-9) 0; } }
+
+.nt-sec__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-6);
+  margin-bottom: var(--s-8);
+  flex-wrap: wrap;
+}
+
+.nt-sec__num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-stamp);
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: var(--s-3);
+}
+
+.nt-sec__title {
+  font-family: var(--font-brutal);
+  font-weight: 800;
+  font-size: clamp(34px, 5.4vw, 68px);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-tight);
+  color: var(--bone);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.nt-sec__meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  color: var(--muted-deep);
+  text-align: right;
+  line-height: 1.9;
+}
+@media (max-width: 720px) { .nt-sec__meta { text-align: left; } }
+
+/* ============================================================
+   SPLIT VIEW
+   The NULLTAG way of showing "one thing playing, everything
+   else waiting": a sticky media pane and a scrollable index.
+   Collapses to a single column below 900px, media first.
+   ============================================================ */
+
+.nt-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: var(--s-7);
+  align-items: start;
+}
+@media (max-width: 900px) { .nt-split { grid-template-columns: 1fr; gap: var(--s-6); } }
+
+/* stage = the pane that holds the player */
+.nt-split__stage { position: sticky; top: var(--s-8); min-width: 0; }
+@media (max-width: 900px) { .nt-split__stage { position: static; } }
+
+/* index = the scrollable list beside it */
+.nt-split__index {
+  min-width: 0;
+  max-height: 62vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: var(--bw) solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow-card);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-warm) transparent;
+}
+@media (max-width: 900px) { .nt-split__index { max-height: 52vh; } }
+.nt-split__index::-webkit-scrollbar { width: 8px; }
+.nt-split__index::-webkit-scrollbar-thumb { background: var(--border-warm); border-radius: var(--r-pill); }
+.nt-split__index::-webkit-scrollbar-track { background: transparent; }
+
+/* sticky header inside the index column */
+.nt-split__indexhead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--glass);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border-bottom: var(--bw) solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================================
+   VIDEO FACADE
+   A click-to-load YouTube surface. Nothing is requested from
+   youtube.com until the visitor actually presses play, so the
+   page ships no third-party cookies by default. The <iframe>
+   is swapped in by web.js on activation.
+   ============================================================ */
+
+.nt-vid {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--void-deep);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--shadow-soft);
+}
+.nt-vid:hover { text-decoration: none; }
+.nt-vid img, .nt-vid iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.nt-vid img {
+  object-fit: cover;
+  opacity: 0.72;
+  transition: opacity var(--t-slow) var(--ease), transform 600ms var(--ease);
+}
+.nt-vid:hover img { opacity: 0.9; transform: scale(1.02); }
+
+/* the vignette that keeps the play mark readable on any thumbnail */
+.nt-vid__veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 25%, rgba(5,5,5,0.72) 100%);
+}
+
+.nt-vid__play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.nt-vid__disc {
+  width: 74px;
+  height: 74px;
+  border-radius: var(--r-pill);
+  display: grid;
+  place-items: center;
+  background: var(--tiefrot);
+  color: var(--void);
+  font-size: 24px;
+  line-height: 1;
+  padding-left: 4px;
+  box-shadow: 0 0 0 1px var(--tiefrot), 0 12px 32px -12px rgba(255,42,85,0.7);
+  transition: transform var(--t-slow) var(--ease);
+}
+.nt-vid:hover .nt-vid__disc { transform: scale(1.08); }
+
+/* caption strip under the stage */
+.nt-vid__cap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-top: var(--s-4);
+  flex-wrap: wrap;
+}
+.nt-vid__title {
+  font-family: var(--font-brutal);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--bone);
+  margin: 0;
+}
+.nt-vid__meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* corner stamp — the catalog-number tick used across covers */
+.nt-vid__stamp {
+  position: absolute;
+  top: var(--s-3);
+  left: var(--s-3);
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-stamp);
+  text-transform: uppercase;
+  color: var(--bone);
+  background: rgba(10,10,10,0.72);
+  border: var(--bw) solid var(--hairline);
+  border-radius: var(--r-sm);
+  padding: 4px 8px;
+}
+
+/* ============================================================
+   INDEX ROWS
+   One row per video / track / lesson. Thumbnail, title, meta,
+   and a red rail on the active row.
+   ============================================================ */
+
+.nt-row {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: var(--s-3);
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: var(--s-3) var(--s-4);
+  background: none;
+  border: 0;
+  border-bottom: var(--bw) solid var(--border);
+  border-left: var(--bw-3) solid transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--t-base) var(--ease),
+              border-left-color var(--t-base) var(--ease);
+}
+.nt-row:last-child { border-bottom: 0; }
+.nt-row:hover { background: var(--surface-2); text-decoration: none; }
+.nt-row[aria-current="true"] {
+  background: var(--surface-2);
+  border-left-color: var(--tiefrot);
+}
+
+.nt-row__thumb {
+  width: 92px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  border: var(--bw) solid var(--border);
+  background: var(--code-bg);
+  display: block;
+}
+
+.nt-row__title {
+  font-family: var(--font-grotesk);
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.35;
+  color: var(--bone);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.nt-row[aria-current="true"] .nt-row__title { color: var(--bone); }
+
+.nt-row__meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   PLATFORM BADGE
+   Used in the feed so a YouTube upload, a SoundCloud drop and a
+   distributed release are told apart at a glance — by shape and
+   text, never by colour alone.
+   ============================================================ */
+
+.nt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  color: var(--muted);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+.nt-badge--video { color: var(--tiefrot); border-color: var(--tiefrot); }
+.nt-badge--audio { color: var(--cold-blue); border-color: var(--cold); }
+
+/* ============================================================
+   EMPTY / LOADING STATE
+   Never an invented number, never a broken grid — a stated
+   state instead.
+   ============================================================ */
+
+.nt-empty {
+  padding: var(--s-7) var(--s-5);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  color: var(--muted-deep);
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+
+.nt-sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* skip link — visible only on keyboard focus */
+.nt-skip {
+  position: absolute;
+  left: var(--s-4);
+  top: -60px;
+  z-index: 100;
+  background: var(--tiefrot);
+  color: var(--void);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border-radius: var(--r-md);
+  text-decoration: none;
+  transition: top var(--t-base) var(--ease);
+}
+.nt-skip:focus { top: var(--s-4); text-decoration: none; }
+
+/* Motion is decoration here — every animation above is safe to
+   drop entirely for visitors who ask for less of it. */
+@media (prefers-reduced-motion: reduce) {
+  .nt-dot { animation: none; }
+  .nt-vid img,
+  .nt-vid__disc,
+  .nt-row,
+  .nt-switch a { transition: none; }
+  .nt-vid:hover img { transform: none; }
+  .nt-vid:hover .nt-vid__disc { transform: none; }
+}
