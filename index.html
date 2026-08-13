@@ -44,8 +44,11 @@
 <link rel="stylesheet" href="fonts/fonts.css" />
 <link rel="stylesheet" href="colors_and_type.css?v=3" />
 <!-- Shared NULLTAG web layer — edited in nulltag-cd, vendored here. -->
-<link rel="stylesheet" href="web.css?v=1" />
-<script src="web.js?v=1" defer></script>
+<link rel="stylesheet" href="web.css?v=2" />
+<script src="web.js?v=2" defer></script>
+<!-- Curated content. Blocking on purpose: §03 renders CONFIG.updates on
+     first paint, and the file is a few kB of literals. -->
+<script src="config.js?v=2"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js" defer></script>
 <style>
@@ -575,6 +578,7 @@
     <div class="nav__menu">
       <a href="#latest">Latest</a>
       <a href="#rollout">Rollout</a>
+      <a href="#news">News</a>
       <a href="#catalog">Catalog</a>
       <a href="#video">Video</a>
       <a href="#schienen">Schienen</a>
@@ -710,11 +714,61 @@
   </div>
 </section>
 
-<section class="s" id="catalog" data-screen-label="04 Catalog">
+<!-- ===== §03 · NEWS ===========================================
+     One list for everything that happened, whatever channel it
+     happened on. Two sources, merged and sorted newest-first:
+
+       CONFIG.updates    curated by hand — press, interviews,
+                         announcements. Add a line to config.js,
+                         commit, it is live. THIS is the channel
+                         for anything no API knows about.
+       feed.updates      built by the feed Action from the YouTube,
+                         SoundCloud and Spotify sources.
+
+     The rows below are the no-JS fallback and mirror the curated
+     entries in config.js. Automatic entries join them at runtime.
+     ============================================================ -->
+<section class="s" id="news" data-screen-label="04 News">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§03 · CATALOG · FEATURED ARTWORK</div>
+        <div class="s__num">§03 · NEWS · ALLE KANÄLE</div>
+        <h2 class="s__title">News</h2>
+      </div>
+      <div class="s__meta">KURATIERT + AUTOMATISCH<br/>NEUESTE ZUERST</div>
+    </div>
+
+    <ol class="nt-feed" id="news-list">
+      <li class="nt-feed__item">
+        <div class="nt-feed__date">2026-05-16</div>
+        <div class="nt-feed__body">
+          <div class="nt-feed__head"><span class="nt-badge nt-badge--audio">Release</span></div>
+          <a class="nt-feed__text" href="https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" target="_blank" rel="noopener">Plastic Paradise EP is out — listen on every platform.</a>
+        </div>
+      </li>
+      <li class="nt-feed__item">
+        <div class="nt-feed__date">2026-05-16</div>
+        <div class="nt-feed__body">
+          <div class="nt-feed__head"><span class="nt-badge">Instagram</span></div>
+          <a class="nt-feed__text" href="https://www.instagram.com/nulltag.ch/" target="_blank" rel="noopener">New visuals + behind-the-scenes on Instagram.</a>
+        </div>
+      </li>
+    </ol>
+
+    <p class="muted-copy" style="margin-top:var(--s-6); max-width:64ch">
+      Uploads, Drops und Distributionen laufen automatisch ein. Presse,
+      Interviews und alles, was keine API kennt, stehen kuratiert in
+      <code>config.js</code> — eine Zeile, ein Commit, live.
+    </p>
+  </div>
+</section>
+
+
+<section class="s" id="catalog" data-screen-label="05 Catalog">
+  <div class="container">
+    <div class="s__head">
+      <div>
+        <div class="s__num">§04 · CATALOG · FEATURED ARTWORK</div>
         <h2 class="s__title">Catalog</h2>
       </div>
       <div class="s__meta">27 RELEASES · 56 TRACKS<br/>GRUPPIERT NACH RELEASE</div>
@@ -745,11 +799,11 @@
      leave with nothing at all.
      Nothing is requested from youtube.com until play is pressed.
      ============================================================ -->
-<section class="s s--video" id="video" data-screen-label="05 Video">
+<section class="s s--video" id="video" data-screen-label="06 Video">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§04 · VIDEO · YOUTUBE · AUTO</div>
+        <div class="s__num">§05 · VIDEO · YOUTUBE · AUTO</div>
         <h2 class="s__title">Video</h2>
       </div>
       <div class="s__meta">@REALNULLTAG<br/>KLICK LÄDT YOUTUBE</div>
@@ -793,11 +847,11 @@
   </div>
 </section>
 
-<section class="s" id="schienen" data-screen-label="06 Schienen">
+<section class="s" id="schienen" data-screen-label="07 Schienen">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§05 · RELEASE RAILS · 05</div>
+        <div class="s__num">§06 · RELEASE RAILS · 05</div>
         <h2 class="s__title">Schienen</h2>
       </div>
       <div class="s__meta">FIVE WORLDS<br/>ONE WORDMARK</div>
@@ -842,11 +896,11 @@
   </div>
 </section>
 
-<section class="s" id="lineage" data-screen-label="07 Lineage">
+<section class="s" id="lineage" data-screen-label="08 Lineage">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§06 · LINEAGE · TECHNO / EDM</div>
+        <div class="s__num">§07 · LINEAGE · TECHNO / EDM</div>
         <h2 class="s__title">Family Tree</h2>
       </div>
       <div class="s__meta">ROOTS → NULLTAG<br/>INTERACTIVE</div>
@@ -861,11 +915,11 @@
   </div>
 </section>
 
-<section class="s" id="tools" data-screen-label="08 Tools">
+<section class="s" id="tools" data-screen-label="09 Tools">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§07 · TOOLS · <span class="tb-beta">● BETA</span></div>
+        <div class="s__num">§08 · TOOLS · <span class="tb-beta">● BETA</span></div>
         <h2 class="s__title">Tools</h2>
       </div>
       <div class="s__meta">SOUND · QR · KALENDER<br/>LIVE-DATEN</div>
@@ -951,11 +1005,11 @@
   </div>
 </section>
 
-<section class="s" id="facts" data-screen-label="09 Facts">
+<section class="s" id="facts" data-screen-label="10 Facts">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§08 · FACTS · PHYSIK-VIDEO</div>
+        <div class="s__num">§09 · FACTS · PHYSIK-VIDEO</div>
         <h2 class="s__title">Die Physik<br/>hinter den Tracks</h2>
       </div>
       <div class="s__meta">LICHTJAHR VOL.2<br/>6 PHÄNOMENE</div>
@@ -979,11 +1033,11 @@
   </div>
 </section>
 
-<section class="s" id="manifest" data-screen-label="10 Manifest">
+<section class="s" id="manifest" data-screen-label="11 Manifest">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§09 · MANIFEST · BILINGUAL</div>
+        <div class="s__num">§10 · MANIFEST · BILINGUAL</div>
         <h2 class="s__title">Manifest</h2>
       </div>
       <div class="s__meta">DE · EN<br/>VERBATIM</div>
@@ -1012,11 +1066,11 @@
   </div>
 </section>
 
-<section class="s" id="listen" data-screen-label="11 Listen">
+<section class="s" id="listen" data-screen-label="12 Listen">
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§10 · LISTEN · CHANNELS</div>
+        <div class="s__num">§11 · LISTEN · CHANNELS</div>
         <h2 class="s__title">Listen</h2>
       </div>
       <div class="s__meta">SIX PLATFORMS<br/>SAME STAMP</div>
@@ -1201,7 +1255,64 @@
     });
   }
 
+  // ── §03 news ← CONFIG.updates (kuratiert) + feed.updates (automatisch) ──
+  // Beide Quellen liefern {date, platform, text, url}. Zusammenführen,
+  // nach URL deduplizieren (ein kuratierter Eintrag darf denselben Link
+  // wie ein automatischer haben und gewinnt dann, weil er den besseren
+  // Text trägt), neueste zuerst.
+  var NEWS_LIMIT = 12;
+
+  function newsBadgeClass(platform){
+    var p = String(platform || "").toLowerCase();
+    if (p === "youtube") return "nt-badge nt-badge--video";
+    if (p === "soundcloud" || p === "spotify" || p === "apple music" || p === "release") {
+      return "nt-badge nt-badge--audio";
+    }
+    return "nt-badge";
+  }
+
+  function renderNews(feed){
+    var list = document.getElementById("news-list");
+    if (!list) return;
+    var esc = function(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+
+    var curated = (window.CONFIG && CONFIG.updates) || [];
+    var auto = (feed && feed.updates) || [];
+    var seen = {}, items = [];
+    curated.concat(auto).forEach(function(u){
+      if (!u || !u.text) return;
+      var key = u.url || ("t:" + u.text);
+      if (seen[key]) return;
+      seen[key] = 1;
+      items.push(u);
+    });
+    if (!items.length) return;   // fallback markup stands
+
+    items.sort(function(a, b){ return String(b.date||"").localeCompare(String(a.date||"")); });
+
+    list.innerHTML = items.slice(0, NEWS_LIMIT).map(function(u){
+      var text = esc(u.text);
+      var body = u.url
+        ? '<a class="nt-feed__text" href="' + esc(u.url) + '" target="_blank" rel="noopener">' + text + "</a>"
+        : '<span class="nt-feed__text">' + text + "</span>";
+      return '<li class="nt-feed__item">' +
+        '<div class="nt-feed__date">' + esc(u.date || "") + "</div>" +
+        '<div class="nt-feed__body">' +
+          '<div class="nt-feed__head"><span class="' + newsBadgeClass(u.platform) + '">' +
+            esc(u.platform || "NULLTAG") + "</span></div>" +
+          body +
+          (u.note ? '<p class="nt-feed__note">' + esc(u.note) + "</p>" : "") +
+        "</div></li>";
+    }).join("");
+  }
+
+  // Curated entries are available immediately — config.js is a blocking
+  // script — so the list is correct before the feed ever answers.
+  renderNews(null);
+
   function hydrateFromFeed(feed){
+    renderNews(feed);
     hydrateVideos(feed);
     if (!feed || !feed.albums || !feed.albums.length) return;
     var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){
