@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NULLTAG · Schienen · Behind the Scenes</title>
+<meta name="description" content="Woher die NULLTAG-Schienen kommen: Auslöser, Regeln, Referenzen — und was unterwegs schiefging." />
+<link rel="icon" type="image/svg+xml" href="assets/avatar.svg" />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<link rel="stylesheet" href="colors_and_type.css?v=3" />
+<link rel="stylesheet" href="web.css?v=4" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { overflow-x: hidden; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: var(--s-8) var(--s-7) var(--s-10); }
+
+  .back { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: var(--s-6); }
+  .back:hover { color: var(--tiefrot); text-decoration: none; }
+
+  .phead { border-bottom: 1px solid var(--border); padding-bottom: var(--s-6); margin-bottom: var(--s-7); }
+  .phead .eye { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--tiefrot); margin-bottom: var(--s-3); }
+  .phead h1 { font-family: var(--font-brutal); font-weight: 800; font-size: clamp(38px, 6.5vw, 80px); line-height: 0.9; letter-spacing: -0.03em; text-transform: uppercase; margin: 0; color: var(--bone); }
+  .phead p { font-family: var(--font-grotesk); font-size: 16px; line-height: 1.6; color: var(--bone-dim); max-width: 64ch; margin: var(--s-5) 0 0; }
+
+  /* Sprungleiste — auf dem Handy dieselbe Wischleiste wie der Katalog.
+     Hier steht bewusst KEINE min-height: die Trefferflaeche gehoert
+     .nt-tap aus web.css. Eine lokale Regel stuende in der Kaskade danach
+     und wuerde die systemweite 44px-Regel auf Touch schlagen — genau der
+     Fehler, der in diesem Repo schon zweimal passiert ist. */
+  .jump { margin-bottom: var(--s-8); }
+  .jump a { display: inline-flex; align-items: center; padding: 7px 14px; border: 1px solid var(--hairline); border-radius: var(--r-pill); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-dim); text-decoration: none; transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
+  .jump a:hover { color: var(--bone); border-color: var(--border-warm); text-decoration: none; }
+  .jump a[data-rail] { border-color: color-mix(in srgb, var(--accent, var(--hairline)) 45%, transparent); }
+  .jump a[data-rail]:hover { color: var(--accent, var(--bone)); border-color: var(--accent, var(--border-warm)); }
+
+  .sch { padding: var(--s-9) 0; border-top: 1px solid var(--border); scroll-margin-top: var(--s-6); }
+  .sch:first-of-type { border-top: 0; padding-top: var(--s-4); }
+  .sch__eye { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: var(--s-3); display: flex; gap: var(--s-4); flex-wrap: wrap; }
+  .sch__eye b { color: var(--bone-dim); font-weight: 500; }
+  .sch h2 { font-family: var(--font-display); font-size: clamp(40px, 7vw, 84px); line-height: 0.86; text-transform: uppercase; letter-spacing: -0.005em; margin: 0 0 var(--s-3); color: var(--accent, var(--bone)); }
+  .sch__lead { font-family: var(--font-grotesk); font-size: 17px; line-height: 1.6; color: var(--bone); margin: 0 0 var(--s-7); max-width: 60ch; }
+
+  .blocks { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--s-7) var(--s-8); }
+  .blk { min-width: 0; }
+  .blk h3 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent, var(--muted)); margin: 0 0 var(--s-3); padding-bottom: 6px; border-bottom: 1px solid var(--hairline); }
+  .blk p { font-family: var(--font-body); font-size: 15px; line-height: 1.65; color: var(--bone-dim); margin: 0 0 var(--s-3); }
+  .blk p:last-child { margin-bottom: 0; }
+  .blk b { color: var(--bone); font-weight: 600; }
+  .blk q { font-style: normal; color: var(--bone); }
+  .blk q::before { content: "„"; } .blk q::after { content: "“"; }
+
+  .pull { font-family: var(--font-grotesk); font-size: clamp(19px, 2.4vw, 26px); line-height: 1.32; color: var(--bone); margin: var(--s-7) 0 0; padding-left: var(--s-5); border-left: 2px solid var(--accent, var(--tiefrot)); max-width: 52ch; }
+
+  .closing { margin-top: var(--s-10); padding-top: var(--s-8); border-top: 1px solid var(--border); }
+  .closing h2 { font-family: var(--font-display); font-size: clamp(28px, 4vw, 46px); line-height: 0.95; text-transform: uppercase; color: var(--bone); margin: 0 0 var(--s-6); }
+  .rules { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; }
+  .rules > div { background: var(--void); padding: var(--s-5) var(--s-6); }
+  .rules h4 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tiefrot); margin: 0 0 8px; }
+  .rules p { font-family: var(--font-body); font-size: 15px; line-height: 1.6; color: var(--bone-dim); margin: 0; }
+  .rules b { color: var(--bone); font-weight: 600; }
+
+  .note { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: var(--muted); margin: var(--s-7) 0 0; max-width: 68ch; }
+  .note b { color: var(--bone-dim); font-weight: 600; }
+
+  .foot { margin-top: var(--s-9); padding-top: var(--s-6); border-top: 1px solid var(--border); display: flex; gap: var(--s-6); flex-wrap: wrap; }
+  .foot a { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; }
+  .foot a:hover { color: var(--tiefrot); text-decoration: none; }
+</style>
+</head>
+<body>
+<a class="nt-skip" href="#inhalt">Zum Inhalt</a>
+<div class="wrap">
+  <a class="back nt-tap" href="index.html#schienen">← Zurück zu NULLTAG</a>
+
+  <div class="phead">
+    <div class="eye">§ SCHIENEN · BEHIND THE SCENES</div>
+    <h1>Woher die Schienen kommen</h1>
+    <p>Eine Schiene ist keine Playlist. Sie hat einen Auslöser, eine Regel, Referenzen — und
+       eine Liste von Dingen, die unterwegs nicht funktioniert haben. Das Folgende steht so
+       im Arbeitsarchiv des Labels; hier stehen die Teile, die erzählbar sind.</p>
+  </div>
+
+  <nav class="jump nt-swipe" id="jump" aria-label="Zu einer Schiene springen"></nav>
+
+  <main id="inhalt"></main>
+
+  <section class="closing">
+    <h2>Was über alle Schienen gilt</h2>
+    <div class="rules" id="rules"></div>
+
+    <p class="note">
+      Drei weitere Schienen existieren nur als Entwurf und haben keinen einzigen Track:
+      <b>NACHTSTROM</b> (deutsches Cinematic Techno, Farbsignatur Natriumdampf-Orange bei
+      589&nbsp;nm, Katalog NS-NN), <b>MERIDIAN</b> und <b>RFC</b>. Sie stehen hier, weil sie
+      zur Geschichte gehören — und nicht im Katalog, weil es dort nichts zu hören gibt.
+      Ein Entwurf ist keine Ankündigung.
+    </p>
+  </section>
+
+  <div class="foot">
+    <a class="nt-tap" href="index.html#schienen">Schienen im Überblick</a>
+    <a class="nt-tap" href="index.html#catalog">Katalog</a>
+    <a class="nt-tap" href="family-tree.html">Family Tree</a>
+    <a class="nt-tap" href="index.html">NULLTAG</a>
+  </div>
+</div>
+
+<script>
+/* ── Die Texte ────────────────────────────────────────────────────────
+   Quelle ist das Arbeitsarchiv des Labels (Obsidian-Vault TA-NULLTAG,
+   exportiert nach nulltag-cd/vault-export/bts-schienen.md).
+
+   Was bewusst NICHT hier steht, obwohl es in der Quelle steht:
+   Abrufzahlen und Reichweiten-Auswertungen, die Namen der privaten
+   Personen hinter der Tonband-Schiene (im eigenen Musikvideo wurde der
+   Ort ebenfalls unkenntlich gemacht), die Suno-Style-Bloecke, eine
+   extern ungeprueft gebliebene Herkunftsreferenz, und alles, was
+   laufende Auslieferungen oder rechtliche Fragen beruehrt. Das ist eine
+   Auswahl, keine Kuerzung aus Platzgruenden. */
+var SCHIENEN = [
+  {
+    id: "lichtjahr", name: "Lichtjahr", cat: "LJ-NN", accent: "var(--cosmic-glow)",
+    sound: "Cosmic Frenchcore · 188–205 BPM · EN",
+    lead: "Kein Ort und keine Nacht als Auslöser, sondern ein Fachgebiet: Frenchcore trifft Astrophysik.",
+    pull: "Für alle, die beim Feiern ans Universum denken.",
+    blocks: [
+      { h: "Auslöser", p: [
+        "Jeder Track trägt ein benanntes physikalisches Gesetz. Lichtgeschwindigkeit als Intimität (<b>Cosmic Sea</b>), die Hubble-Expansion als Käfig (<b>The Edge Recedes</b>), der Pale Blue Dot als Schutzgebet (<b>Blue Planet</b>), Holsts Jupiter als Patron und Tyrann zugleich, der zweite Hauptsatz der Thermodynamik als Frieden (<b>Heat Death</b>).",
+        "Der Schienenname gehört zum System: Lichtjahr ist eine Längeneinheit, und die Cover tragen Distanzmarken."
+      ]},
+      { h: "Regel", p: [
+        "Verzerrter Triplet-Kick, kosmisch-symphonische Atmosphäre, ätherische Vocals, Moll — Aeolisch als Normalfall, Phrygisch-Dominant für dunkle Ereignisse.",
+        "<b>Heat Death hat ausdrücklich keinen Drop.</b> Als ein Playlist-Kurator „a more defined peak moment“ verlangte, lautete die Antwort im Arbeitspack: <q>Curator-Mismatch, nicht Production-Defekt.</q> Die Schiene lässt sich lieber kritisieren, als ihre Form aufzugeben."
+      ]},
+      { h: "Die versteckte Ebene", p: [
+        "<b>TRAPPIST Loop</b> läuft in 7-Beat-Phrasen statt der Standard-8 — nach den realen Bahnresonanzen des Systems (8:5:3:2).",
+        "<b>Event Horizon</b> verlangsamt im Outro schrittweise von 195 über 180 und 160 auf 140 BPM, als ob die Musik in das Loch fällt.",
+        "Der Zweck steht offen im Konzeptpapier: wer Musiktheorie kann, erkennt das Erste; wer Astronomie kann, das Zweite. Wer beides nicht kann, verliert nichts."
+      ]},
+      { h: "Was schiefging", p: [
+        "Der Opener starb zweimal. Erst gestrichen („kein Mehrwert als isolierter Intro-Track“), dann als <b>First Light</b> zurück, dann mit einem Track einer anderen Schiene verschmolzen — und am Ende komplett verworfen. Vol.1 hat seitdem keinen markierten Anfang.",
+        "Das gesamte Bildsystem wurde einmal weggeworfen: ein weit ausgearbeitetes Halftone-Riso-Konzept — <q>Cover wie ein Druckerzeugnis aus einem Observatoriums-Archiv, in dem die Druckmaschine drei Mal über das Papier gefahren ist</q> — liegt im Archiv.",
+        "Und Vol.2 warf einen <b>fertigen</b> Track weg: <b>Dark Matter</b> war gemastert, hochgeladen, hatte drei fertige Reels und einen Termin. Ersetzt durch <b>Supernova</b>."
+      ]},
+      { h: "Referenzen", p: [
+        "Gustav Holst, Two Steps From Hell, Carl Sagans <i>Pale Blue Dot</i>. Für Vol.2 kamen die WMAP-Karte der Hintergrundstrahlung und eine Akkretionsscheibe als Bildreferenzen dazu."
+      ]}
+    ]
+  },
+  {
+    id: "cinetekk", name: "Cinetekk", cat: "CT-NN", accent: "var(--nachtblau-glow)",
+    sound: "Cinematic Techno · 144–160 BPM · DE",
+    lead: "Ein Film ohne Bilder. Neun Tracks, ein Lichtstrahl, ein roter Punkt — und die dichteste Regelsammlung des ganzen Katalogs.",
+    pull: "Bilder statt Erzählung. Szenen, keine Plots.",
+    blocks: [
+      { h: "Regel", p: [
+        "Sweet Spot 152–156 BPM, <b>immer Moll</b>. Sieben Instrumentierungs-Ebenen, darunter Streicher — Pizzicato im Aufbau, Legato im Drop —, Foley aus Regen und fernen Stimmen, und Vocals halb gesprochen, halb gesungen.",
+        "Für die Texte gilt <b>kein Reimzwang</b>: <q>Cinematic-Texte sind eher Prosa-Fragmente als Schlager-Reime.</q>"
+      ]},
+      { h: "Was verboten ist", p: [
+        "Kein euphorischer Trance, kein Big-Room-EDM, kein Supersaw-Lead, <b>kein Avicii-Piano</b>. Diese Liste hängt an jeder einzelnen Produktion.",
+        "Visuell genauso scharf: <q>Keine Riso-Drucke wie bei der Tonband-Linie. Nicht Photo-Real-Pop — sondern ein Standbild aus einem Film, den niemand kennt.</q>"
+      ]},
+      { h: "Ein Bild pro Track", p: [
+        "Jeder Track startet nicht mit einem Thema, sondern mit einem Standbild. <b>Glassplitter</b>: eine Hand, die nach Scherben auf nassem dunklem Asphalt greift. <b>Nachtfalter</b>: ein einzelner Falter, der eine Straßenlaterne im Nebel umkreist. <b>Letzter Sommer</b>: eine leere Schaukel im hohen Gras in der Dämmerung."
+      ]},
+      { h: "Sprache", p: [
+        "Deutsch — und die einzige Schiene, für die Deutsch nach der Umstellung auf Englisch überhaupt noch erlaubt ist. Die Regel formuliert das als ausdrückliche Ausnahme: <q>Deutsch nur noch im cinematic-Techno-Kontext.</q>"
+      ]},
+      { h: "Was schiefging", p: [
+        "Das Regelpapier korrigiert sich selbst in Zeile 5: die ältere Fassung war auf ein <b>völlig falsches Sound-Profil</b> aufgesetzt — 90–120 BPM Dark Ambient. Die Schiene war zwischenzeitlich ein anderes Genre.",
+        "Fünf Tracks existierten nur als Namen und wurden ersetzt: <i>Wasserglas</i>, <i>Knochenuhr</i>, <i>Aschegrund</i>, <i>Echolot</i>. Die deutsche Fassung von <b>Nachtfalter</b> wurde gestrichen — deshalb hat das durchgängig deutsche Album einen englischen Schluss.",
+        "Und <b>Eisflug</b> ist der große unerklärte Ausreißer des Katalogs. Warum ausgerechnet dieser Track so weit aus der Reihe fällt, steht bis heute nirgends. Die Notiz dazu endet mit: <q>Quelle weiter ungeklärt.</q>"
+      ]}
+    ]
+  },
+  {
+    id: "dome", name: "Dome EP", cat: "DM-NN", accent: "var(--glut-glow)",
+    sound: "Festival Frenchcore · 188–200 BPM · EN",
+    lead: "Die einzige Schiene, die gegen den eigenen Katalog definiert ist statt für sich.",
+    pull: "They all said no — there's no party here. So we made our own.",
+    blocks: [
+      { h: "Auslöser", p: [
+        "Eine Lücke, im Konzeptpapier beim Namen genannt: <q>Bisher hatte NULLTAG nur Defiance-Modes, Industrial-Modes, Cinematic-Modes — <b>kein reines Festival-Glück.</b></q>",
+        "Das Bild dazu ist eine Kuppel als selbstgebauter Schutzraum: draußen heißt es „kein Platz für euch“, drinnen wird trotzdem gefeiert."
+      ]},
+      { h: "Gegen den eigenen Katalog", p: [
+        "Das Konzeptpapier enthält eine Tabelle mit dem Titel <q>Wo DOME <i>nicht</i> hin will</q> — fünf Zeilen, jede gegen eine eigene Schiene gerichtet. Gegen BLACKBOX: <q>DOME ist warm, euphorisch, mainstage.</q> Gegen LOVESONG: <q>DOME ist gerade <i>nicht</i> Bait — durchgehend euphorisch.</q>",
+        "Das ist keine Marotte, sondern die Methode: Avicii ist in CINETEKK ausdrücklich verboten und hier Referenz. Die Schienen sind aktiv gegeneinander kalibriert."
+      ]},
+      { h: "Regel", p: [
+        "<b>Lydisch und Dur</b> — die bewusste Abkehr vom Moll-Normalfall des Labels. Triplet-Kicks, aber heller und tonal gestimmt, kein Industrial-Dreck.",
+        "Aufbau unter 30 Sekunden, früher Drop, kein langes atmosphärisches Intro. Die Regel kam aus einem Mix-Audit: <q>Hook in 15 Sekunden.</q>",
+        "Bei <b>Stuck On Repeat</b> ist die exakte Wiederholung der Gesamtstruktur Absicht — der Track ist stuck on repeat <i>als Form</i>. Und: <b>DOME ist kein Shuffle-Album</b>, strikt 01 → 02 → 03 → 04."
+      ]},
+      { h: "Was schiefging", p: [
+        "Der geplante Kampagnenbogen über fünf Wochen wurde nie gefahren — alle vier Tracks gingen am selben Tag live. Eine Notiz „Plan verworfen“ gibt es nicht; das ergibt sich nur aus dem Widerspruch zwischen Konzept und Umsetzung.",
+        "Und der Konzept-Brief selbst war zeitweise verschwunden. Er wurde im August 2026 aus der Versionsgeschichte wiederhergestellt — zusammen mit fünf weiteren, die bei einem Aufräumen gelöscht worden waren."
+      ]}
+    ]
+  },
+  {
+    id: "blackbox", name: "Blackbox", cat: "BB-NN", accent: "var(--tiefrot)",
+    sound: "Industrial · Acid Techno · 147–155 BPM · EN",
+    lead: "Vier Tracks als Dramaturgie — und die einzige Schiene, in der der Beruf des Labelinhabers das Material ist.",
+    pull: "The question → the answer → the trap → the release.",
+    blocks: [
+      { h: "Regel", p: [
+        "Die vier Tracks sind ein Ablauf, kein Bündel: <b>BLACKBOX</b> — was ist da drin. <b>GHOST PROTOCOL</b> — verschwinden. <b>HONEYPOT</b> — die Falle. <b>KILL SWITCH</b> — alles kappen.",
+        "Visuell: ein schwarzer Bildschirm, ein einzelner Cursor, ein Zeichenraster mit genau einer hervorgehobenen Zeile."
+      ]},
+      { h: "Die versteckte Ebene", p: [
+        "<b>Kill Switch</b> ist in den sieben echten Stufen der Cyber Kill Chain aufgebaut. Dasselbe Prinzip wie die 7-Beat-Phrasen in Lichtjahr: wer aus dem Fach kommt, erkennt es — wer nicht, hört einen Track."
+      ]},
+      { h: "Was schiefging", p: [
+        "Auf SoundCloud läuft die EP <b>rückwärts</b>, weil dort nach Upload-Datum sortiert wird. Die Reparatur wurde als zu teuer verworfen — die Dramaturgie existiert also nur dort, wo die Reihenfolge stimmt.",
+        "Eine zweite EP wurde vollständig konzipiert und nie gebaut.",
+        "Und die BPM-Angabe war im Archiv <b>vierfach widersprüchlich</b>: 130, 150–158, 175–190 und 130–138 standen gleichzeitig in vier Dokumenten. Im August 2026 an den fertigen Mastern nachgemessen: 147, 148, 149 und 155."
+      ]}
+    ]
+  },
+  {
+    id: "tausend-stimmen", name: "Tausend Stimmen", cat: "TS-NN", accent: "var(--eisflug-glow)",
+    sound: "Trance · Hands-Up · 144 BPM · DE / EN",
+    lead: "Ein Werk in vier Fassungen — und eine Release-Regel, die später den ganzen Katalog geprägt hat.",
+    pull: "Tausend Stimmen, keiner hört. Jeder sendet, niemand fragt.",
+    blocks: [
+      { h: "Die Idee dahinter", p: [
+        "Die eigentliche Erfindung dieser Schiene ist keine Klangregel, sondern eine Veröffentlichungsregel: <b>zwei Sprachfassungen am selben Tag</b>. Die Begründung im Arbeitspack ist nüchtern — der Algorithmus sieht dann „dieser Künstler hat zwei Tracks gleichzeitig veröffentlicht“.",
+        "Aus dieser Zweierlogik wurde später die Dreiersprachen-Logik der Coronation Trilogy."
+      ]},
+      { h: "Ein Widerspruch, der nie aufgelöst wurde", p: [
+        "Die Beschreibung verkauft eine Hymne für die Crew, für die Hand-in-Hand-im-Floor-Stunden. Der Text handelt von etwas anderem: <q>Algorithmen wählen Seiten, bauen Mauern aus Geschrei</q>, <q>Kinder sehen Krieg im Stream — zwischen Werbung, zwischen Tanz.</q>",
+        "Diese Diskrepanz wird im Archiv an keiner Stelle thematisiert. Sie steht hier, weil sie zur Schiene gehört."
+      ]},
+      { h: "Was fehlt", p: [
+        "Für diese Schiene gibt es weder Referenzen noch ein Regeldokument — als einzige. Instrumental und String-Theory-Mix blieben bewusst SoundCloud-only, um die Hauptfassung nicht zu kannibalisieren."
+      ]}
+    ]
+  },
+  {
+    id: "tonband", name: "Tonband", cat: "TB-NN", accent: "var(--giftgrun-glow)",
+    sound: "Comedy Hardtek · 110–175 BPM · DE / CH-DE",
+    lead: "Der Rest eines aufgelösten Konzeptalbums — und die einzige Schiene, deren Sprache gewachsen ist statt entschieden.",
+    pull: "Tonband heisst so, weil sie das ist, was von diesem Tonband übrig blieb.",
+    blocks: [
+      { h: "Auslöser", p: [
+        "Geplant war eine Doppel-EP mit den Seiten A bis F: <b>„Campingplatz-Tonband“</b>, ein Konzeptalbum über eine Nacht auf einem Campingplatz, eine Anreise im Konvoi und einen Hof, der brennt. Die Seiten waren als Kette gedacht, jede sollte an einer anderen Schraube drehen.",
+        "Das Album wurde aufgelöst. Die acht Tracks, die es gibt, sind seine Einzelteile."
+      ]},
+      { h: "Regel", p: [
+        "Auf dem Papier: Hardtek, gesprochene Comedy-Vocals, Deutsch, Protest-Comedy. In Wirklichkeit streuen die acht Tracks über Hands-Up-Trance, Hard Techno, Hardtek, Indie-Synthwave, Cyber-Pop und Afterhour-Club.",
+        "Die eigentliche Regel dieser Schiene ist deshalb keine Klangregel, sondern die Lehre daraus — und sie gilt seither für alle: <q>Nie wieder Re-Title aus einem aufgelösten Konzept als Strategie.</q>"
+      ]},
+      { h: "Sprache", p: [
+        "Deutsch und Schweizerdeutsch, <b>gewachsen, nicht entschieden</b>. Das sind die ältesten Tracks des Katalogs, aus einem privaten Umfeld, entstanden bevor Sprache überhaupt eine Strategiefrage war.",
+        "Tonband ist damit die Schiene, die die eigene spätere Regel nicht mehr erfüllt — und die deshalb eingefroren ist. Zurückgezogen ist nichts."
+      ]},
+      { h: "Was schiefging", p: [
+        "Alle Titel wurden umbenannt, und die neuen tragen die Geschichte nicht mehr. Einer wurde bewusst entschärft — die Pointe sollte im Songtext arbeiten statt im Titel.",
+        "Fünf der acht Tracks haben kein lokales Master mehr; sie liegen nur noch dort, wo sie veröffentlicht wurden."
+      ]}
+    ]
+  },
+  {
+    id: "standalone", name: "Standalones", cat: "NULLTAG-NN", accent: "var(--cold-blue)",
+    sound: "Heterogen · 147–220 BPM · EN",
+    lead: "Geplant als Anti-Schiene ohne jede Regel. Geworden ist daraus die Schiene mit der striktesten Formel im Katalog.",
+    pull: "Konkrete Bilder statt Parolen.",
+    blocks: [
+      { h: "Der Plan", p: [
+        "Entworfen als bewusste Gegen-Schiene: <q>die einzige Schiene ohne EP-Bindung, ohne Brief-System, ohne Sprach-Default, ohne Klang-Konsistenz. Pro Quartal ein Single-Track. Jeder Track = ein Experiment.</q> Von 60 BPM Ambient bis 220 BPM Speedcore sollte alles möglich sein.",
+        "Vier Tracks waren dafür samt Text, Cover-Konzept und Klangvorgabe ausgearbeitet. <b>Produziert wurde kein einziger.</b> Ihre Katalognummern gingen an die Coronation Trilogy."
+      ]},
+      { h: "Die Wirklichkeit", p: [
+        "Die realen Standalones entstanden aus Nachrichtenlagen statt aus Genre-Experimenten — Hitzerekorde, KI-Entlassungen, Lebenshaltungskosten, ein fragiler Waffenstillstand.",
+        "Und statt der Negativliste gilt eine ausformulierte Formel: Cinematic Frenchcore 184–192 BPM in Moll, atmosphärisches Streicher- und Piano-Intro, harter verzerrter Drop, euphorischer Supersaw, feste Sektionsfolge, chantbarer Titel-Hook. Die geplante Schiene wurde von der realen überschrieben."
+      ]},
+      { h: "Zwei inhaltliche Verbote", p: [
+        "Ein Song über „die KI nimmt die Jobs“ wurde gestrichen — <b>KI-Thema auf einem KI-gestützt produzierten Track ist eine Falle</b>, egal wie gut der Text ist.",
+        "Beim Waffenstillstands-Thema lautet die Vorgabe: <q>universell, keine Seiten.</q>"
+      ]},
+      { h: "Der Katalog referenziert sich selbst", p: [
+        "<b>Tinfoil Crowns</b> ist ein Disstrack gegen die eigene Diskografie: „Plastic peeled“ (Plastic Paradise), „Paper drowned“ (Paper Kings), „Showroom cracked“ (SHOWROOM).",
+        "Und die Bait-and-Switch-Mechanik aus <b>LOVESONG</b> — Klavierballade bei 80 BPM, gesprochener Bruch (<q>Just kidding. Nulltag still nulltag.</q>), dann 200 BPM Frenchcore — wird inzwischen als wiederverwendbares Muster geführt."
+      ]}
+    ]
+  }
+];
+
+var REGELN = [
+  { h: "Cover-Wechsel sind Schienen-Operationen", p: "Nie eine Track-Operation. Das steht wortgleich in mehreren Papieren und ist der Grund, warum eine Schiene über Jahre erkennbar bleibt." },
+  { h: "Genau ein roter Akzent", p: "<b>#ff2a55</b>, einmal pro Oberfläche, schienenübergreifend. Nicht zweimal, nicht in einer anderen Rolle." },
+  { h: "Schienen werden gegeneinander definiert", p: "Nicht für sich. Avicii ist in CINETEKK verboten und in DOME Referenz — das ist kein Widerspruch, sondern die Methode." },
+  { h: "Strukturelles Edutainment", p: "7-Beat-Phrasen für TRAPPIST-1, sieben Stufen für die Kill Chain. <b>Wer es erkennt, wird belohnt; wer nicht, verliert nichts.</b>" },
+  { h: "Cover tragen nur Künstler und Titel", p: "Alles andere ist bei den Vertriebsdiensten ein Ablehnungsgrund — gelernt, nicht gelesen." }
+];
+
+(function build(){
+  function esc(s){ return String(s == null ? "" : s); }
+
+  var jump = document.getElementById("jump");
+  jump.innerHTML = SCHIENEN.map(function(s){
+    // .nt-tap: auf Touch waechst die Trefferflaeche auf 44px, sichtbar
+    // aendert sich nichts. Die 36px hier sind die Desktop-Form.
+    return '<a class="nt-tap" href="#' + s.id + '" data-rail="' + s.id + '" style="--accent:' + s.accent + '">' +
+      esc(s.name) + "</a>";
+  }).join("");
+
+  document.getElementById("inhalt").innerHTML = SCHIENEN.map(function(s){
+    return '<section class="sch" id="' + s.id + '" style="--accent:' + s.accent + '">' +
+      '<div class="sch__eye"><b>' + esc(s.cat) + "</b><span>" + esc(s.sound) + "</span></div>" +
+      "<h2>" + esc(s.name) + "</h2>" +
+      '<p class="sch__lead">' + esc(s.lead) + "</p>" +
+      '<div class="blocks">' + s.blocks.map(function(b){
+        return '<div class="blk"><h3>' + esc(b.h) + "</h3>" +
+          b.p.map(function(t){ return "<p>" + t + "</p>"; }).join("") + "</div>";
+      }).join("") + "</div>" +
+      (s.pull ? '<p class="pull">' + esc(s.pull) + "</p>" : "") +
+    "</section>";
+  }).join("");
+
+  document.getElementById("rules").innerHTML = REGELN.map(function(r){
+    return "<div><h4>" + esc(r.h) + "</h4><p>" + r.p + "</p></div>";
+  }).join("");
+})();
+</script>
+</body>
+</html>

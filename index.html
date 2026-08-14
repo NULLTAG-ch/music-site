@@ -328,6 +328,10 @@
   /* Das Status-Schild steht als .nt-state in web.css. */
   .rail__sub { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--bone-dim); margin-bottom: var(--s-4); }
   .rail__desc { font-family: var(--font-grotesk); font-size: 14px; line-height: 1.55; color: var(--bone-dim); flex: 1; }
+  /* Der Weg von der Karte in die Langfassung. Steht unter dem Fussstrich,
+     damit die Karte selbst ihre Form behaelt. */
+  .rail__more { display: inline-flex; align-items: center; margin-top: var(--s-4); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color var(--t-base) var(--ease); }
+  .rail__more:hover { color: var(--tiefrot); text-decoration: none; }
   .rail__foot { margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--hairline); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
   .rail__foot b { color: var(--bone); font-weight: 500; }
 
@@ -990,7 +994,7 @@
         <div class="s__num">§06 · RELEASE RAILS</div>
         <h2 class="s__title">Schienen</h2>
       </div>
-      <div class="s__meta"><span data-count="rails">07</span> MIT RELEASES<br/>ONE WORDMARK</div>
+      <div class="s__meta"><span data-count="rails">07</span> MIT RELEASES<br/><a href="schienen.html">BEHIND THE SCENES ↗</a></div>
     </div>
     <!-- Diese Sektion fuehrte bis 2026-08-14 fuenf Schienen, darunter eine
          namens "DISTRIBUTION". Die gibt es nicht: DISTRIBUTION ist der
@@ -1009,6 +1013,7 @@
         <div class="rail__sub">Cosmic frenchcore · EN</div>
         <p class="rail__desc">Uplifting-to-symphonic Frenchcore zu Himmelskörper-Bildern. Aeolian / Phrygian-Dom. Vol.1 komplett (6 Tracks), Vol.2 seit 26.06 vollständig auf allen Diensten (6 Tracks).</p>
         <div class="rail__foot"><span><b>188–205</b> BPM</span><span class="nt-state nt-state--live">Laufend</span></div>
+        <a class="rail__more nt-tap" href="schienen.html#lichtjahr">Behind the Scenes ↗</a>
       </article>
       <article class="rail" data-rail="CT">
         <div class="rail__head"><span class="rail__cat"><b>CT-NN</b> · ALBUM</span><span class="rail__num"></span></div>
@@ -1016,6 +1021,7 @@
         <div class="rail__sub">Cinematic techno · DE</div>
         <p class="rail__desc">Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. Album mit neun Tracks, seit Mai 2026 vollständig.</p>
         <div class="rail__foot"><span><b>144–160</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
+        <a class="rail__more nt-tap" href="schienen.html#cinetekk">Behind the Scenes ↗</a>
       </article>
       <article class="rail" data-rail="DM">
         <div class="rail__head"><span class="rail__cat"><b>DM-NN</b> · EP</span><span class="rail__num"></span></div>
@@ -1023,6 +1029,7 @@
         <div class="rail__sub">Festival frenchcore · EN</div>
         <p class="rail__desc">Euphoric Peaktime-Mainstage-Anthem als durchgehender Story-Arc: Arrival → Communion → Intimacy → Surrender. Vier Tracks, eigene Schiene mit eigenem Prefix — nicht Teil von Lichtjahr.</p>
         <div class="rail__foot"><span><b>188–200</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
+        <a class="rail__more nt-tap" href="schienen.html#dome">Behind the Scenes ↗</a>
       </article>
       <article class="rail" data-rail="BB">
         <div class="rail__head"><span class="rail__cat"><b>BB-NN</b> · EP</span><span class="rail__num"></span></div>
@@ -1030,6 +1037,7 @@
         <div class="rail__sub">Industrial · Acid Techno · EN</div>
         <p class="rail__desc">Cyber-Espionage als Sound: schwarzer Bildschirm, ein Cursor, vier Tracks von Blackbox bis Kill Switch. Das bisher einzige NULLTAG-Release mit einem Spotify-Playlist-Placement.</p>
         <div class="rail__foot"><span><b>147–155</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
+        <a class="rail__more nt-tap" href="schienen.html#blackbox">Behind the Scenes ↗</a>
       </article>
       <article class="rail" data-rail="TS">
         <div class="rail__head"><span class="rail__cat"><b>TS-NN</b> · EP</span><span class="rail__num"></span></div>
@@ -1037,6 +1045,7 @@
         <div class="rail__sub">Trance · Hands-Up · DE / EN</div>
         <p class="rail__desc">Ein Werk in vier Fassungen: deutsche Version, englische Version, Instrumental und String-Theory-Mix. Dieselbe Melodie, vier Blickwinkel.</p>
         <div class="rail__foot"><span><b>144</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
+        <a class="rail__more nt-tap" href="schienen.html#tausend-stimmen">Behind the Scenes ↗</a>
       </article>
       <article class="rail" data-rail="TB">
         <div class="rail__head"><span class="rail__cat"><b>TB-NN</b> · SINGLES</span><span class="rail__num"></span></div>
@@ -1044,6 +1053,7 @@
         <div class="rail__sub">Comedy hardtek · DE / CH-DE</div>
         <p class="rail__desc">Mundart und Blödsinn auf Frenchcore-Fundament, Halftone-Riso-Pop als Bildsprache. Neun Singles live — die Schiene ist bewusst eingefroren, zurückgezogen ist nichts.</p>
         <div class="rail__foot"><span><b>110–175</b> BPM</span><span class="nt-state">Eingefroren</span></div>
+        <a class="rail__more nt-tap" href="schienen.html#tonband">Behind the Scenes ↗</a>
       </article>
       <article class="rail" data-rail="ST">
         <div class="rail__head"><span class="rail__cat"><b>NULLTAG-NN</b> · SINGLES</span><span class="rail__num"></span></div>
@@ -1051,6 +1061,7 @@
         <div class="rail__sub">Singles ohne EP-Bindung</div>
         <p class="rail__desc">Der offene Katalog — Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music und die laufenden Nummern. Hier erscheint zurzeit alles Neue.</p>
         <div class="rail__foot"><span><b>147–220</b> BPM</span><span class="nt-state nt-state--live">Laufend</span></div>
+        <a class="rail__more nt-tap" href="schienen.html#standalone">Behind the Scenes ↗</a>
       </article>
     </div>
   </div>
