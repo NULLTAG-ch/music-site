@@ -234,8 +234,14 @@ window.CONFIG = {
     // richtig als tagesgenau und erfunden; sortiert wird trotzdem korrekt.
     // `?m=1` ist Bloggers Mobil-Parameter und gehoert nicht in einen Link,
     // den jemand auf dem Desktop oeffnet.
+    // Titel per Websuche belegt (die Seite selbst ist von der
+    // Netzwerk-Policy blockiert, der Index kennt sie aber). Der
+    // Besprechungstext liegt nur als Suchmaschinen-Zusammenfassung vor —
+    // 200 BPM, Frenchcore, Einsatz ab 0:31, maennliche und weibliche
+    // Stimme, Anti-System-Botschaft. Das ist eine Paraphrase, kein
+    // Wortlaut, und steht deshalb NICHT als `quote` in der Karte.
     { date: "2026-06", source: "Rockola Indie", kind: "Artikel",
-      about: "Freedom",
+      title: "NULLTAG - Freedom", about: "Freedom",
       url: "https://www.rockolaindie.com/2026/06/nulltag-freedom.html" }
   ]
 
