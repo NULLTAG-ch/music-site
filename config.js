@@ -213,7 +213,19 @@ window.CONFIG = {
     //
     // Die URL ist um den Tracking-Parameter `mibextid` gekuerzt.
     { source: "TV Liechtenstein", kind: "TV",
-      url: "https://www.facebook.com/reel/2262232791280600/" }
+      url: "https://www.facebook.com/reel/2262232791280600/" },
+
+    // Besprechung von „Freedom" (NULLTAG-13) bei einem mexikanischen
+    // Radio-/Musikmagazin.
+    //
+    // `date` und `about` sind NICHT geraten, sondern aus der URL
+    // abgeleitet: der WordPress-Permalink traegt das Datum im Pfad
+    // (/2026/05/30/) und das Thema im Slug (nulltag-freedom). Die
+    // Schlagzeile steht dort nicht drin — sie fehlt hier deshalb, und die
+    // Karte liest sich als „Beitrag über Freedom".
+    { date: "2026-05-30", source: "Cosmonauta Radio", kind: "Artikel",
+      about: "Freedom",
+      url: "https://cosmonautaradio.com.mx/2026/05/30/nulltag-freedom/" }
   ]
 
   // Kein `upcoming` mehr — bewusst entfernt, nicht ersetzt (Entscheidung

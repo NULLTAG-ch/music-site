@@ -1631,7 +1631,11 @@
             '<span class="' + presseBadge(p.kind) + '">' + catEsc(p.kind || "Artikel") + "</span>" +
           "</div>" +
           '<div class="pr__date">' + catEsc(p.date || "") + "</div>" +
-          '<h3 class="pr__title">' + catEsc(p.title || "Beitrag über NULLTAG") + "</h3>" +
+          // Ohne Schlagzeile beschreibt die Karte, was der Link ist. `about`
+        // nennt dabei das Thema, wenn es feststeht — „Beitrag über
+        // Freedom" statt sechsmal derselben Zeile.
+        '<h3 class="pr__title">' +
+          catEsc(p.title || ("Beitrag über " + (p.about || "NULLTAG"))) + "</h3>" +
           (p.quote ? '<p class="pr__quote">' + catEsc(p.quote) + "</p>" : "") +
             '<div class="pr__go">' + (sehen ? "Beitrag ansehen ↗" : "Beitrag lesen ↗") + "</div>" +
         "</div>" +
