@@ -490,6 +490,60 @@ a.nt-feed__text::after {
 }
 
 /* ============================================================
+   TREFFERFLÄCHEN AUF TOUCH-GERÄTEN
+   ------------------------------------------------------------
+   Ein Prüflauf über alle nulltag.ch-Seiten fand auf JEDER Seite
+   Bedienelemente zwischen 14px und 39px Höhe. Mit der Maus reicht
+   das, mit dem Daumen nicht — und es war überall dasselbe Muster,
+   also gehört die Antwort hierher und nicht in jede Seite einzeln.
+
+   Gebunden an `pointer: coarse`, nicht an die Fensterbreite: ein
+   schmales Desktop-Fenster wird nicht mit dem Finger bedient, ein
+   breites Tablet schon. Wer eine Maus hat, behält die kompakte
+   Dichte, die zur Marke gehört.
+
+   Links MITTEN IM FLIESSTEXT sind bewusst NICHT enthalten. WCAG
+   2.5.8 nimmt sie ausdrücklich aus, und sie zu polstern zerreisst
+   die Zeile, in der sie stehen. Deshalb greift die Regel auf echte
+   Bedienelemente — und Anker, die sich wie Knöpfe verhalten,
+   holen sie sich über `.nt-tap`.
+   ============================================================ */
+
+@media (pointer: coarse), (hover: none) {
+  button,
+  select,
+  summary,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  .nt-tap,
+  .nt-skip,
+  .nt-switch a,
+  .nt-bar__mark {
+    min-height: 44px;
+  }
+
+  /* Damit die neue Höhe den Inhalt zentriert statt ihn oben kleben
+     zu lassen — betrifft nur Elemente, die vorher kleiner waren. */
+  button, [role="button"], .nt-tap, .nt-skip, .nt-switch a, .nt-bar__mark {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Die Leiste wächst mit ihren Zielen mit. */
+  .nt-bar { min-height: 48px; }
+
+  /* Index-Zeilen sind ganze Reihen — die sind schon gross genug,
+     brauchen aber Luft, damit zwei nicht aneinander kleben. */
+  .nt-row { min-height: 56px; }
+}
+
+/* Für Anker, die als Knopf gestaltet sind. Auf einen Link im Satz
+   gehört diese Klasse NICHT. */
+.nt-tap { align-items: center; }
+
+/* ============================================================
    ACCESSIBILITY
    ============================================================ */
 

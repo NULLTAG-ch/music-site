@@ -11,7 +11,11 @@
 <meta property="og:type" content="video.other" />
 <meta property="og:image" content="https://music.nulltag.ch/assets/facts-poster.jpg" />
 <link rel="stylesheet" href="fonts/fonts.css" />
-<link rel="stylesheet" href="colors_and_type.css?v=2" />
+<link rel="stylesheet" href="colors_and_type.css?v=3" />
+<!-- Gemeinsame Web-Schicht aus nulltag-cd. Fehlte hier: systemweite
+     Korrekturen (etwa Trefferflaechen auf Touch) erreichten diese Seite
+     bisher nicht, weil sie nur die Tokens lud. -->
+<link rel="stylesheet" href="web.css?v=3" />
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   html, body { height: 100%; }
@@ -45,7 +49,7 @@
 </head>
 <body>
   <header class="fv-top">
-    <a href="index.html"><span class="dot" aria-hidden="true"></span>NULLTAG</a>
+    <a class="nt-tap" href="index.html"><span class="dot" aria-hidden="true"></span>NULLTAG</a>
     <span class="rail">LICHTJAHR VOL.2 · PHYSIK-VIDEO</span>
   </header>
 
@@ -62,9 +66,9 @@
   <footer class="fv-foot">
     <div class="fv-cap">6 Tracks · 6 echte Phänomene · <b>Echte Astrophysik als Musik</b><br><span style="opacity:.6">Footage: NASA / SVS · ESA / Hubble · Public Domain</span></div>
     <div class="fv-links">
-      <a class="fv-btn" href="facts-read.html">≡ Alle Fakten lesen</a>
-      <a class="fv-btn fv-btn--primary" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener">▶ Hör Lichtjahr Vol.2</a>
-      <a class="fv-btn" href="index.html">← Zurück</a>
+      <a class="fv-btn nt-tap" href="facts-read.html">≡ Alle Fakten lesen</a>
+      <a class="fv-btn fv-btn--primary nt-tap" href="https://soundcloud.com/nulltag" target="_blank" rel="noopener">▶ Hör Lichtjahr Vol.2</a>
+      <a class="fv-btn nt-tap" href="index.html">← Zurück</a>
     </div>
   </footer>
   <script>
