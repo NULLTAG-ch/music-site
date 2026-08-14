@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="fonts/fonts.css" />
 <link rel="stylesheet" href="colors_and_type.css?v=3" />
 <!-- Shared NULLTAG web layer — edited in nulltag-cd, vendored here. -->
-<link rel="stylesheet" href="web.css?v=2" />
+<link rel="stylesheet" href="web.css?v=4" />
 <script src="web.js?v=2" defer></script>
 <!-- Curated content. Blocking on purpose: §03 renders CONFIG.updates on
      first paint, and the file is a few kB of literals. -->
@@ -177,8 +177,11 @@
   @media (max-width: 880px) { .latest { grid-template-columns: 1fr; gap: var(--s-6); } }
 
   /* ===== catalog ===== */
-  .filters { display: flex; gap: var(--s-2); margin-bottom: var(--s-7); flex-wrap: wrap; }
-  .filters button { flex: 0 1 auto; appearance: none; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-pill); color: var(--bone-dim); padding: 9px 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: color var(--t-base) var(--ease), background var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
+  /* Basis (Flex, Umbruch, Abstand) kommt aus .nt-swipe in web.css. */
+  .filters { margin-bottom: var(--s-7); }
+  /* kein flex hier — .nt-swipe setzt es, und ein lokales flex-shrink:1
+     wuerde die Chips gegen die Wischleiste zusammendruecken. */
+  .filters button { appearance: none; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-pill); color: var(--bone-dim); padding: 9px 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: color var(--t-base) var(--ease), background var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
   .filters button:hover { color: var(--bone); border-color: var(--border-warm); background: var(--surface-2); }
   .filters button.active { color: var(--void); background: var(--bone); border-color: var(--bone); }
   .filters button[data-rail="LJ"].active { background: var(--cosmic-glow); border-color: var(--cosmic-glow); color: var(--void); }
@@ -197,23 +200,11 @@
      2. minmax(200px,1fr) ergibt bei 390px genau EINE Kachel pro Reihe.
         Ein Katalog, den man nur einzeln durchscrollen kann, ist keine
         Uebersicht. Zwei Spalten halbieren den Weg und zeigen Nachbarn. */
+  /* Die Wischleiste selbst steht als .nt-swipe in web.css — sie ist kein
+     Katalog-Detail, sondern ein Muster, das jede Chip-Zeile auf jeder
+     NULLTAG-Seite braucht. Hier bleibt nur, was wirklich der Katalog ist. */
   @media (max-width: 720px) {
-    .filters {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overscroll-behavior-x: contain;
-      scroll-snap-type: x proximity;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      margin-inline: calc(var(--s-5) * -1);
-      padding-inline: var(--s-5);
-      /* Ausblenden an den Kanten: sagt „hier geht es weiter", ohne eine
-         Leiste zu zeichnen, die es im System nicht gibt. */
-      mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
-      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
-    }
-    .filters::-webkit-scrollbar { display: none; }
-    .filters button { flex: 0 0 auto; scroll-snap-align: start; }
+    .filters { -webkit-overflow-scrolling: touch; }
     .catalog { grid-template-columns: 1fr 1fr; gap: var(--s-2); }
   }
   .cat { position: relative; background: var(--void); aspect-ratio: 1/1; display: block; overflow: hidden; text-decoration: none; color: var(--bone); border-radius: var(--r-lg); border: 1px solid var(--hairline); }
@@ -303,8 +294,7 @@
   /* Titel einer abgeschlossenen Schiene: die Schiene bleibt sichtbar, aber
      der Status steht daneben statt sie auszugrauen — abgeschlossen ist Teil
      der Geschichte, kein Makel. */
-  .rail__state { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; padding: 3px 7px; border: 1px solid var(--hairline); border-radius: 3px; color: var(--muted); white-space: nowrap; }
-  .rail__state--live { color: var(--giftgrun-glow); border-color: rgba(90,224,130,0.4); }
+  /* Das Status-Schild steht als .nt-state in web.css. */
   .rail__sub { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--bone-dim); margin-bottom: var(--s-4); }
   .rail__desc { font-family: var(--font-grotesk); font-size: 14px; line-height: 1.55; color: var(--bone-dim); flex: 1; }
   .rail__foot { margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--hairline); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
@@ -876,7 +866,7 @@
          die beim naechsten Release still falsch wurden — und eine Schiene,
          die es nie gab. Ohne JS bleibt der ALL-Chip stehen und der Katalog
          zeigt trotzdem alles. -->
-    <div class="filters" role="tablist" id="filters">
+    <div class="filters nt-swipe" role="tablist" id="filters">
       <button class="active" data-rail="ALL">ALL · <span data-count="releases">27</span></button>
     </div>
     <div class="catalog" id="catalog-grid"></div>
@@ -970,49 +960,49 @@
         <h3 class="rail__title">Lichtjahr</h3>
         <div class="rail__sub">Cosmic frenchcore · EN</div>
         <p class="rail__desc">Uplifting-to-symphonic Frenchcore zu Himmelskörper-Bildern. Aeolian / Phrygian-Dom. Vol.1 komplett (6 Tracks), Vol.2 seit 26.06 vollständig auf allen Diensten (6 Tracks).</p>
-        <div class="rail__foot"><span><b>188–205</b> BPM</span><span class="rail__state rail__state--live">Laufend</span></div>
+        <div class="rail__foot"><span><b>188–205</b> BPM</span><span class="nt-state nt-state--live">Laufend</span></div>
       </article>
       <article class="rail" data-rail="CT">
         <div class="rail__head"><span class="rail__cat"><b>CT-NN</b> · ALBUM</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Cinetekk</h3>
         <div class="rail__sub">Cinematic techno · DE</div>
         <p class="rail__desc">Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. Album mit neun Tracks, seit Mai 2026 vollständig.</p>
-        <div class="rail__foot"><span><b>144–160</b> BPM</span><span class="rail__state">Abgeschlossen</span></div>
+        <div class="rail__foot"><span><b>144–160</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
       </article>
       <article class="rail" data-rail="DM">
         <div class="rail__head"><span class="rail__cat"><b>DM-NN</b> · EP</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Dome EP</h3>
         <div class="rail__sub">Festival frenchcore · EN</div>
         <p class="rail__desc">Euphoric Peaktime-Mainstage-Anthem als durchgehender Story-Arc: Arrival → Communion → Intimacy → Surrender. Vier Tracks, eigene Schiene mit eigenem Prefix — nicht Teil von Lichtjahr.</p>
-        <div class="rail__foot"><span><b>188–200</b> BPM</span><span class="rail__state">Abgeschlossen</span></div>
+        <div class="rail__foot"><span><b>188–200</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
       </article>
       <article class="rail" data-rail="BB">
         <div class="rail__head"><span class="rail__cat"><b>BB-NN</b> · EP</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Blackbox</h3>
         <div class="rail__sub">Industrial · Acid Techno · EN</div>
         <p class="rail__desc">Cyber-Espionage als Sound: schwarzer Bildschirm, ein Cursor, vier Tracks von Blackbox bis Kill Switch. Das bisher einzige NULLTAG-Release mit einem Spotify-Playlist-Placement.</p>
-        <div class="rail__foot"><span><b>147–155</b> BPM</span><span class="rail__state">Abgeschlossen</span></div>
+        <div class="rail__foot"><span><b>147–155</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
       </article>
       <article class="rail" data-rail="TS">
         <div class="rail__head"><span class="rail__cat"><b>TS-NN</b> · EP</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Tausend Stimmen</h3>
         <div class="rail__sub">Trance · Hands-Up · DE / EN</div>
         <p class="rail__desc">Ein Werk in vier Fassungen: deutsche Version, englische Version, Instrumental und String-Theory-Mix. Dieselbe Melodie, vier Blickwinkel.</p>
-        <div class="rail__foot"><span><b>144</b> BPM</span><span class="rail__state">Abgeschlossen</span></div>
+        <div class="rail__foot"><span><b>144</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
       </article>
       <article class="rail" data-rail="TB">
         <div class="rail__head"><span class="rail__cat"><b>TB-NN</b> · SINGLES</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Tonband</h3>
         <div class="rail__sub">Comedy hardtek · DE / CH-DE</div>
         <p class="rail__desc">Mundart und Blödsinn auf Frenchcore-Fundament, Halftone-Riso-Pop als Bildsprache. Neun Singles live — die Schiene ist bewusst eingefroren, zurückgezogen ist nichts.</p>
-        <div class="rail__foot"><span><b>110–175</b> BPM</span><span class="rail__state">Eingefroren</span></div>
+        <div class="rail__foot"><span><b>110–175</b> BPM</span><span class="nt-state">Eingefroren</span></div>
       </article>
       <article class="rail" data-rail="ST">
         <div class="rail__head"><span class="rail__cat"><b>NULLTAG-NN</b> · SINGLES</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Standalones</h3>
         <div class="rail__sub">Singles ohne EP-Bindung</div>
         <p class="rail__desc">Der offene Katalog — Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music und die laufenden Nummern. Hier erscheint zurzeit alles Neue.</p>
-        <div class="rail__foot"><span><b>147–220</b> BPM</span><span class="rail__state rail__state--live">Laufend</span></div>
+        <div class="rail__foot"><span><b>147–220</b> BPM</span><span class="nt-state nt-state--live">Laufend</span></div>
       </article>
     </div>
   </div>

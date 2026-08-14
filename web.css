@@ -407,6 +407,30 @@
 .nt-badge--audio { color: var(--cold-blue); border-color: var(--cold); }
 
 /* ============================================================
+   STATE BADGE
+   Says what state a thing is in — a Schiene that still ships, one
+   that is finished, one that was deliberately frozen. Finished is
+   part of the story, not a defect, so it is not greyed out into
+   illegibility: it reads as calm, and only the running state
+   carries colour.
+   ============================================================ */
+
+.nt-state {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: var(--ls-mono-eye);
+  text-transform: uppercase;
+  color: var(--muted);
+  border: var(--bw) solid var(--hairline);
+  border-radius: var(--r-sm);
+  padding: 3px 7px;
+  white-space: nowrap;
+}
+.nt-state--live { color: var(--giftgrun-glow); border-color: rgba(90, 224, 130, 0.4); }
+
+/* ============================================================
    FEED
    A dated list of things that happened — a release, an upload, a
    piece of press. Two columns: the date carries the rhythm on the
@@ -542,6 +566,46 @@ a.nt-feed__text::after {
 /* Für Anker, die als Knopf gestaltet sind. Auf einen Link im Satz
    gehört diese Klasse NICHT. */
 .nt-tap { align-items: center; }
+
+/* ============================================================
+   SWIPE BAR
+   A row of chips that fits on a desktop and does not fit on a
+   phone. Wrapping is the default and the wrong answer: three
+   stacked rows of filters push the thing being filtered off the
+   screen. So below the breakpoint the row stops wrapping and
+   becomes swipeable — one line, snap points, and a fade on the
+   right as the only hint that there is more.
+
+   The fade is right-only on purpose. A symmetric mask dims the
+   first chip while the row is still scrolled to the start, and
+   the first chip is usually the active one.
+
+   Put .nt-swipe on the row; the chips need no class of their own.
+   ============================================================ */
+
+.nt-swipe { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+
+@media (max-width: 720px) {
+  .nt-swipe {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    /* Der Balken zieht sich bis an den Rand, damit die letzte Karte
+       nicht in einer Sackgasse endet. */
+    margin-inline: calc(var(--s-5) * -1);
+    padding-inline: var(--s-5);
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+            mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+  }
+  .nt-swipe::-webkit-scrollbar { display: none; }
+  /* nowrap gehoert dazu: ohne es schrumpfen die Chips auf die
+     Containerbreite und brechen ihre Beschriftung um — aus einer
+     44px-Zeile werden 62px, und das Wischen wird sinnlos, weil ohnehin
+     alles hineinpasst. */
+  .nt-swipe > * { flex: 0 0 auto; scroll-snap-align: start; white-space: nowrap; }
+}
 
 /* ============================================================
    ACCESSIBILITY
