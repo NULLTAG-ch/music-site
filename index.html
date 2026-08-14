@@ -897,7 +897,7 @@
         <div class="s__num">§05 · PRESSE · ÜBER NULLTAG</div>
         <h2 class="s__title">Presse</h2>
       </div>
-      <div class="s__meta"><span data-count="presse">—</span> BEITRÄGE<br/>NEUESTE ZUERST</div>
+      <div class="s__meta"><span data-count="presse">—</span> <span data-count="presseWort">BEITRÄGE</span><br/>NEUESTE ZUERST</div>
     </div>
     <div class="presse" id="presse-list"></div>
   </div>
@@ -1475,11 +1475,14 @@
     var rails = {};
     CATALOG.forEach(function(c){ if (c.rail && c.rail !== "NEW") rails[c.rail] = 1; });
     var pad = function(n){ return (n < 10 ? "0" : "") + n; };
+    var presseN = document.querySelectorAll("#presse-list .pr").length;
     var values = {
       releases: String(releases),
       tracks: String(tracks),
       rails: pad(Object.keys(rails).length),
-      presse: pad(document.querySelectorAll("#presse-list .pr").length)
+      presse: pad(presseN),
+      // Ein Beitrag ist kein Beiträge.
+      presseWort: presseN === 1 ? "BEITRAG" : "BEITRÄGE"
     };
     document.querySelectorAll("[data-count]").forEach(function(el){
       var v = values[el.dataset.count];
@@ -1587,8 +1590,11 @@
     // Initialisierung mit einem ReferenceError abzuraeumen.
     var isVid = (window.NT && NT.isVideoId) ? NT.isVideoId : function(){ return false; };
 
+    // Ein Eintrag braucht eine URL. Ein Titel waere besser — aber lieber
+    // eine sachliche Beschreibung dessen, was der Link ist, als eine
+    // erfundene Schlagzeile. Auf dieser Seite steht nichts Geratenes.
     var items = ((window.CONFIG && CONFIG.presse) || []).filter(function(p){
-      return p && p.title && p.url;
+      return p && p.url;
     });
     // Leer heisst weg. Eine Ueberschrift ohne Inhalt ist eine Ankuendigung,
     // und Ankuendigungen ohne Termin sind auf dieser Seite abgeschafft.
@@ -1606,6 +1612,10 @@
 
     box.innerHTML = items.map(function(p, i){
       var vid = isVid(p.video) ? p.video : "";
+      // Ein Fernsehbeitrag wird angesehen, auch wenn er nicht als
+      // YouTube-Facade eingebettet ist, sondern nur verlinkt.
+      var k = String(p.kind || "").toLowerCase();
+      var sehen = !!vid || k === "tv" || k === "video";
       // Der erste Beitrag mit Bewegtbild bekommt die volle Breite — ein
       // TV-Beitrag ueber das Label ist das staerkste Stueck auf der Seite.
       var wide = vid && i === 0 ? " pr--wide" : "";
@@ -1621,9 +1631,9 @@
             '<span class="' + presseBadge(p.kind) + '">' + catEsc(p.kind || "Artikel") + "</span>" +
           "</div>" +
           '<div class="pr__date">' + catEsc(p.date || "") + "</div>" +
-          '<h3 class="pr__title">' + catEsc(p.title) + "</h3>" +
+          '<h3 class="pr__title">' + catEsc(p.title || "Beitrag über NULLTAG") + "</h3>" +
           (p.quote ? '<p class="pr__quote">' + catEsc(p.quote) + "</p>" : "") +
-          '<div class="pr__go">' + (vid ? "Beitrag ansehen ↗" : "Beitrag lesen ↗") + "</div>" +
+            '<div class="pr__go">' + (sehen ? "Beitrag ansehen ↗" : "Beitrag lesen ↗") + "</div>" +
         "</div>" +
       "</a>";
     }).join("");

@@ -194,7 +194,27 @@ window.CONFIG = {
   //
   // { date: "2026-06-12", source: "1FL TV", kind: "TV",
   //   title: "…", url: "https://…", quote: "…", video: "…" },
-  presse: []
+  presse: [
+    // Fernsehbeitrag von TV Liechtenstein, als Reel auf Facebook.
+    //
+    // `title` und `date` fehlen absichtlich: die Session, die diesen
+    // Eintrag angelegt hat, kommt per Egress-Regel nicht an facebook.com
+    // und kann Schlagzeile und Sendedatum nicht auslesen. Lieber kein
+    // Titel als ein geratener — die Karte faellt dann auf „Beitrag über
+    // NULLTAG" zurueck. Sobald beides bekannt ist, hier eintragen; ein
+    // `quote` aus dem Beitrag macht die Karte deutlich staerker.
+    //
+    // Kein `video`: das Feld erwartet eine YouTube-ID fuer die
+    // Klick-Facade. Ein Facebook-Reel liesse sich nur ueber deren SDK
+    // einbetten, und das laedt Skripte und Cookies von Meta, bevor
+    // irgendjemand auf Play gedrueckt hat. Die Seite liefert per Default
+    // keinen Third-Party-Cookie aus, und dabei bleibt es — also verlinkt
+    // die Karte, statt einzubetten.
+    //
+    // Die URL ist um den Tracking-Parameter `mibextid` gekuerzt.
+    { source: "TV Liechtenstein", kind: "TV",
+      url: "https://www.facebook.com/reel/2262232791280600/" }
+  ]
 
   // Kein `upcoming` mehr — bewusst entfernt, nicht ersetzt (Entscheidung
   // Ivan Stricker, 2026-08-13, siehe nulltag-cd/vault-export/meta.json).
