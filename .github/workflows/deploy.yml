@@ -1,42 +1,133 @@
-name: Deploy to GitHub Pages
+name: Build feed and deploy Pages
 
-# Pages must be enabled once: repo Settings → Pages → Source = "GitHub Actions".
-# SOLE owner of push-to-main Pages deploys. Triggers on `main` only — a
-# second ref (or feed.yml) in the shared `pages` concurrency group makes
-# GitHub cancel runs ("higher priority waiting request for pages exists")
-# so nothing ever publishes. feed.yml deploys on its own schedule instead.
+# EIN Workflow fuer beides — bewusst, nach einem teuren Irrweg.
+#
+# Vorher gab es zwei: `deploy.yml` fuer Pushes auf main und `feed.yml` alle
+# 15 Minuten. Beide veroeffentlichten nach Pages, beide standen in der
+# Concurrency-Gruppe `pages`. Concurrency-Gruppen gelten repo-weit, nicht
+# pro Workflow — GitHub laesst pro Gruppe genau einen wartenden Lauf zu und
+# bricht den aelteren ab, sobald ein neuer dazukommt. Bei 15-Minuten-Takt
+# heisst das: alle 15 Minuten wird der wartende Deploy abgeraeumt, der neue
+# wartet, und 15 Minuten spaeter trifft es ihn.
+#
+# Der letzte erfolgreiche Deploy war der 21. Juli. Der Kommentar in der
+# alten deploy.yml behauptete, getrennte Trigger loesten das ("deploy.yml
+# owns push-to-main deploys, feed.yml deploys on its own schedule") — das
+# war falsch: die Gruppe kennt keine Trigger, nur Laeufe.
+#
+# Jetzt gibt es genau einen Anwaerter auf `pages`. Ueberholen sich zwei
+# Laeufe dieses Workflows, gewinnt der neuere — und der traegt ohnehin den
+# neueren Stand.
+#
+# Pages muss einmalig eingeschaltet sein: Settings → Pages → Source =
+# "GitHub Actions".
+#
+# Taktnotiz: GitHub-Zeitplaene sind best effort und unter Last oft
+# verzoegert, "*/15" ist also eher 15–30 Minuten als exakt.
 
 on:
   push:
     branches:
       - main
+  schedule:
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
-# Allow one concurrent deployment, don't cancel an in-progress one.
+# Der Datenteil darf NICHT in der `pages`-Gruppe haengen. Stand er dort,
+# wartete jeder geplante Lauf in der Gruppe und wurde exakt in dem Moment
+# abgebrochen, in dem der naechste startete: 30 von 30 Laeufen "cancelled",
+# releases.json seit 2026-08-06 unveraendert. Der Build hat seine eigene
+# Spur; nur der Deploy-Job teilt sich `pages` (siehe unten). Wird der
+# Deploy verdraengt, sind die Daten trotzdem committet und gehen mit dem
+# naechsten Lauf raus.
 concurrency:
-  group: pages
+  group: site-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  build:
+  feed:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build releases.json
+        env:
+          SC_CLIENT_ID: ${{ secrets.SC_CLIENT_ID }}
+          SC_CLIENT_SECRET: ${{ secrets.SC_CLIENT_SECRET }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        run: node tools/build-feed.mjs
+
+      # Postet Release-Änderungen nach Telegram. Läuft hier — nach dem Build,
+      # vor dem Commit —, weil dann HEAD = alte committete releases.json und der
+      # Working-Tree = neu gebaute Version ist (sauberer Diff). continue-on-error,
+      # damit ein Telegram-Ausfall niemals den Site-Deploy blockiert.
+      - name: Notify Telegram of release changes
+        continue-on-error: true
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 .github/scripts/notify_release.py
+
+      # Committet releases.json UND announced.json (der Notify-Ledger, den der
+      # vorige Step fortschreibt). Beide müssen persistiert werden, sonst würde
+      # der nächste Lauf bereits angekündigte Releases erneut posten.
+      #
+      # [skip ci] ist hier Dokumentation, keine Notwendigkeit: ein Push mit
+      # dem GITHUB_TOKEN loest ohnehin keinen neuen Workflow-Lauf aus. Genau
+      # deshalb war "deploy.yml faengt den Feed-Commit auf" nie eine Option
+      # und der Feed brauchte einen eigenen Deploy — der jetzt hier steht.
+      - name: Commit feed if it changed
+        run: |
+          if git diff --quiet -- releases.json announced.json; then
+            echo "No feed changes."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add releases.json announced.json
+            git commit -m "chore: refresh release feed [skip ci]"
+            git push
+          fi
+
+  # Veroeffentlichen ist ein eigener Job — er darf verdraengt werden, ohne
+  # den Datenstand mitzureissen.
+  publish:
+    needs: feed
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        # Nach dem Commit des Feed-Jobs auschecken, sonst ginge der alte
+        # Stand ins Artefakt.
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
-          # Idempotent; ensures the Pages site exists (Actions source).
+          # Idempotent; stellt sicher, dass die Pages-Site existiert.
           enablement: true
 
       - name: Prune non-site files from artifact
-        # Keep the repo as-is; just don't ship prototypes/tooling to Pages.
+        # Das Repo bleibt wie es ist; nur Prototypen und Werkzeug gehen
+        # nicht mit nach Pages.
         run: rm -rf assets/proto tools docs
 
       - name: Upload site artifact
@@ -44,14 +135,6 @@ jobs:
         with:
           path: .
 
-  deploy:
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
