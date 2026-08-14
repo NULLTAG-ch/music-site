@@ -140,19 +140,13 @@ window.CONFIG = {
   updates: [
     { date: "2026-05-16", platform: "Release",   text: "Plastic Paradise EP is out — listen on every platform.", url: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" },
     { date: "2026-05-16", platform: "Instagram", text: "New visuals + behind-the-scenes on Instagram.",            url: "https://www.instagram.com/nulltag.ch/" }
-  ],
-
-  // Upcoming projects — what's next. Fields: title, schiene, status
-  // (Concept · Writing · In mix · Mastering · Scheduled), eta (free text),
-  // note (1–2 sentences), link (optional "more info ↗" url, "" to hide).
-  upcoming: [
-    {
-      title: "Lichtjahr Vol.2 — Full EP",
-      schiene: "Lichtjahr",
-      status: "Scheduled",
-      eta: "26.06.2026",
-      note: "6-track cosmic-frenchcore EP. SoundCloud singles are uploads (last single 'Last Light', Fri 19.06); the real release — distribution to all streaming services — is 26 June 2026. Showroom 03 July.",
-      link: ""
-    }
   ]
+
+  // Kein `upcoming` mehr — bewusst entfernt, nicht ersetzt (Entscheidung
+  // Ivan Stricker, 2026-08-13, siehe nulltag-cd/vault-export/meta.json).
+  // Der Eintrag kuendigte "Lichtjahr Vol.2" sieben Wochen nach dem Release
+  // noch als `Scheduled` an. Bei rund einem Release pro Woche veraltet jede
+  // Einzelankuendigung schneller, als die Seite gepflegt wird — und ein Feld,
+  // das es nicht gibt, kann nicht falsch sein. Die Seite zeigt den Live-
+  // Katalog; der kommt aus releases.json und pflegt sich selbst.
 };
