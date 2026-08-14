@@ -225,7 +225,18 @@ window.CONFIG = {
     // Karte liest sich als „Beitrag über Freedom".
     { date: "2026-05-30", source: "Cosmonauta Radio", kind: "Artikel",
       about: "Freedom",
-      url: "https://cosmonautaradio.com.mx/2026/05/30/nulltag-freedom/" }
+      url: "https://cosmonautaradio.com.mx/2026/05/30/nulltag-freedom/" },
+
+    // Zweite Besprechung von „Freedom", bei einem Indie-Musikblog.
+    //
+    // Der Blogger-Permalink traegt nur Jahr und Monat (/2026/06/), keinen
+    // Tag — das Datum steht hier deshalb monatsgenau. Lieber ungenau und
+    // richtig als tagesgenau und erfunden; sortiert wird trotzdem korrekt.
+    // `?m=1` ist Bloggers Mobil-Parameter und gehoert nicht in einen Link,
+    // den jemand auf dem Desktop oeffnet.
+    { date: "2026-06", source: "Rockola Indie", kind: "Artikel",
+      about: "Freedom",
+      url: "https://www.rockolaindie.com/2026/06/nulltag-freedom.html" }
   ]
 
   // Kein `upcoming` mehr — bewusst entfernt, nicht ersetzt (Entscheidung
