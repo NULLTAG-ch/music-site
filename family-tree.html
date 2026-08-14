@@ -10,7 +10,7 @@
 <!-- Gemeinsame Web-Schicht aus nulltag-cd. Fehlte hier: systemweite
      Korrekturen (etwa Trefferflaechen auf Touch) erreichten diese Seite
      bisher nicht, weil sie nur die Tokens lud. -->
-<link rel="stylesheet" href="web.css?v=3" />
+<link rel="stylesheet" href="web.css?v=4" />
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   body { overflow-x: hidden; }
@@ -36,7 +36,7 @@
   .tree svg { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
   .edge { fill: none; stroke: var(--border-warm); stroke-width: 1.2; transition: stroke 200ms var(--ease), stroke-width 200ms var(--ease), opacity 200ms var(--ease); }
   .edge.lit { stroke: var(--tiefrot); stroke-width: 2; opacity: 1; }
-  .edge.dim { opacity: 0.12; }
+  .edge.dim { opacity: 0.22; }
 
   .col-head { position: absolute; z-index: 2; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); text-align: center; }
   .col-head b { display: block; color: var(--bone-dim); font-weight: 500; margin-bottom: 3px; }
@@ -45,11 +45,17 @@
   .node:hover { border-color: var(--bone-dim); }
   .node .n-label { font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.02em; color: var(--bone); line-height: 1.15; }
   .node .n-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; color: var(--muted); margin-top: 3px; text-transform: uppercase; }
-  .node .n-year { position: absolute; top: 8px; right: 10px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted-deep); }
+  /* Das Jahr stand als absolute Marke oben rechts und lag bei schmaleren
+     Spalten ueber dem Label ("Kraftwerk · Electro’74"). Es gehoert in die
+     Metazeile: dort hat es Platz und kollidiert mit nichts. */
+  .node .n-sub em { font-style: normal; color: var(--muted-deep); }
   .node.nt { background: linear-gradient(180deg, rgba(255,42,85,0.07), var(--panel)); border-color: var(--tiefrot); }
   .node.nt .n-label { color: var(--bone); }
   .node.nt::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--tiefrot); }
-  .node.dim { opacity: 0.22; }
+  /* 0.22 war unter der Lesbarkeitsgrenze — der Baum sah beim ersten Blick
+     kaputt aus statt fokussiert. Ein Spotlight soll den Rest abdunkeln,
+     nicht ausloeschen. */
+  .node.dim { opacity: 0.42; }
   .node.lit { border-color: var(--bone); background: var(--code-bg); }
   .node.lit.nt { border-color: var(--tiefrot); box-shadow: 0 0 16px rgba(255,42,85,0.35); }
   .node.sel { border-color: var(--tiefrot); box-shadow: 0 0 0 1px var(--tiefrot); }
@@ -65,7 +71,58 @@
   .info__reset { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); background: var(--void); border: 1px solid var(--border-warm); padding: 8px 12px; cursor: pointer; white-space: nowrap; transition: all 150ms var(--ease); }
   .info__reset:hover { border-color: var(--tiefrot); color: var(--bone); }
   @media (max-width: 640px){ .info { grid-template-columns: 1fr; } }
+
+  /* ---------- Handy: derselbe Baum als Liste ----------
+     Der Graph ist 1224px breit. Auf 390px wird daraus ein Guckloch, das
+     man horizontal verschiebt — und das steckt auch noch in einer
+     vertikal scrollenden Seite. Zwei Scrollrichtungen ineinander sind
+     unbedienbar.
+
+     Also dieselbe Information anders erzaehlt: nach Epoche gestapelt,
+     die Abstammung als Text statt als Linie. Die Verbindungen gehen
+     nicht verloren — sie werden lesbar statt sichtbar. */
+  .tree-list { display: none; }
+  @media (max-width: 720px) {
+    .scroller { display: none; }
+    .lg-scroll { display: none; }
+    .tree-list { display: block; }
+    .tl-era { margin-bottom: var(--s-7); }
+    .tl-era__h { display: flex; align-items: baseline; gap: 10px; margin: 0 0 var(--s-3);
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border);
+      padding-bottom: 6px; }
+    .tl-era__h b { color: var(--bone-dim); font-weight: 500; }
+    .tl-era__h span { margin-left: auto; color: var(--muted-deep); }
+    .tl-node { display: block; width: 100%; text-align: left; min-height: 44px;
+      background: var(--panel); border: 1px solid var(--border-warm); border-radius: var(--r-md);
+      padding: 12px 14px; margin-bottom: 8px; cursor: pointer;
+      transition: border-color 180ms var(--ease), background 180ms var(--ease), opacity 180ms var(--ease); }
+    .tl-node__label { display: block; font-family: var(--font-mono); font-size: 13px;
+      font-weight: 500; color: var(--bone); }
+    .tl-node__meta { display: block; font-family: var(--font-mono); font-size: 9.5px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+    .tl-node__from { display: block; font-family: var(--font-mono); font-size: 9.5px;
+      letter-spacing: 0.06em; color: var(--muted-deep); margin-top: 6px; }
+    .tl-node.nt { border-color: var(--tiefrot);
+      background: linear-gradient(180deg, rgba(255,42,85,0.07), var(--panel)); }
+    .tl-node.dim { opacity: 0.5; }
+    .tl-node.lit { border-color: var(--bone-dim); }
+    .tl-node.sel { border-color: var(--tiefrot); box-shadow: 0 0 0 1px var(--tiefrot); }
+    /* Die Infotafel folgt der Auswahl, statt am Seitenende zu warten. */
+    .info { position: sticky; bottom: 0; z-index: 5; }
+  }
+
+  /* ---------- eingebettet in index.html ----------
+     Im Rahmen ist der Seitenkopf doppelt: die Sektion drumherum traegt
+     Titel und Erklaerung bereits. Weg damit, und die Raender enger —
+     der Rahmen ist die Karte, nicht die Seite. */
+  .is-embed .wrap { max-width: none; padding: var(--s-5) var(--s-5) var(--s-6); }
+  .is-embed .phead { display: none; }
 </style>
+<script>
+  /* Frueh genug, dass der Seitenkopf im Rahmen gar nicht erst aufblitzt. */
+  try { if (window.parent !== window) document.documentElement.className += " is-embed"; } catch (e) {}
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -74,13 +131,16 @@
       <div class="eye">§ LINEAGE · TECHNO / EDM · FAMILY TREE</div>
       <h1>Family Tree</h1>
     </div>
-    <p>Von Kraftwerk &amp; Disco bis zu NULLTAGs fünf Schienen. Klick einen Knoten — die Abstammungslinie leuchtet auf. <b style="color:var(--bone)">Rot = NULLTAG</b>.</p>
+    <p>Von Kraftwerk &amp; Disco bis zu den sieben NULLTAG-Schienen mit Releases. Klick einen Knoten — die Abstammungslinie leuchtet auf. <b style="color:var(--bone)">Rot = NULLTAG</b>.</p>
   </div>
 
   <div class="legend">
     <span><i class="lg-gen"></i> Genre / Era</span>
     <span><i class="lg-nt"></i> NULLTAG-Schiene</span>
-    <span class="lg-hint">→ Knoten klicken für Lineage &amp; Details · horizontal scrollen</span>
+    <!-- Der Scroll-Hinweis gilt nur fuer den Graphen. In der Listenansicht
+         auf dem Handy gibt es nichts horizontal zu schieben — ein Hinweis
+         auf eine Geste, die nichts tut, ist schlimmer als keiner. -->
+    <span class="lg-hint">→ Knoten klicken für Lineage &amp; Details<span class="lg-scroll"> · horizontal scrollen</span></span>
   </div>
 
   <div class="scroller">
@@ -89,12 +149,14 @@
     </div>
   </div>
 
+  <div class="tree-list" id="tree-list"></div>
+
   <div class="info" id="info">
     <div>
       <div class="info__eye" id="info-eye">START</div>
       <h2 class="info__title" id="info-title">Wähle einen Knoten</h2>
       <div class="info__sub" id="info-sub">Der Stammbaum elektronischer Tanzmusik — vereinfacht auf die Hauptlinien.</div>
-      <p class="info__desc" id="info-desc">Jede NULLTAG-Schiene sitzt am Ende einer echten Genre-Linie: LICHTJAHR &amp; DOME aus dem Frenchcore, CINETEKK aus dem Techno, Distribution aus Trance / Hard&nbsp;Techno / Hands-Up. Klick eine Schiene, um ihre Herkunft zu sehen — oder ein Wurzel-Genre, um zu sehen, was daraus wurde.</p>
+      <p class="info__desc" id="info-desc">Jede NULLTAG-Schiene sitzt am Ende einer echten Genre-Linie: LICHTJAHR &amp; DOME aus dem Frenchcore, CINETEKK aus dem Techno, BLACKBOX aus Acid&nbsp;/&nbsp;Hard&nbsp;Techno, TAUSEND&nbsp;STIMMEN aus Trance und Hands-Up, TONBAND aus dem Hardtek. Klick eine Schiene, um ihre Herkunft zu sehen — oder ein Wurzel-Genre, um zu sehen, was daraus wurde.</p>
       <div class="info__lineage" id="info-lineage"></div>
     </div>
     <button class="info__reset" id="info-reset">↻ Reset</button>
@@ -121,7 +183,9 @@
     { id:"lichtjahr",   col:4, nt:true, label:"LICHTJAHR",    sub:"Cosmic Frenchcore",            desc:"Uplifting-to-symphonic Frenchcore zu Himmelskörper-Bildern. Aeolian / Phrygian-Dom. 188–205 BPM · EN. Vol.1 komplett, Vol.2 im Rollout." },
     { id:"dome",        col:4, nt:true, label:"DOME EP",      sub:"Festival Frenchcore",          desc:"Euphoric Peaktime-Mainstage-Anthem als Story-Arc: Arrival → Communion → Intimacy → Surrender. 188–200 BPM · EN. 4/4 live." },
     { id:"cinetekk",    col:4, nt:true, label:"CINETEKK",     sub:"Cinematic Techno · Album",     desc:"Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. 144–160 BPM · DE. Album 9/9 live." },
-    { id:"dist",        col:4, nt:true, label:"DISTRIBUTION", sub:"Trance · Hard Techno · Hands-Up", desc:"Tausend Stimmen, BLACKBOX EP, Tonband-Singles (DE Hardtek / Hands-Up). 110–175 BPM. 16 Tracks live." },
+    { id:"blackbox",    col:4, nt:true, label:"BLACKBOX",       sub:"Industrial · Acid Techno",  desc:"Cyber-Espionage als Sound: schwarzer Bildschirm, ein Cursor. 147–155 BPM · EN. 4-Track-EP, abgeschlossen — das bisher einzige NULLTAG-Release mit einem Spotify-Playlist-Placement." },
+    { id:"tausend",     col:4, nt:true, label:"TAUSEND STIMMEN", sub:"Trance · Hands-Up",         desc:"Ein Werk in vier Fassungen: DE, EN, Instrumental, String-Theory-Mix. 144 BPM. Abgeschlossen." },
+    { id:"tonband",     col:4, nt:true, label:"TONBAND",         sub:"Comedy Hardtek",            desc:"Mundart und Blödsinn auf Frenchcore-Fundament, Halftone-Riso-Pop als Bildsprache. 110–175 BPM · DE / CH-DE. Neun Singles live, Schiene eingefroren." },
     { id:"standalones", col:4, nt:true, label:"STANDALONES",  sub:"Singles, heterogen",           desc:"Reine NULLTAG-Singles: Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music. 147–220 BPM." }
   ];
 
@@ -133,8 +197,10 @@
     ["hardcore","frenchcore"], ["hardcore","hardstyle"],
     ["frenchcore","lichtjahr"], ["frenchcore","dome"], ["hardstyle","dome"],
     ["techno","cinetekk"],
-    ["trance","dist"], ["techno","dist"], ["handsup","dist"],
-    ["frenchcore","standalones"], ["trance","standalones"], ["techno","standalones"]
+    ["techno","blackbox"], ["acid","blackbox"],
+    ["trance","tausend"], ["handsup","tausend"],
+    ["frenchcore","tonband"], ["handsup","tonband"],
+    ["frenchcore","standalones"], ["hardstyle","standalones"], ["hardcore","standalones"]
   ];
 
   var COLHEAD = [
@@ -145,7 +211,24 @@
     { t:"NULLTAG", s:"2026" }
   ];
 
-  var NODE_W = 188, NODE_H = 62, COL_GAP = 58, V_GAP = 18, HEAD_H = 46, PAD = 26;
+  // ── Der Baum passt sich der verfuegbaren Breite an ────────────────
+  // Feste 188px pro Spalte ergaben 1224px Gesamtbreite. Im eingebetteten
+  // Rahmen stehen weniger zur Verfuegung — und abgeschnitten wurde
+  // ausgerechnet die NULLTAG-Spalte, also die Pointe. Spaltenbreite und
+  // -abstand schrumpfen jetzt gemeinsam bis zu einer Untergrenze, unter
+  // der die Beschriftungen brechen wuerden; erst darunter scrollt es
+  // wieder horizontal.
+  var NODE_H = 62, V_GAP = 18, HEAD_H = 46, PAD = 26;
+  var NODE_W, COL_GAP;
+  (function fit(){
+    var box = document.querySelector(".scroller");
+    var avail = (box ? box.clientWidth : 0) || 1224;
+    // total(t) = 5*(150+38t) + 4*(24+34t) + 2*PAD
+    var t = (avail - (5 * 150 + 4 * 24 + PAD * 2)) / (5 * 38 + 4 * 34);
+    t = Math.max(0, Math.min(1, t));
+    NODE_W = Math.floor(150 + 38 * t);
+    COL_GAP = Math.floor(24 + 34 * t);
+  })();
   var byId = {}; NODES.forEach(function(n){ byId[n.id] = n; });
 
   // layout
@@ -205,10 +288,11 @@
     el.style.left = n.x + "px"; el.style.top = n.y + "px";
     el.style.width = NODE_W + "px"; el.style.height = NODE_H + "px";
     el.dataset.id = n.id;
+    var sub = n.sub || n.origin || "";
+    if (n.year) sub += (sub ? " · " : "") + "<em>" + n.year + "</em>";
     el.innerHTML =
-      (n.year ? '<span class="n-year">' + n.year + '</span>' : '') +
       '<div class="n-label">' + n.label + '</div>' +
-      (n.sub ? '<div class="n-sub">' + n.sub + '</div>' : (n.origin ? '<div class="n-sub">' + n.origin + '</div>' : ''));
+      (sub ? '<div class="n-sub">' + sub + '</div>' : '');
     el.addEventListener("click", function(ev){ ev.stopPropagation(); selectNode(n.id); });
     tree.appendChild(el);
   });
@@ -224,7 +308,7 @@
     Object.keys(anc).forEach(function(k){ conn[k] = 1; });
     Object.keys(des).forEach(function(k){ conn[k] = 1; });
 
-    document.querySelectorAll(".node").forEach(function(el){
+    document.querySelectorAll(".node, .tl-node").forEach(function(el){
       var nid = el.dataset.id;
       el.classList.toggle("dim", !conn[nid]);
       el.classList.toggle("lit", !!conn[nid] && nid !== id);
@@ -254,18 +338,79 @@
   }
 
   function reset(){
-    document.querySelectorAll(".node").forEach(function(el){ el.classList.remove("dim","lit","sel"); });
+    document.querySelectorAll(".node, .tl-node").forEach(function(el){ el.classList.remove("dim","lit","sel"); });
     document.querySelectorAll(".edge").forEach(function(el){ el.classList.remove("dim","lit"); });
     document.getElementById("info-eye").textContent = "START";
     document.getElementById("info-title").textContent = "Wähle einen Knoten";
     document.getElementById("info-sub").textContent = "Der Stammbaum elektronischer Tanzmusik — vereinfacht auf die Hauptlinien.";
-    document.getElementById("info-desc").innerHTML = "Jede NULLTAG-Schiene sitzt am Ende einer echten Genre-Linie: LICHTJAHR &amp; DOME aus dem Frenchcore, CINETEKK aus dem Techno, Distribution aus Trance / Hard&nbsp;Techno / Hands-Up. Klick eine Schiene, um ihre Herkunft zu sehen — oder ein Wurzel-Genre, um zu sehen, was daraus wurde.";
+    document.getElementById("info-desc").innerHTML = "Jede NULLTAG-Schiene sitzt am Ende einer echten Genre-Linie: LICHTJAHR &amp; DOME aus dem Frenchcore, CINETEKK aus dem Techno, BLACKBOX aus Acid&nbsp;/&nbsp;Hard&nbsp;Techno, TAUSEND&nbsp;STIMMEN aus Trance und Hands-Up, TONBAND aus dem Hardtek. Klick eine Schiene, um ihre Herkunft zu sehen — oder ein Wurzel-Genre, um zu sehen, was daraus wurde.";
     document.getElementById("info-lineage").innerHTML = "";
   }
   document.getElementById("info-reset").addEventListener("click", reset);
 
+  // ---------- Handy-Liste ----------
+  // Baut denselben Baum als gestapelte Liste. Quelle sind dieselben NODES
+  // und EDGES — es gibt keine zweite Wahrheit, nur eine zweite Darstellung.
+  var parentsOf = {};
+  EDGES.forEach(function(e){ (parentsOf[e[1]] = parentsOf[e[1]] || []).push(e[0]); });
+
+  (function buildList(){
+    var list = document.getElementById("tree-list");
+    if (!list) return;
+    COLHEAD.forEach(function(h, ci){
+      var sec = document.createElement("section");
+      sec.className = "tl-era";
+      var head = document.createElement("h3");
+      head.className = "tl-era__h";
+      head.innerHTML = "<b>" + h.t + "</b><span>" + h.s + "</span>";
+      sec.appendChild(head);
+      NODES.filter(function(n){ return n.col === ci; }).forEach(function(n){
+        var b = document.createElement("button");
+        b.className = "tl-node" + (n.nt ? " nt" : "");
+        b.dataset.id = n.id;
+        var meta = n.sub || [n.origin, n.year].filter(Boolean).join(" · ");
+        var from = (parentsOf[n.id] || []).map(function(id){
+          return byId[id].label.replace(/ ·.*$/, "");
+        }).join(" · ");
+        b.innerHTML =
+          '<span class="tl-node__label"></span>' +
+          '<span class="tl-node__meta"></span>' +
+          (from ? '<span class="tl-node__from"></span>' : "");
+        b.querySelector(".tl-node__label").textContent = n.label;
+        b.querySelector(".tl-node__meta").textContent = meta;
+        if (from) b.querySelector(".tl-node__from").textContent = "\u2190 aus " + from;
+        b.addEventListener("click", function(){ selectNode(n.id); });
+        sec.appendChild(b);
+      });
+      list.appendChild(sec);
+    });
+  })();
+
   // default: gently spotlight LICHTJAHR's lineage
   selectNode("lichtjahr");
+
+  // ── Hoehe an den Rahmen melden ────────────────────────────────────
+  // Der Einbau in index.html stand auf festen 760px. Auf dem Handy ist die
+  // Listenansicht deutlich hoeher — das ergab ein kleines Fenster mit
+  // eigenem Scroll, mitten in einer scrollenden Seite. Zwei Scrollflaechen
+  // ineinander sind unbedienbar, und genau das war die eigentliche
+  // Ursache, nicht der Graph. Also sagt die Seite ihre Hoehe selbst an;
+  // der Rahmen waechst mit und scrollt nie.
+  (function reportHeight(){
+    if (window.parent === window) return;
+    var last = 0;
+    function post(){
+      var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+      if (h && Math.abs(h - last) > 2) {
+        last = h;
+        window.parent.postMessage({ nt: "tree-height", height: h }, "*");
+      }
+    }
+    if (window.ResizeObserver) new ResizeObserver(post).observe(document.documentElement);
+    window.addEventListener("load", post);
+    window.addEventListener("resize", post);
+    post();
+  })();
 </script>
 </body>
 </html>

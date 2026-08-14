@@ -65,13 +65,30 @@ window.CONFIG = {
 
   // ── SCHIENEN ──────────────────────────────────────────────────────────
   // A "Schiene" (rail) is the release LINE / sound-world a release belongs
-  // to (≠ the format EP/Single/Album). The 5 NULLTAG rails:
+  // to (≠ the format EP/Single/Album).
+  //
+  // Diese Liste stand bis 2026-08-14 falsch hier: sie führte "DISTRIBUTION"
+  // als fünfte Schiene. DISTRIBUTION ist keine Schiene, sondern ein
+  // Auswertungs-Bucket im Release-Dashboard, das drei echte Schienen
+  // zusammenfasst — BLACKBOX, TAUSEND STIMMEN und TONBAND. Der Vault
+  // (nulltag-cd/vault-export/schienen.json) ist hier die Quelle: zwölf
+  // Schienen insgesamt, davon sieben mit eigenem Katalog-Prefix und
+  // Releases. NACHTSTROM, RFC und MERIDIAN existieren nur als Konzept —
+  // eine Release-Seite hat für sie nichts zu zeigen, also stehen sie hier
+  // auch nicht.
+  //
+  // CORONATION TRILOGY und PLASTIC PARADISE führt der Vault als eigene
+  // Einträge, sie haben aber kein eigenes Prefix: sie belegen Nummern im
+  // Standalone-Katalog (NULLTAG-05/06/07 bzw. NULLTAG-03/08/09) und
+  // laufen deshalb hier unter "standalone".
   schienen: [
-    { id: "lichtjahr",  name: "LICHTJAHR",    sound: "Cosmic frenchcore",               accent: "#e879c4" },
-    { id: "cinetekk",   name: "CINETEKK",     sound: "Cinematic techno · Album",        accent: "#3aa8ff" },
-    { id: "dome",       name: "DOME EP",      sound: "Festival frenchcore",             accent: "#ff6a2a" },
-    { id: "dist",       name: "DISTRIBUTION", sound: "Trance · Hard Techno · Hands-Up", accent: "#d4c8a8" },
-    { id: "standalone", name: "STANDALONES",  sound: "Singles, heterogen",              accent: "#5fc8e0" }
+    { id: "lichtjahr",       name: "LICHTJAHR",       sound: "Cosmic frenchcore",       accent: "#e879c4" },
+    { id: "cinetekk",        name: "CINETEKK",        sound: "Cinematic techno · Album",accent: "#3aa8ff" },
+    { id: "dome",            name: "DOME EP",         sound: "Festival frenchcore",     accent: "#ff6a2a" },
+    { id: "blackbox",        name: "BLACKBOX",        sound: "Industrial · Acid Techno",accent: "#ff2a55" },
+    { id: "tausend-stimmen", name: "TAUSEND STIMMEN", sound: "Trance · Hands-Up",       accent: "#7adfe8" },
+    { id: "tonband",         name: "TONBAND",         sound: "Comedy Hardtek",          accent: "#5ae082" },
+    { id: "standalone",      name: "STANDALONES",     sound: "Singles, heterogen",      accent: "#5fc8e0" }
   ],
   // Map each release title (Deezer / SoundCloud, case-insensitive) to a
   // Schiene id above. Unmapped releases simply show no rail tag — nothing
@@ -80,9 +97,17 @@ window.CONFIG = {
     "lichtjahr": "lichtjahr",
     "cinetekk": "cinetekk",
     "in the dome": "dome", "god of bass": "dome", "stuck on repeat": "dome", "fell in love with the music": "dome",
-    "blackbox": "dist", "tausend stimmen": "dist", "thousand voices": "dist", "swiss geeman": "dist",
+    "blackbox": "blackbox", "ghost protocol": "blackbox", "honeypot": "blackbox", "kill switch": "blackbox",
+    "tausend stimmen": "tausend-stimmen", "thousand voices": "tausend-stimmen",
+    // TB-01..TB-09 laut vault-export/tracks.json.
+    "swiss geeman": "tonband", "wo ist der bass": "tonband", "achthundert beamte": "tonband",
+    "bayern crew": "tonband", "einfacher als du denkst": "tonband", "sternenstaub": "tonband",
+    "saendele mit dominique": "tonband", "sandkastenparty": "tonband", "mein name ist hase": "tonband",
     "plastic paradise": "standalone", "plastic funeral": "standalone", "peace remains": "standalone",
     "lovesong": "standalone", "freedom": "standalone", "fifteen years": "standalone", "beauty of music": "standalone",
+    // Vögel Einsneunzig (NULLTAG-01) und Tekkno Train (NULLTAG-02) tragen
+    // Standalone-Katalognummern. Dass TONBAND seine Bildsprache aus dem
+    // Vögel-Cover ableitet, macht den Track nicht zu einem TONBAND-Track.
     "voegel einsneunzig": "standalone", "tekkno train": "standalone"
   },
 

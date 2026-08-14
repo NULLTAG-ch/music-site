@@ -10,7 +10,7 @@
 <!-- Gemeinsame Web-Schicht aus nulltag-cd. Fehlte hier: systemweite
      Korrekturen (etwa Trefferflaechen auf Touch) erreichten diese Seite
      bisher nicht, weil sie nur die Tokens lud. -->
-<link rel="stylesheet" href="web.css?v=3" />
+<link rel="stylesheet" href="web.css?v=4" />
 <style>
   body { overflow-x: hidden; }
   *, *::before, *::after { box-sizing: border-box; }
@@ -175,7 +175,9 @@
           <div class="sf__q" id="sf-qnum">Frage 01 / 03</div>
           <h3 class="sf__prompt" id="sf-prompt">Wann hörst du am liebsten?</h3>
           <div class="sf__opts" id="sf-opts"></div>
-          <div class="sf__progress" id="sf-prog"><span class="on"></span><span></span><span></span></div>
+          <!-- Punkte baut renderQ() aus QUESTIONS.length; der erste steht als
+               No-JS-Fallback hier. -->
+          <div class="sf__progress" id="sf-prog"><span class="on"></span></div>
         </div>
         <div class="sf__res" id="sf-res">
           <div class="sf__rescover"><img id="sf-rescover" src="" alt="Empfohlenes Cover" /></div>
@@ -268,34 +270,48 @@
     .catch(function(){ /* static fallback stands */ });
 
   // ===== G-03 · SCHIENE FINDER =====
+  // Der Finder kannte bis 2026-08-14 eine Schiene "Distribution". Die ist
+  // keine — sie ist der Auswertungs-Bucket ueber BLACKBOX, TAUSEND STIMMEN
+  // und TONBAND. Ein Werkzeug, das auf eine erfundene Schiene zeigt, ist
+  // schlimmer als keins. Jetzt fuehren alle Wege auf eine Schiene, die es
+  // gibt, und jede der sieben ist ueber mindestens zwei Antworten
+  // erreichbar — sonst gewinnt sie nie.
   var QUESTIONS = [
     { q:"Wann hörst du am liebsten?", opts:[
       {t:"Peak-Time, Hände hoch", s:"dome"},
       {t:"Hymnisch, Sterne über dir", s:"lichtjahr"},
       {t:"Kino im Kopf, allein", s:"cinetekk"},
-      {t:"Egal — Hauptsache speziell", s:"standalone"} ]},
+      {t:"Nachts am Rechner", s:"blackbox"} ]},
     { q:"Welches Tempo?", opts:[
       {t:"Schnell & euphorisch (190+)", s:"lichtjahr"},
       {t:"Festival-Mainstage (188–200)", s:"dome"},
-      {t:"Langsam, cineastisch (150)", s:"cinetekk"},
-      {t:"Treibend, Hands-Up (110–175)", s:"dist"} ]},
+      {t:"Langsam, cineastisch (144–160)", s:"cinetekk"},
+      {t:"Trance-Hymne (144)", s:"tausend"} ]},
     { q:"Sprache & Stimmung?", opts:[
       {t:"Englisch, kosmisch", s:"lichtjahr"},
       {t:"Deutsch, sparsam & dunkel", s:"cinetekk"},
-      {t:"Deutsch, Hardtek/Hands-Up", s:"dist"},
-      {t:"Egal — Single-Statement", s:"standalone"} ]}
+      {t:"Mundart, mit Humor", s:"tonband"},
+      {t:"Egal — Single-Statement", s:"standalone"} ]},
+    { q:"Was soll der Track mit dir machen?", opts:[
+      {t:"Mitsingen lassen", s:"tausend"},
+      {t:"Nervös machen", s:"blackbox"},
+      {t:"Zum Lachen bringen", s:"tonband"},
+      {t:"Überraschen", s:"standalone"} ]}
   ];
   var RESULT = {
-    lichtjahr:{ name:"Lichtjahr", color:"var(--cosmic-glow)", desc:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Aeolian/Phrygian-Dom, Kicks auf Planetenbewegung getunt. Vol.1 komplett, Vol.2 im Rollout.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg" },
-    cinetekk:{ name:"Cinetekk", color:"var(--crimson)", desc:"Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. Album 9/9 live.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg" },
-    dome:{ name:"Dome EP", color:"var(--glut-glow)", desc:"Festival-Frenchcore, euphoric Peaktime-Mainstage-Anthem als Story-Arc: Arrival → Communion → Intimacy → Surrender. 4/4 live.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg" },
-    dist:{ name:"Distribution", color:"var(--knochen-glow)", desc:"Trance, Hard Techno und Hands-Up für die Distribution — Tausend Stimmen, BLACKBOX EP, Tonband-Singles (DE Hardtek). 16 Tracks live.", track:"BLACKBOX · BB-01 · 130 BPM", cover:"assets/avatar.svg" },
-    standalone:{ name:"Standalones", color:"var(--cold-blue)", desc:"Reine NULLTAG-Singles mit eigenem Catalog — Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music.", track:"Peace Remains · NULLTAG-10 · 190 BPM", cover:"covers/peace_remains.jpg" }
+    lichtjahr:{ name:"Lichtjahr", color:"var(--cosmic-glow)", desc:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Aeolian/Phrygian-Dom, Kicks auf Planetenbewegung getunt. Vol.1 und Vol.2 komplett — 12 Tracks live.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg" },
+    cinetekk:{ name:"Cinetekk", color:"var(--crimson)", desc:"Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. Album 9/9 live, Schiene abgeschlossen.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg" },
+    dome:{ name:"Dome EP", color:"var(--glut-glow)", desc:"Festival-Frenchcore, euphoric Peaktime-Mainstage-Anthem als Story-Arc: Arrival → Communion → Intimacy → Surrender. 4/4 live, eigene Schiene mit eigenem Prefix.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg" },
+    blackbox:{ name:"Blackbox", color:"var(--tiefrot)", desc:"Industrial- und Acid-Techno als Cyber-Espionage: schwarzer Bildschirm, ein Cursor. Vier Tracks, abgeschlossen — und das bisher einzige NULLTAG-Release mit Spotify-Playlist-Placement.", track:"BLACKBOX EP · BB-01…04 · 147–155 BPM", cover:"covers/rel_blackbox.jpg" },
+    tausend:{ name:"Tausend Stimmen", color:"var(--eisflug-glow)", desc:"Trance und Hands-Up, ein Werk in vier Fassungen: deutsch, englisch, Instrumental und String-Theory-Mix.", track:"Tausend Stimmen · TS-01 · 144 BPM", cover:"covers/rel_tausend_stimmen_thousand_voices.jpg" },
+    tonband:{ name:"Tonband", color:"var(--giftgrun-glow)", desc:"Comedy-Hardtek auf Frenchcore-Fundament, deutsch und Schweizerdeutsch, Halftone-Riso-Pop als Bildsprache. Neun Singles live, Schiene eingefroren.", track:"Swiss Geeman · TB-01 · CH-DE", cover:"covers/rel_swiss_geeman.jpg" },
+    standalone:{ name:"Standalones", color:"var(--cold-blue)", desc:"Reine NULLTAG-Singles mit eigenem Catalog — Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music. Hier erscheint zurzeit alles Neue.", track:"Peace Remains · NULLTAG-10 · 190 BPM", cover:"covers/peace_remains.jpg" }
   };
   var sfStep = 0, sfScore = {};
   function renderQ(){
     var Q = QUESTIONS[sfStep];
-    document.getElementById("sf-qnum").textContent = "Frage " + (sfStep+1<10?"0":"") + (sfStep+1) + " / 03";
+    var pad2 = function(n){ return (n<10?"0":"") + n; };
+    document.getElementById("sf-qnum").textContent = "Frage " + pad2(sfStep+1) + " / " + pad2(QUESTIONS.length);
     document.getElementById("sf-prompt").textContent = Q.q;
     var box = document.getElementById("sf-opts"); box.innerHTML = "";
     Q.opts.forEach(function(o){
@@ -303,14 +319,18 @@
       b.addEventListener("click", function(){ sfScore[o.s] = (sfScore[o.s]||0)+1; sfStep++; advance(); });
       box.appendChild(b);
     });
-    var prog = document.getElementById("sf-prog").children;
-    for (var i=0;i<prog.length;i++) prog[i].className = i<=sfStep ? "on" : "";
+    var pbox = document.getElementById("sf-prog");
+    if (pbox.children.length !== QUESTIONS.length) {
+      pbox.innerHTML = "";
+      QUESTIONS.forEach(function(){ pbox.appendChild(document.createElement("span")); });
+    }
+    for (var i=0;i<pbox.children.length;i++) pbox.children[i].className = i<=sfStep ? "on" : "";
   }
   function advance(){
     if (sfStep < QUESTIONS.length) { renderQ(); return; }
     // pick top-scored schiene
     var best=null, bestN=-1; for (var k in sfScore){ if (sfScore[k]>bestN){ bestN=sfScore[k]; best=k; } }
-    var r = RESULT[best] || RESULT.lichtjahre;
+    var r = RESULT[best] || RESULT.lichtjahr;
     document.getElementById("sf-quiz").style.display = "none";
     var res = document.getElementById("sf-res"); res.classList.add("show");
     var nm = document.getElementById("sf-resname"); nm.textContent = r.name; nm.style.color = r.color;

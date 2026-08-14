@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="fonts/fonts.css" />
 <link rel="stylesheet" href="colors_and_type.css?v=3" />
 <!-- Shared NULLTAG web layer — edited in nulltag-cd, vendored here. -->
-<link rel="stylesheet" href="web.css?v=2" />
+<link rel="stylesheet" href="web.css?v=4" />
 <script src="web.js?v=2" defer></script>
 <!-- Curated content. Blocking on purpose: §03 renders CONFIG.updates on
      first paint, and the file is a few kB of literals. -->
@@ -177,14 +177,36 @@
   @media (max-width: 880px) { .latest { grid-template-columns: 1fr; gap: var(--s-6); } }
 
   /* ===== catalog ===== */
-  .filters { display: flex; gap: var(--s-2); margin-bottom: var(--s-7); flex-wrap: wrap; }
-  .filters button { flex: 0 1 auto; appearance: none; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-pill); color: var(--bone-dim); padding: 9px 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: color var(--t-base) var(--ease), background var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
+  /* Basis (Flex, Umbruch, Abstand) kommt aus .nt-swipe in web.css. */
+  .filters { margin-bottom: var(--s-7); }
+  /* kein flex hier — .nt-swipe setzt es, und ein lokales flex-shrink:1
+     wuerde die Chips gegen die Wischleiste zusammendruecken. */
+  .filters button { appearance: none; background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-pill); color: var(--bone-dim); padding: 9px 18px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: color var(--t-base) var(--ease), background var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
   .filters button:hover { color: var(--bone); border-color: var(--border-warm); background: var(--surface-2); }
   .filters button.active { color: var(--void); background: var(--bone); border-color: var(--bone); }
   .filters button[data-rail="LJ"].active { background: var(--cosmic-glow); border-color: var(--cosmic-glow); color: var(--void); }
   .filters button[data-rail="DM"].active { background: var(--glut-glow); border-color: var(--glut-glow); color: var(--void); }
+  .filters button[data-rail="TS"].active { background: var(--eisflug-glow); border-color: var(--eisflug-glow); color: var(--void); }
+  .filters button[data-rail="TB"].active { background: var(--giftgrun-glow); border-color: var(--giftgrun-glow); color: var(--void); }
   .filters button[data-rail="ST"].active { background: var(--cold-blue); border-color: var(--cold-blue); color: var(--void); }
   .catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s-3); }
+
+  /* ---------- Katalog auf dem Handy ----------
+     Zwei Befunde aus dem Geraetetest:
+     1. Die Filterzeile brach auf drei Zeilen um und schob den Katalog aus
+        dem Bild. Sie wird zur Wischleiste: eine Zeile, horizontal
+        scrollbar, randlos bis an die Displaykante — damit sieht man, dass
+        es rechts weitergeht, statt es zu erraten.
+     2. minmax(200px,1fr) ergibt bei 390px genau EINE Kachel pro Reihe.
+        Ein Katalog, den man nur einzeln durchscrollen kann, ist keine
+        Uebersicht. Zwei Spalten halbieren den Weg und zeigen Nachbarn. */
+  /* Die Wischleiste selbst steht als .nt-swipe in web.css — sie ist kein
+     Katalog-Detail, sondern ein Muster, das jede Chip-Zeile auf jeder
+     NULLTAG-Seite braucht. Hier bleibt nur, was wirklich der Katalog ist. */
+  @media (max-width: 720px) {
+    .filters { -webkit-overflow-scrolling: touch; }
+    .catalog { grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+  }
   .cat { position: relative; background: var(--void); aspect-ratio: 1/1; display: block; overflow: hidden; text-decoration: none; color: var(--bone); border-radius: var(--r-lg); border: 1px solid var(--hairline); }
   .cat img { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease), filter 300ms var(--ease); }
   .cat:hover img { transform: scale(1.04); filter: brightness(0.45); }
@@ -192,7 +214,9 @@
   .cat__rail[data-rail="LJ"] { color: var(--cosmic-glow); border-color: rgba(232,121,196,0.5); }
   .cat__rail[data-rail="DM"] { color: var(--glut-glow); border-color: rgba(255,106,42,0.5); }
   .cat__rail[data-rail="ST"] { color: var(--cold-blue); }
-  .cat__rail[data-rail="ND"] { color: var(--knochen-glow); }
+  .cat__rail[data-rail="BB"] { color: var(--tiefrot); border-color: rgba(255,42,85,0.5); }
+  .cat__rail[data-rail="TS"] { color: var(--eisflug-glow); border-color: rgba(122,223,232,0.5); }
+  .cat__rail[data-rail="TB"] { color: var(--giftgrun-glow); border-color: rgba(90,224,130,0.5); }
   .cat__info { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--s-4); background: linear-gradient(0deg, rgba(5,5,5,0.95) 30%, transparent 100%); opacity: 0; transform: translateY(8px); transition: all 250ms var(--ease); }
   .cat:hover .cat__info { opacity: 1; transform: translateY(0); }
   .cat__title { font-family: var(--font-display); font-size: 24px; line-height: 0.95; text-transform: uppercase; margin: 0 0 6px; color: var(--bone); }
@@ -241,23 +265,36 @@
   .rail[data-rail="LJ"] { --plate: url("covers/rail_lichtjahr.jpg"); }
   .rail[data-rail="CT"] { --plate: url("covers/rail_cinetekk.jpg"); }
   .rail[data-rail="DM"] { --plate: url("covers/rail_dome.jpg"); --plate-dim: 0.5; }
-  .rail[data-rail="ND"] { --plate: url("covers/rail_distribution.jpg"); --plate-dim: 0.45; }
+  /* Die drei Schienen, die vorher unter "DISTRIBUTION" zusammengefasst
+     waren, haben keine eigens generierten Rail-Plates. Statt drei Bilder zu
+     erfinden, steht hier das jeweilige Release-Cover — es ist die echte
+     visuelle Signatur der Schiene und liegt bereits im Repo. */
+  .rail[data-rail="BB"] { --plate: url("covers/rel_blackbox.jpg"); --plate-dim: 0.55; }
+  .rail[data-rail="TS"] { --plate: url("covers/rel_tausend_stimmen_thousand_voices.jpg"); --plate-dim: 0.5; }
+  .rail[data-rail="TB"] { --plate: url("covers/rel_swiss_geeman.jpg"); --plate-dim: 0.45; }
   .rail[data-rail="ST"] { --plate: url("covers/rail_standalone.jpg"); }
   @media (prefers-reduced-motion: reduce) { .rail::after { transition: none; } }
   .rail[data-rail="LJ"] { --glow: var(--cosmic-glow); }
   .rail[data-rail="CT"] { --glow: var(--nachtblau-glow); }
   .rail[data-rail="DM"] { --glow: var(--glut-glow); }
-  .rail[data-rail="ND"] { --glow: var(--knochen-glow); }
+  .rail[data-rail="BB"] { --glow: var(--tiefrot); }
+  .rail[data-rail="TS"] { --glow: var(--eisflug-glow); }
+  .rail[data-rail="TB"] { --glow: var(--giftgrun-glow); }
   .rail[data-rail="ST"] { --glow: var(--cold-blue); }
   .rail__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--s-5); gap: var(--s-3); }
   .rail__cat { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
   .rail__cat b { color: var(--bone); font-weight: 500; }
-  .rail__num { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-deep); }
+  .rail__num { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-deep); white-space: nowrap; }
   .rail__title { font-family: var(--font-display); font-size: 50px; line-height: 0.92; letter-spacing: -0.005em; margin: 0 0 var(--s-2); color: var(--bone); text-transform: uppercase; }
   .rail[data-rail="LJ"] .rail__title { color: var(--cosmic-glow); }
   .rail[data-rail="DM"] .rail__title { color: var(--glut-glow); }
-  .rail[data-rail="ND"] .rail__title { color: var(--knochen-glow); }
+  .rail[data-rail="TS"] .rail__title { color: var(--eisflug-glow); }
+  .rail[data-rail="TB"] .rail__title { color: var(--giftgrun-glow); }
   .rail[data-rail="ST"] .rail__title { color: var(--cold-blue); }
+  /* Titel einer abgeschlossenen Schiene: die Schiene bleibt sichtbar, aber
+     der Status steht daneben statt sie auszugrauen — abgeschlossen ist Teil
+     der Geschichte, kein Makel. */
+  /* Das Status-Schild steht als .nt-state in web.css. */
   .rail__sub { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; color: var(--bone-dim); margin-bottom: var(--s-4); }
   .rail__desc { font-family: var(--font-grotesk); font-size: 14px; line-height: 1.55; color: var(--bone-dim); flex: 1; }
   .rail__foot { margin-top: var(--s-5); padding-top: var(--s-4); border-top: 1px solid var(--hairline); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
@@ -659,7 +696,7 @@
     <div>
       <div class="latest__cat" style="color: var(--bone-dim); margin-bottom: var(--s-5);">— CINEMATIC TECHNO · COSMIC FRENCHCORE · GERMAN UNDERGROUND</div>
       <h1 class="hero__title">NULL<em>TAG</em></h1>
-      <p class="hero__sub">A one-person Swiss music label working across five <b>Schienen</b> — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key and ISRC are <b>treated as design</b>, not metadata to hide.</p>
+      <p class="hero__sub">A one-person Swiss music label working across <b>Schienen</b> — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key and ISRC are <b>treated as design</b>, not metadata to hide.</p>
       <div class="hero__cta">
         <a href="#latest" class="btn-hero">▶ Play latest release</a>
         <a href="#catalog" class="btn-hero btn-hero--ghost">↓ Catalog · <span data-count="tracks">56</span> Tracks</a>
@@ -824,13 +861,13 @@
       </div>
       <div class="s__meta"><span data-count="releases">27</span> RELEASES · <span data-count="tracks">56</span> TRACKS<br/>GRUPPIERT NACH RELEASE</div>
     </div>
-    <div class="filters" role="tablist" id="filters">
+    <!-- Die Schienen-Chips samt Zahl baut buildFilters() aus CATALOG. Vorher
+         standen hier sechs Literale ("LICHTJAHR · 02", "DISTRIBUTION · 11"),
+         die beim naechsten Release still falsch wurden — und eine Schiene,
+         die es nie gab. Ohne JS bleibt der ALL-Chip stehen und der Katalog
+         zeigt trotzdem alles. -->
+    <div class="filters nt-swipe" role="tablist" id="filters">
       <button class="active" data-rail="ALL">ALL · <span data-count="releases">27</span></button>
-      <button data-rail="LJ">LICHTJAHR · 02</button>
-      <button data-rail="CT">CINETEKK · 01</button>
-      <button data-rail="DM">DOME · 01</button>
-      <button data-rail="ND">DISTRIBUTION · 11</button>
-      <button data-rail="ST">STANDALONE · 12</button>
     </div>
     <div class="catalog" id="catalog-grid"></div>
   </div>
@@ -902,46 +939,70 @@
   <div class="container">
     <div class="s__head">
       <div>
-        <div class="s__num">§06 · RELEASE RAILS · 05</div>
+        <div class="s__num">§06 · RELEASE RAILS</div>
         <h2 class="s__title">Schienen</h2>
       </div>
-      <div class="s__meta">FIVE WORLDS<br/>ONE WORDMARK</div>
+      <div class="s__meta"><span data-count="rails">07</span> MIT RELEASES<br/>ONE WORDMARK</div>
     </div>
+    <!-- Diese Sektion fuehrte bis 2026-08-14 fuenf Schienen, darunter eine
+         namens "DISTRIBUTION". Die gibt es nicht: DISTRIBUTION ist der
+         Auswertungs-Bucket im Release-Dashboard, unter dem BLACKBOX,
+         TAUSEND STIMMEN und TONBAND zusammengefasst werden — drei
+         eigenstaendige Schienen mit eigenem Katalog-Prefix. Quelle ist
+         nulltag-cd/vault-export/schienen.json.
+         Die drei reinen Konzept-Schienen (NACHTSTROM, RFC, MERIDIAN)
+         stehen bewusst nicht hier: sie haben nichts zu zeigen, und eine
+         Karte ohne Release waere genau das "bald erscheint", das auf
+         dieser Seite nicht mehr vorkommen soll. -->
     <div class="rails">
       <article class="rail" data-rail="LJ">
-        <div class="rail__head"><span class="rail__cat"><b>LJ-NN</b> · EP-RAIL</span><span class="rail__num">01 / 05</span></div>
+        <div class="rail__head"><span class="rail__cat"><b>LJ-NN</b> · EP-RAIL</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Lichtjahr</h3>
-        <div class="rail__sub">Cosmic frenchcore</div>
+        <div class="rail__sub">Cosmic frenchcore · EN</div>
         <p class="rail__desc">Uplifting-to-symphonic Frenchcore zu Himmelskörper-Bildern. Aeolian / Phrygian-Dom. Vol.1 komplett (6 Tracks), Vol.2 seit 26.06 vollständig auf allen Diensten (6 Tracks).</p>
-        <div class="rail__foot"><span><b>188–205</b> BPM</span><span>EN</span></div>
+        <div class="rail__foot"><span><b>188–205</b> BPM</span><span class="nt-state nt-state--live">Laufend</span></div>
       </article>
       <article class="rail" data-rail="CT">
-        <div class="rail__head"><span class="rail__cat"><b>CT-NN</b> · ALBUM</span><span class="rail__num">02 / 05</span></div>
+        <div class="rail__head"><span class="rail__cat"><b>CT-NN</b> · ALBUM</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Cinetekk</h3>
-        <div class="rail__sub">Cinematic techno · Album</div>
-        <p class="rail__desc">Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. 8/8 Tracks live.</p>
-        <div class="rail__foot"><span><b>144–160</b> BPM</span><span>DE</span></div>
+        <div class="rail__sub">Cinematic techno · DE</div>
+        <p class="rail__desc">Film ohne Bilder. Ein Lichtstrahl, ein roter Punkt, deutsche Vocals sparsam. Moll, langsamer Build. Album mit neun Tracks, seit Mai 2026 vollständig.</p>
+        <div class="rail__foot"><span><b>144–160</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
       </article>
       <article class="rail" data-rail="DM">
-        <div class="rail__head"><span class="rail__cat"><b>DM-NN</b> · EP</span><span class="rail__num">03 / 05</span></div>
+        <div class="rail__head"><span class="rail__cat"><b>DM-NN</b> · EP</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Dome EP</h3>
-        <div class="rail__sub">Festival frenchcore · Mainstage</div>
-        <p class="rail__desc">Euphoric Peaktime-Mainstage-Anthem als durchgehender Story-Arc: Arrival → Communion → Intimacy → Surrender. 4/4 live.</p>
-        <div class="rail__foot"><span><b>188–200</b> BPM</span><span>EN</span></div>
+        <div class="rail__sub">Festival frenchcore · EN</div>
+        <p class="rail__desc">Euphoric Peaktime-Mainstage-Anthem als durchgehender Story-Arc: Arrival → Communion → Intimacy → Surrender. Vier Tracks, eigene Schiene mit eigenem Prefix — nicht Teil von Lichtjahr.</p>
+        <div class="rail__foot"><span><b>188–200</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
       </article>
-      <article class="rail" data-rail="ND">
-        <div class="rail__head"><span class="rail__cat"><b>TS · BB · TB</b> · DIST</span><span class="rail__num">04 / 05</span></div>
-        <h3 class="rail__title">Distribution</h3>
-        <div class="rail__sub">Trance · Hard Techno · Hands-Up</div>
-        <p class="rail__desc">Singles + EPs für die Distribution: Tausend Stimmen, BLACKBOX EP und die Tonband-Singles (DE Hardtek / Hands-Up). 16 Tracks live.</p>
-        <div class="rail__foot"><span><b>110–175</b> BPM</span><span>DE · EN</span></div>
+      <article class="rail" data-rail="BB">
+        <div class="rail__head"><span class="rail__cat"><b>BB-NN</b> · EP</span><span class="rail__num"></span></div>
+        <h3 class="rail__title">Blackbox</h3>
+        <div class="rail__sub">Industrial · Acid Techno · EN</div>
+        <p class="rail__desc">Cyber-Espionage als Sound: schwarzer Bildschirm, ein Cursor, vier Tracks von Blackbox bis Kill Switch. Das bisher einzige NULLTAG-Release mit einem Spotify-Playlist-Placement.</p>
+        <div class="rail__foot"><span><b>147–155</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
+      </article>
+      <article class="rail" data-rail="TS">
+        <div class="rail__head"><span class="rail__cat"><b>TS-NN</b> · EP</span><span class="rail__num"></span></div>
+        <h3 class="rail__title">Tausend Stimmen</h3>
+        <div class="rail__sub">Trance · Hands-Up · DE / EN</div>
+        <p class="rail__desc">Ein Werk in vier Fassungen: deutsche Version, englische Version, Instrumental und String-Theory-Mix. Dieselbe Melodie, vier Blickwinkel.</p>
+        <div class="rail__foot"><span><b>144</b> BPM</span><span class="nt-state">Abgeschlossen</span></div>
+      </article>
+      <article class="rail" data-rail="TB">
+        <div class="rail__head"><span class="rail__cat"><b>TB-NN</b> · SINGLES</span><span class="rail__num"></span></div>
+        <h3 class="rail__title">Tonband</h3>
+        <div class="rail__sub">Comedy hardtek · DE / CH-DE</div>
+        <p class="rail__desc">Mundart und Blödsinn auf Frenchcore-Fundament, Halftone-Riso-Pop als Bildsprache. Neun Singles live — die Schiene ist bewusst eingefroren, zurückgezogen ist nichts.</p>
+        <div class="rail__foot"><span><b>110–175</b> BPM</span><span class="nt-state">Eingefroren</span></div>
       </article>
       <article class="rail" data-rail="ST">
-        <div class="rail__head"><span class="rail__cat"><b>NULLTAG-NN</b> · SINGLES</span><span class="rail__num">05 / 05</span></div>
+        <div class="rail__head"><span class="rail__cat"><b>NULLTAG-NN</b> · SINGLES</span><span class="rail__num"></span></div>
         <h3 class="rail__title">Standalones</h3>
         <div class="rail__sub">Singles ohne EP-Bindung</div>
-        <p class="rail__desc">Reine NULLTAG-Singles mit eigenem Catalog — Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music u. a.</p>
-        <div class="rail__foot"><span><b>147–220</b> BPM</span><span>MIXED</span></div>
+        <p class="rail__desc">Der offene Katalog — Coronation Trilogy, Plastic Paradise, Vögel Einsneunzig, LOVESONG, Beauty of Music und die laufenden Nummern. Hier erscheint zurzeit alles Neue.</p>
+        <div class="rail__foot"><span><b>147–220</b> BPM</span><span class="nt-state nt-state--live">Laufend</span></div>
       </article>
     </div>
   </div>
@@ -956,9 +1017,9 @@
       </div>
       <div class="s__meta">ROOTS → NULLTAG<br/>INTERACTIVE</div>
     </div>
-    <p style="font-family:var(--font-grotesk); font-size:16px; line-height:1.6; color:var(--bone-dim); max-width:64ch; margin:0 0 var(--s-6);">Wo kommt NULLTAG her? Von Kraftwerk &amp; Disco über Detroit Techno, Trance und Hardcore bis zu den fünf Schienen. Klick einen Knoten — die Abstammungslinie leuchtet auf.</p>
+    <p style="font-family:var(--font-grotesk); font-size:16px; line-height:1.6; color:var(--bone-dim); max-width:64ch; margin:0 0 var(--s-6);">Wo kommt NULLTAG her? Von Kraftwerk &amp; Disco über Detroit Techno, Trance und Hardcore bis zu den sieben Schienen mit Releases. Klick einen Knoten — die Abstammungslinie leuchtet auf.</p>
     <div style="border:1px solid var(--border); background:var(--void-deep);">
-      <iframe src="family-tree.html" title="Techno / EDM Family Tree" loading="lazy" style="width:100%; height:760px; border:0; display:block;"></iframe>
+      <iframe id="tree-frame" src="family-tree.html" title="Techno / EDM Family Tree" loading="lazy" style="width:100%; height:760px; border:0; display:block;"></iframe>
     </div>
     <div style="margin-top:var(--s-4); text-align:right;">
       <a class="btn-hero btn-hero--ghost" href="family-tree.html" target="_blank" rel="noopener" style="font-size:11px;">↗ Vollbild öffnen</a>
@@ -1096,21 +1157,23 @@
     <div class="man">
       <aside class="man__facts" aria-label="Label facts">
         <div><dt>Composer</dt><dd>Ivan Stricker</dd></div>
+        <div><dt>Written</dt><dd>Composition · Lyrics · Structure</dd></div>
+        <div><dt>Produced</dt><dd>Mix · Master</dd></div>
+        <div><dt>Toolchain</dt><dd>Suno Pro — Vocals · Finish</dd></div>
         <div><dt>Location</dt><dd>Buchs SG · CH</dd></div>
         <div><dt>Founded</dt><dd>MMXXVI</dd></div>
-        <div><dt>Method</dt><dd>Suno Pro · Lic.</dd></div>
         <div><dt>Languages</dt><dd>EN · DE · CH-DE</dd></div>
-        <div><dt>Catalog</dt><dd>49 Tracks</dd></div>
+        <div><dt>Catalog</dt><dd><span data-count="tracks">—</span> Tracks</dd></div>
       </aside>
       <div class="man__body">
         <p>„Kino ohne Bilder. Filme entstehen im Kopf, nicht auf der Leinwand. Cinematic techno · cosmic frenchcore · German underground."</p>
-        <p>NULLTAG is a one-person Swiss music label. Releases ship across five Schienen — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key, and ISRC are <em>treated as design</em>, not metadata to hide.</p>
+        <p>NULLTAG is a one-person Swiss music label. Releases ship across several Schienen — release rails sharing a sound profile and a visual signature. Catalog numbers, BPM, key, and ISRC are <em>treated as design</em>, not metadata to hide.</p>
         <p>Brutalist verbal language, single TIEFROT mark per surface, JetBrains Mono everywhere. A small operation that happens to spec releases like a research lab — physics-as-lyrics, BPM-as-tag.</p>
         <div class="man__stamp">
           <div>—</div>
           <div>NULLTAG · MMXXVI · Buchs SG, Switzerland</div>
-          <div>Made with Suno Pro (commercial license).</div>
-          <div>Lyrics, concept and direction by NULLTAG.</div>
+          <div>Composition, lyrics, song structure, mix and master by NULLTAG.</div>
+          <div>Suno Pro (commercial licence) for vocals and finishing sound design.</div>
         </div>
       </div>
     </div>
@@ -1194,25 +1257,32 @@
       tracks:["Cosmic Sea","The Edge Recedes","Blue Planet","Jupiter","Heat Death","Mercury's Burn"] },
     // — CINETEKK · album —
     { rail:"CT", title:"Cinetekk", type:"ALBUM", meta:"Album · 152–156 BPM · DE", img:"covers/cinetekk.jpg",
-      tracks:["Cinetekk","Glassplitter","Vergessenes Spiegelbild","Eisflug","Asche In Der Hand","Letzter Sommer","Schwerkraft","Nachtfalter"] },
+      tracks:["Cinetekk","Glassplitter","Vergessenes Spiegelbild","Eisflug","Asche in der Hand","Letzter Sommer","Schwerkraft","Nachtfalter (English Version)","Cinetekk Studio (Violin Mix)"] },
     // — DOME · EP —
     { rail:"DM", title:"Dome EP", type:"EP", meta:"EP · 188–200 BPM · EN", img:"covers/in_the_dome.jpg",
       tracks:["In The Dome","God Of Bass","Stuck On Repeat","Fell In Love With The Music"] },
-    // — DISTRIBUTION —
-    { rail:"ND", title:"Blackbox", type:"EP", meta:"EP · EN", img:"covers/rel_blackbox.jpg",
-      tracks:["Kill Switch","Ghost Protocol","Honeypot","Blackbox"] },
-    { rail:"ND", title:"Tausend Stimmen", type:"EP", meta:"EP · DE · EN", img:"covers/rel_tausend_stimmen_thousand_voices.jpg",
-      tracks:["Thousand Voices Stringtheory","Thousand Voices","Tausend Stimmen"] },
-    { rail:"ND", title:"Tekkno Train", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_tekkno_train.jpg" },
-    { rail:"ND", title:"Tekkno Train", type:"REMASTER", meta:"Remastered · DE", img:"covers/rel_tekkno_train_remastered.jpg" },
-    { rail:"ND", title:"Bayern Crew", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_bayern_crew.jpg" },
-    { rail:"ND", title:"Swiss Geeman", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_swiss_geeman.jpg" },
-    { rail:"ND", title:"Achthundert Beamte", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_achthundert_beamte.jpg" },
-    { rail:"ND", title:"Sternenstaub", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_sternenstaub.jpg" },
-    { rail:"ND", title:"Einfacher als du denkst!", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_einfacher_als_du_denkst.jpg" },
-    { rail:"ND", title:"Wo ist der Bass?", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_wo_ist_der_bass.jpg" },
-    { rail:"ND", title:"Sandkastenparty", type:"SINGLE", meta:"Tonband · DE", img:"covers/rel_sandkastenparty.jpg" },
+    // — BLACKBOX · EP —
+    // BPM am 2026-08-14 im Vault an den FINAL-Mastern gemessen (146.9 /
+    // 148.1 / 149.0 / 154.8), nachdem vier Quellen sich widersprochen
+    // hatten. Hier steht die gemessene Spanne, nicht die geschaetzte.
+    { rail:"BB", title:"Blackbox", type:"EP", meta:"EP · 147–155 BPM · EN", img:"covers/rel_blackbox.jpg",
+      tracks:["Blackbox","Ghost Protocol","Honeypot","Kill Switch"] },
+    // — TAUSEND STIMMEN · EP —
+    { rail:"TS", title:"Tausend Stimmen", type:"EP", meta:"EP · 144 BPM · DE · EN", img:"covers/rel_tausend_stimmen_thousand_voices.jpg",
+      tracks:["Tausend Stimmen (DE)","Thousand Voices (EN)","Tausend Stimmen (Instrumental)","Thousand Voices (String Theory Mix)"] },
+    // — TONBAND · Singles (TB-NN) —
+    { rail:"TB", title:"Swiss Geeman", type:"SINGLE", meta:"TB-01 · CH-DE", img:"covers/rel_swiss_geeman.jpg" },
+    { rail:"TB", title:"Wo ist der Bass?", type:"SINGLE", meta:"TB-02 · DE", img:"covers/rel_wo_ist_der_bass.jpg" },
+    { rail:"TB", title:"Achthundert Beamte", type:"SINGLE", meta:"TB-03 · DE", img:"covers/rel_achthundert_beamte.jpg" },
+    { rail:"TB", title:"Bayern Crew", type:"SINGLE", meta:"TB-04 · DE", img:"covers/rel_bayern_crew.jpg" },
+    { rail:"TB", title:"Einfacher als du denkst!", type:"SINGLE", meta:"TB-05 · DE", img:"covers/rel_einfacher_als_du_denkst.jpg" },
+    { rail:"TB", title:"Sternenstaub", type:"SINGLE", meta:"TB-06 · DE", img:"covers/rel_sternenstaub.jpg" },
+    { rail:"TB", title:"Sandkastenparty", type:"SINGLE", meta:"TB-08 · DE", img:"covers/rel_sandkastenparty.jpg" },
     // — STANDALONE —
+    // Tekkno Train und Vögel Einsneunzig tragen NULLTAG-02 bzw. NULLTAG-01
+    // und gehoeren damit in den Standalone-Katalog, nicht zu TONBAND.
+    { rail:"ST", title:"Tekkno Train", type:"SINGLE", meta:"Single · DE", img:"covers/rel_tekkno_train.jpg" },
+    { rail:"ST", title:"Tekkno Train", type:"REMASTER", meta:"NULLTAG-02 · Remastered · DE", img:"covers/rel_tekkno_train_remastered.jpg" },
     { rail:"ST", title:"One Man Owns the Sky", type:"SINGLE", meta:"SoundCloud · 03.07.2026 · EN", img:"covers/one_man_owns_the_sky.jpg" },
     { rail:"ST", title:"Paper Kings", type:"SINGLE", meta:"SoundCloud · 30.06.2026 · EN", img:"covers/paper_kings.jpg" },
     { rail:"ST", title:"Plastic Paradise", type:"EP", meta:"EP · EN", img:"covers/rel_plastic_paradise.jpg",
@@ -1226,9 +1296,10 @@
     { rail:"ST", title:"Fifteen Years",   type:"SINGLE", meta:"NULLTAG-12 · 147 BPM · EN", img:"covers/fifteen_years.jpg" },
     { rail:"ST", title:"LOVESONG",        type:"SINGLE", meta:"NULLTAG-11 · 200 BPM · EN", img:"covers/lovesong.jpg" },
     { rail:"ST", title:"Peace Remains",   type:"SINGLE", meta:"NULLTAG-10 · 190 BPM", img:"covers/peace_remains.jpg" },
-    { rail:"ST", title:"Vögel Einsneunzig", type:"SINGLE", meta:"Single · DE", img:"covers/rel_voegel_einsneunzig.jpg" }
+    { rail:"ST", title:"Vögel Einsneunzig", type:"SINGLE", meta:"NULLTAG-01 · DE", img:"covers/rel_voegel_einsneunzig.jpg" }
   ];
-  var RAIL_NAME = { LJ:"LICHTJAHR", CT:"CINETEKK", DM:"DOME EP", ND:"DISTRIBUTION", ST:"STANDALONE" };
+  var RAIL_NAME = { LJ:"LICHTJAHR", CT:"CINETEKK", DM:"DOME EP", BB:"BLACKBOX",
+                    TS:"TAUSEND STIMMEN", TB:"TONBAND", ST:"STANDALONE" };
 
   function catEsc(s){ return String(s).replace(/[&<>"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]; }); }
   function renderCatalog(filter) {
@@ -1261,6 +1332,30 @@
     });
   }
   renderCatalog("ALL");
+
+  // ── Filterzeile aus CATALOG ───────────────────────────────────────
+  // Reihenfolge: wie RAIL_ORDER, damit die Chips nicht bei jedem neuen
+  // Release die Plaetze tauschen. Eine Schiene ohne Release im Katalog
+  // bekommt keinen Chip — ein Filter, der auf ein leeres Raster fuehrt,
+  // ist kein Filter.
+  var RAIL_ORDER = ["LJ","CT","DM","BB","TS","TB","ST"];
+  function buildFilters(){
+    var box = document.getElementById("filters");
+    var all = box.querySelector('button[data-rail="ALL"]');
+    var active = (box.querySelector("button.active") || all).dataset.rail;
+    var counts = {};
+    CATALOG.forEach(function(c){ if (c.rail && c.rail !== "NEW") counts[c.rail] = (counts[c.rail] || 0) + 1; });
+    [].forEach.call(box.querySelectorAll('button:not([data-rail="ALL"])'), function(b){ b.remove(); });
+    RAIL_ORDER.forEach(function(id){
+      if (!counts[id]) return;
+      var b = document.createElement("button");
+      b.dataset.rail = id;
+      b.textContent = RAIL_NAME[id] + " · " + (counts[id] < 10 ? "0" : "") + counts[id];
+      if (id === active) { b.classList.add("active"); all.classList.remove("active"); }
+      box.appendChild(b);
+    });
+  }
+  buildFilters();
 
   document.getElementById("filters").addEventListener("click", function(e){
     var btn = e.target.closest("button");
@@ -1330,6 +1425,15 @@
       var v = values[el.dataset.count];
       if (v) el.textContent = v;
     });
+
+    // "01 / 05" stand in jeder Rail-Karte von Hand. Als aus fuenf Schienen
+    // sieben wurden, waeren alle fuenf Nenner falsch geblieben. Also aus
+    // dem DOM zaehlen, wie beim §-Index.
+    var cards = document.querySelectorAll("#schienen .rail");
+    cards.forEach(function(el, i){
+      var n = el.querySelector(".rail__num");
+      if (n) n.textContent = pad(i + 1) + " / " + pad(cards.length);
+    });
   }
 
   // ── Rollout-Kopfzeile aus dem Terminplan ──────────────────────────
@@ -1337,6 +1441,22 @@
   // war damit über einen Monat nach dem Termin noch zu lesen, während
   // der Countdown daneben längst auf TBA stand. Dieselbe Liste, eine
   // Wahrheit.
+  // ── Der Family-Tree-Rahmen waechst mit seinem Inhalt ──────────────
+  // 760px fest waren auf dem Desktop knapp und auf dem Handy falsch: die
+  // Listenansicht ist dort hoeher, also scrollte der Rahmen intern —
+  // innerhalb einer Seite, die selbst scrollt. Die eingebettete Seite
+  // meldet ihre Hoehe per postMessage, hier wird sie gesetzt. Faellt die
+  // Meldung aus (JS blockiert, Datei aelter), bleiben die 760px als
+  // Fallback stehen.
+  window.addEventListener("message", function(ev){
+    var frame = document.getElementById("tree-frame");
+    if (!frame || ev.source !== frame.contentWindow) return;
+    var d = ev.data;
+    if (!d || d.nt !== "tree-height") return;
+    var h = Number(d.height);
+    if (h > 200 && h < 6000) frame.style.height = h + "px";
+  });
+
   function stampRollout(){
     var el = document.getElementById("ro-meta");
     if (!el || typeof RO_DROPS === "undefined") return;
@@ -1570,11 +1690,18 @@
 
   // ----- Härte-Tuner (Web Audio) -----
   (function(){
+    // Eine Zone hiess "Distribution" und empfahl TEKKNO TRAIN als
+    // Tonband-Track. Beides falsch: DISTRIBUTION ist keine Schiene, und
+    // Tekkno Train traegt NULLTAG-02, gehoert also zu den Standalones.
+    // STANDALONES fehlt hier bewusst: 147-220 BPM deckt die ganze Skala
+    // ab, eine Zone waere dort keine Aussage.
     var ZONES = [
-      { max:161, key:"cinetekk",     name:"Cinetekk",     hard:"weich · kino",        meta:"Cinematic Techno — Film ohne Bilder, ein Lichtstrahl, ein roter Punkt. Moll, langsamer Build.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg", sc:"letzter-sommer" },
-      { max:184, key:"distribution", name:"Distribution", hard:"mittelhart · hands-up", meta:"Hardtek & Hands-Up aus der Tonband-Schiene — DE, roh, für den Boden.", track:"TEKKNO TRAIN · TONBAND · DE", cover:"covers/rel_tekkno_train.jpg", sc:"tekkno-train" },
-      { max:199, key:"dome",         name:"Dome EP",      hard:"hart · mainstage",     meta:"Festival-Frenchcore, euphoric Peaktime-Mainstage als Story-Arc. Hände hoch.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg", sc:"in-the-dome" },
-      { max:210, key:"lichtjahr",    name:"Lichtjahr",    hard:"brutal · kosmisch",    meta:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Kicks auf Planetenbewegung getunt.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg", sc:"supernova" }
+      { max:146, key:"tausend",   name:"Tausend Stimmen", hard:"weich · trance",       meta:"Trance und Hands-Up, ein Werk in vier Fassungen — deutsch, englisch, Instrumental, String-Theory-Mix.", track:"Tausend Stimmen (Instrumental) · TS-03 · 144 BPM", cover:"covers/rel_tausend_stimmen_thousand_voices.jpg", sc:"nulltag-tausend-stimmen-instrumental-2" },
+      { max:156, key:"blackbox",  name:"Blackbox",        hard:"kühl · industrial",    meta:"Industrial- und Acid-Techno als Cyber-Espionage: schwarzer Bildschirm, ein Cursor, vier Tracks.", track:"BLACKBOX · BB-01 · 147 BPM", cover:"covers/rel_blackbox.jpg", sc:"blackbox" },
+      { max:166, key:"cinetekk",  name:"Cinetekk",        hard:"cineastisch · kino",   meta:"Cinematic Techno — Film ohne Bilder, ein Lichtstrahl, ein roter Punkt. Moll, langsamer Build.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg", sc:"letzter-sommer" },
+      { max:186, key:"tonband",   name:"Tonband",         hard:"mittelhart · mundart", meta:"Comedy-Hardtek auf Frenchcore-Fundament, deutsch und Schweizerdeutsch. Roh, für den Boden.", track:"Swiss Geeman · TB-01 · 175 BPM", cover:"covers/rel_swiss_geeman.jpg", sc:"swiss-geeman" },
+      { max:199, key:"dome",      name:"Dome EP",         hard:"hart · mainstage",     meta:"Festival-Frenchcore, euphoric Peaktime-Mainstage als Story-Arc. Hände hoch.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg", sc:"in-the-dome" },
+      { max:210, key:"lichtjahr", name:"Lichtjahr",       hard:"brutal · kosmisch",    meta:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Kicks auf Planetenbewegung getunt.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg", sc:"supernova" }
     ];
     function zoneFor(bpm){ for(var i=0;i<ZONES.length;i++){ if(bpm<=ZONES[i].max) return ZONES[i]; } return ZONES[ZONES.length-1]; }
     var STOPS=[[140,74,160,208],[170,232,160,58],[195,255,42,85],[210,255,106,42]];

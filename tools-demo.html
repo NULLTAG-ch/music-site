@@ -12,7 +12,7 @@
 <!-- Gemeinsame Web-Schicht aus nulltag-cd. Fehlte hier: systemweite
      Korrekturen (etwa Trefferflaechen auf Touch) erreichten diese Seite
      bisher nicht, weil sie nur die Tokens lud. -->
-<link rel="stylesheet" href="web.css?v=3" />
+<link rel="stylesheet" href="web.css?v=4" />
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; background:
@@ -430,11 +430,20 @@ var DROPS = [
 /* ============ SF · Härte-Tuner ============ */
 (function(){
   // BPM → Schiene zones (low→high = soft→brutal)
+  // Eine Zone hiess "Distribution" und empfahl TEKKNO TRAIN als
+  // Tonband-Track. Beides falsch: DISTRIBUTION ist keine Schiene, und
+  // Tekkno Train traegt NULLTAG-02, gehoert also zu den Standalones. Die
+  // Zonen decken jetzt echte Schienen ab, und jeder Empfehlungstrack hat
+  // seine BPM-Angabe aus dem Vault statt aus dem Gefuehl.
+  // STANDALONES fehlt bewusst: 147-220 BPM deckt die ganze Skala ab, eine
+  // Zone waere dort keine Aussage.
   var ZONES = [
-    { max:161, key:"cinetekk",     name:"Cinetekk",     hard:"weich · kino",        meta:"Cinematic Techno — Film ohne Bilder, ein Lichtstrahl, ein roter Punkt. Moll, langsamer Build.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg", sc:"letzter-sommer" },
-    { max:184, key:"distribution", name:"Distribution", hard:"mittelhart · hands-up", meta:"Hardtek & Hands-Up aus der Tonband-Schiene — DE, roh, für den Boden.", track:"TEKKNO TRAIN · TONBAND · DE", cover:"covers/rel_tekkno_train.jpg", sc:"tekkno-train" },
-    { max:199, key:"dome",         name:"Dome EP",      hard:"hart · mainstage",     meta:"Festival-Frenchcore, euphoric Peaktime-Mainstage als Story-Arc. Hände hoch.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg", sc:"in-the-dome" },
-    { max:210, key:"lichtjahr",    name:"Lichtjahr",    hard:"brutal · kosmisch",    meta:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Kicks auf Planetenbewegung getunt.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg", sc:"supernova" }
+    { max:146, key:"tausend",   name:"Tausend Stimmen", hard:"weich · trance",       meta:"Trance und Hands-Up, ein Werk in vier Fassungen — deutsch, englisch, Instrumental, String-Theory-Mix.", track:"Tausend Stimmen (Instrumental) · TS-03 · 144 BPM", cover:"covers/rel_tausend_stimmen_thousand_voices.jpg", sc:"nulltag-tausend-stimmen-instrumental-2" },
+    { max:156, key:"blackbox",  name:"Blackbox",        hard:"kühl · industrial",    meta:"Industrial- und Acid-Techno als Cyber-Espionage: schwarzer Bildschirm, ein Cursor, vier Tracks.", track:"BLACKBOX · BB-01 · 147 BPM", cover:"covers/rel_blackbox.jpg", sc:"blackbox" },
+    { max:166, key:"cinetekk",  name:"Cinetekk",        hard:"cineastisch · kino",   meta:"Cinematic Techno — Film ohne Bilder, ein Lichtstrahl, ein roter Punkt. Moll, langsamer Build.", track:"Letzter Sommer · CT-07 · 150 BPM", cover:"covers/letzter_sommer.jpg", sc:"letzter-sommer" },
+    { max:186, key:"tonband",   name:"Tonband",         hard:"mittelhart · mundart", meta:"Comedy-Hardtek auf Frenchcore-Fundament, deutsch und Schweizerdeutsch. Roh, für den Boden.", track:"Swiss Geeman · TB-01 · 175 BPM", cover:"covers/rel_swiss_geeman.jpg", sc:"swiss-geeman" },
+    { max:199, key:"dome",      name:"Dome EP",         hard:"hart · mainstage",     meta:"Festival-Frenchcore, euphoric Peaktime-Mainstage als Story-Arc. Hände hoch.", track:"In The Dome · DM-01 · 190 BPM", cover:"covers/in_the_dome.jpg", sc:"in-the-dome" },
+    { max:210, key:"lichtjahr", name:"Lichtjahr",       hard:"brutal · kosmisch",    meta:"Uplifting-to-symphonic Cosmic Frenchcore zu Himmelskörper-Bildern. Kicks auf Planetenbewegung getunt.", track:"Supernova · LJ-10 · 200 BPM", cover:"covers/supernova.jpg", sc:"supernova" }
   ];
   function zoneFor(bpm){ for(var i=0;i<ZONES.length;i++){ if(bpm<=ZONES[i].max) return ZONES[i]; } return ZONES[ZONES.length-1]; }
   // heat color: cold-blue → amber → tiefrot → glut, monotonic with BPM
