@@ -239,6 +239,37 @@
   .cat--rel .cat__tracks li::before { content: counter(trk, decimal-leading-zero) "  "; color: var(--muted-deep); }
   @media (max-width: 720px){ .cat--rel { grid-template-columns: 76px minmax(0,1fr); gap: var(--s-4); padding: var(--s-4); } .cat--rel .cat__tracks { columns: 1; font-size: 10.5px; line-height: 1.8; } }
 
+  /* ===== presse ===== */
+  /* Presse ist kein Feed-Eintrag. Ein TV-Beitrag oder ein geschriebenes
+     Stueck bleibt Jahre relevant, waehrend "neue Single ist raus" nach
+     einer Woche Altpapier ist. Darum eigene Karten statt einer Zeile in
+     §NEWS — mit Quelle, Datum und, wo es eins gibt, einem Zitat.
+     Die Sektion entfernt sich selbst, solange CONFIG.presse leer ist:
+     ein leerer Block waere genau das "bald erscheint", das auf dieser
+     Seite nicht mehr vorkommt. */
+  .presse { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--s-3); }
+  .pr { display: flex; flex-direction: column; gap: var(--s-3); background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); padding: var(--s-6); text-decoration: none; color: inherit; transition: border-color var(--t-base) var(--ease), background var(--t-base) var(--ease); }
+  .pr__body { display: flex; flex-direction: column; gap: var(--s-3); flex: 1; min-width: 0; }
+  a.pr:hover { border-color: var(--border-warm); background: var(--surface-2); text-decoration: none; }
+  .pr__head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); flex-wrap: wrap; }
+  .pr__src { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone-dim); }
+  .pr__date { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; color: var(--muted-deep); white-space: nowrap; }
+  .pr__title { font-family: var(--font-display); font-size: clamp(22px, 2.4vw, 30px); line-height: 1.02; text-transform: uppercase; color: var(--bone); margin: 0; }
+  a.pr:hover .pr__title { color: var(--tiefrot); }
+  .pr__quote { font-family: var(--font-body); font-size: 14.5px; line-height: 1.55; color: var(--bone-dim); margin: 0; padding-left: var(--s-4); border-left: 2px solid var(--hairline); }
+  .pr__go { margin-top: auto; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+  a.pr:hover .pr__go { color: var(--bone); }
+  /* Ein Beitrag mit Bewegtbild bekommt die Facade der gemeinsamen Schicht:
+     bis zum Klick wird nichts von youtube.com geladen. */
+  /* Der erste Videobeitrag laeuft ueber die volle Breite — aber NICHT mit
+     dem Bild darueber: 16:9 auf 1240px sind 700px hoch, und dann sieht man
+     von der Sektion nichts als ein Standbild. Nebeneinander bleibt das
+     Video gross genug und der Text lesbar. */
+  .pr--wide { grid-column: 1 / -1; }
+  @media (min-width: 760px) {
+    .pr--wide { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--s-6); align-items: center; }
+  }
+
   /* ===== schienen ===== */
   /* §04 ground — a screen-wall plate behind the split view, kept far enough
      down in the mix that it reads as atmosphere, not as content. */
@@ -844,10 +875,27 @@
     </ol>
 
     <p class="muted-copy" style="margin-top:var(--s-6); max-width:64ch">
-      Uploads, Drops und Distributionen laufen automatisch ein. Presse,
-      Interviews und alles, was keine API kennt, stehen kuratiert in
-      <code>config.js</code> — eine Zeile, ein Commit, live.
+      Uploads, Drops und Distributionen laufen automatisch ein. Alles, was
+      keine API kennt, steht kuratiert in <code>config.js</code> — eine
+      Zeile, ein Commit, live.<span id="presse-hint"> Presse und längere Texte
+      haben ihre eigene Sektion: <a href="#presse">§ Presse</a>.</span>
     </p>
+  </div>
+</section>
+
+<!-- Die Sektion baut renderPresse() aus CONFIG.presse. Steht dort nichts,
+     nimmt sie sich aus dem Dokument — samt §-Nummer, die stampCounts()
+     danach ohnehin aus der DOM-Reihenfolge neu vergibt. -->
+<section class="s" id="presse" data-screen-label="05 Presse" hidden>
+  <div class="container">
+    <div class="s__head">
+      <div>
+        <div class="s__num">§05 · PRESSE · ÜBER NULLTAG</div>
+        <h2 class="s__title">Presse</h2>
+      </div>
+      <div class="s__meta"><span data-count="presse">—</span> BEITRÄGE<br/>NEUESTE ZUERST</div>
+    </div>
+    <div class="presse" id="presse-list"></div>
   </div>
 </section>
 
@@ -1419,7 +1467,8 @@
     var values = {
       releases: String(releases),
       tracks: String(tracks),
-      rails: pad(Object.keys(rails).length)
+      rails: pad(Object.keys(rails).length),
+      presse: pad(document.querySelectorAll("#presse-list .pr").length)
     };
     document.querySelectorAll("[data-count]").forEach(function(el){
       var v = values[el.dataset.count];
@@ -1433,6 +1482,25 @@
     cards.forEach(function(el, i){
       var n = el.querySelector(".rail__num");
       if (n) n.textContent = pad(i + 1) + " / " + pad(cards.length);
+    });
+
+    // Die §-Nummern standen als Literal in jedem Sektionskopf. Wer eine
+    // Sektion einschiebt, muss sonst acht Koepfe nachziehen — und genau
+    // das ist in dieser Datei schon zweimal danebengegangen (Katalog und
+    // Schienen trugen beide "§04"). Die Reihenfolge im DOM ist die
+    // Wahrheit; das Markup traegt nur noch den Namen.
+    var secs = document.querySelectorAll("section.s[id]");
+    secs.forEach(function(sec, i){
+      var num = sec.querySelector(".s__num");
+      if (num) num.textContent = num.textContent.replace(/^\s*§\s*\d+/, "§" + pad(i + 1));
+    });
+    // Das data-screen-label liest heute niemand, driftet aber genauso — und
+    // es zaehlt anders: Nav und Hero tragen 00 und 01, sind aber keine
+    // section.s. Also ueber genau die Elemente laufen, die das Attribut
+    // haben, statt einen Versatz zu raten.
+    document.querySelectorAll("[data-screen-label]").forEach(function(el, i){
+      el.setAttribute("data-screen-label",
+        el.getAttribute("data-screen-label").replace(/^\s*\d+/, pad(i)));
     });
   }
 
@@ -1487,6 +1555,71 @@
     return "nt-badge";
   }
 
+  // ── §PRESSE ← CONFIG.presse ───────────────────────────────────────
+  // Presse und Blog liegen kuratiert in config.js — dafuer gibt es keine
+  // API, und es soll auch keine geben: ein TV-Beitrag ist ein Ereignis,
+  // kein Datenstrom. Eine Zeile dort, ein Commit, live.
+  function presseBadge(kind){
+    var k = String(kind || "").toLowerCase();
+    if (k === "tv" || k === "video") return "nt-badge nt-badge--video";
+    if (k === "blog") return "nt-badge nt-badge--audio";
+    return "nt-badge";
+  }
+
+  function renderPresse(){
+    var sec = document.getElementById("presse");
+    var box = document.getElementById("presse-list");
+    if (!sec || !box) return;
+
+    // web.js laedt mit `defer`. Faellt es aus, soll die Sektion trotzdem
+    // stehen — dann eben als reine Linkkarten ohne Video-Facade, statt die
+    // Initialisierung mit einem ReferenceError abzuraeumen.
+    var isVid = (window.NT && NT.isVideoId) ? NT.isVideoId : function(){ return false; };
+
+    var items = ((window.CONFIG && CONFIG.presse) || []).filter(function(p){
+      return p && p.title && p.url;
+    });
+    // Leer heisst weg. Eine Ueberschrift ohne Inhalt ist eine Ankuendigung,
+    // und Ankuendigungen ohne Termin sind auf dieser Seite abgeschafft.
+    if (!items.length) {
+      sec.remove();
+      // Der Verweis in §NEWS zeigt sonst auf einen Anker, den es nicht
+      // mehr gibt.
+      var hint = document.getElementById("presse-hint");
+      if (hint) hint.remove();
+      return;
+    }
+    sec.hidden = false;
+
+    items.sort(function(a, b){ return String(b.date||"").localeCompare(String(a.date||"")); });
+
+    box.innerHTML = items.map(function(p, i){
+      var vid = isVid(p.video) ? p.video : "";
+      // Der erste Beitrag mit Bewegtbild bekommt die volle Breite — ein
+      // TV-Beitrag ueber das Label ist das staerkste Stueck auf der Seite.
+      var wide = vid && i === 0 ? " pr--wide" : "";
+      var facade = vid
+        ? '<div class="nt-vid" data-video="' + catEsc(vid) + '" role="button" tabindex="0" ' +
+          'aria-label="Video abspielen: ' + catEsc(p.title) + '"></div>'
+        : "";
+      return '<a class="pr' + wide + '" href="' + catEsc(p.url) + '" target="_blank" rel="noopener">' +
+        facade +
+        '<div class="pr__body">' +
+          '<div class="pr__head">' +
+            '<span class="pr__src">' + catEsc(p.source || "Presse") + "</span>" +
+            '<span class="' + presseBadge(p.kind) + '">' + catEsc(p.kind || "Artikel") + "</span>" +
+          "</div>" +
+          '<div class="pr__date">' + catEsc(p.date || "") + "</div>" +
+          '<h3 class="pr__title">' + catEsc(p.title) + "</h3>" +
+          (p.quote ? '<p class="pr__quote">' + catEsc(p.quote) + "</p>" : "") +
+          '<div class="pr__go">' + (vid ? "Beitrag ansehen ↗" : "Beitrag lesen ↗") + "</div>" +
+        "</div>" +
+      "</a>";
+    }).join("");
+
+    if (window.NT && NT.facades) NT.facades(box);
+  }
+
   function renderNews(feed){
     var list = document.getElementById("news-list");
     if (!list) return;
@@ -1528,6 +1661,17 @@
   renderNews(null);
   stampCounts();
   stampRollout();
+
+  // renderPresse() braucht NT aus web.js — und das laedt mit `defer`, ist
+  // waehrend des Parsens also noch nicht da. Deferred Skripte laufen
+  // garantiert vor DOMContentLoaded, hier ist NT vorhanden.
+  // stampCounts() danach noch einmal: die Sektion kann sich entfernt haben,
+  // und die §-Nummern kommen aus der DOM-Reihenfolge. Beide Laeufe sind
+  // idempotent.
+  (function whenReady(fn){
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn, { once: true });
+    else fn();
+  })(function(){ renderPresse(); stampCounts(); });
 
   function hydrateFromFeed(feed){
     renderNews(feed);

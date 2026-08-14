@@ -165,7 +165,36 @@ window.CONFIG = {
   updates: [
     { date: "2026-05-16", platform: "Release",   text: "Plastic Paradise EP is out — listen on every platform.", url: "https://music.apple.com/ch/album/plastic-paradise-ep/6769685431" },
     { date: "2026-05-16", platform: "Instagram", text: "New visuals + behind-the-scenes on Instagram.",            url: "https://www.instagram.com/nulltag.ch/" }
-  ]
+  ],
+
+  // ── PRESSE & BLOG ─────────────────────────────────────────────────────
+  // Beitraege ueber NULLTAG und laengere eigene Texte. Bewusst getrennt von
+  // `updates`: ein TV-Beitrag oder ein geschriebenes Stueck bleibt Jahre
+  // relevant, waehrend "neue Single ist raus" nach einer Woche Altpapier
+  // ist. §PRESSE zeigt Karten mit Quelle, Datum und Zitat statt einer
+  // Feed-Zeile.
+  //
+  // Solange diese Liste leer ist, nimmt sich die ganze Sektion aus der
+  // Seite — kein leerer Block, keine Ankuendigung ohne Termin.
+  //
+  // Felder:
+  //   date    "JJJJ-MM-TT"  — sortiert, neueste zuerst
+  //   source  Wer es publiziert hat ("1FL TV", "NULLTAG Blog", ...)
+  //   kind    "TV" | "Artikel" | "Interview" | "Blog" — steuert das Badge
+  //   title   Die Ueberschrift des Beitrags, nicht die eigene Zusammenfassung
+  //   url     Link auf den Beitrag (extern oder eine eigene Seite)
+  //   quote   optional, ein Satz aus dem Beitrag
+  //   video   optional, 11-stellige YouTube-ID. Der erste Eintrag mit Video
+  //           bekommt die volle Breite und eine Klick-Facade: bis zum Klick
+  //           wird nichts von youtube.com geladen.
+  //
+  // Beispiel — beim Eintragen die Kommentarzeichen entfernen und die Werte
+  // durch die echten ersetzen. Erfundene Platzhalter gehoeren nicht in eine
+  // Live-Seite, darum steht hier nichts Halbrichtiges:
+  //
+  // { date: "2026-06-12", source: "1FL TV", kind: "TV",
+  //   title: "…", url: "https://…", quote: "…", video: "…" },
+  presse: []
 
   // Kein `upcoming` mehr — bewusst entfernt, nicht ersetzt (Entscheidung
   // Ivan Stricker, 2026-08-13, siehe nulltag-cd/vault-export/meta.json).
