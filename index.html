@@ -357,6 +357,23 @@
   .gadget__embed { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-deep); background: var(--void); border: 1px solid var(--border-warm); border-radius: var(--r-md); padding: 5px 10px; cursor: pointer; transition: all var(--t-base) var(--ease); }
   .gadget__embed:hover { color: var(--bone); border-color: var(--tiefrot); }
 
+  /* ===== Trefferflächen auf Touch-Geräten =====
+     web.css deckt echte Bedienelemente (button, select, [role=button])
+     systemweit ab. Was es NICHT erraten kann, sind Anker, die hier als
+     Bedienelement gestaltet sind — die Klassennamen kennt nur diese Seite.
+     Dieselbe Bedingung wie im Design-System: `pointer: coarse`, nicht die
+     Fensterbreite. Links im Fliesstext bleiben unangetastet. */
+  @media (pointer: coarse), (hover: none) {
+    .nav__mark,
+    .nav__menu a,
+    .foot__col a,
+    .ch,
+    .latest__platforms a { min-height: 44px; display: inline-flex; align-items: center; }
+    /* Die Footer-Listen brauchen zusätzlich Abstand, sonst wachsen die
+       Ziele zusammen und man trifft den Nachbarn. */
+    .foot__col li { margin-bottom: 2px; }
+  }
+
   /* ===== TOOLS BETA (scoped: tb-) ===== */
   .tb-beta { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tiefrot); border: 1px solid var(--tiefrot); border-radius: var(--r-pill); padding: 3px 10px; }
   .tb-laser { position: relative; height: 2px; background: var(--border); overflow: hidden; margin-bottom: var(--s-5); }
