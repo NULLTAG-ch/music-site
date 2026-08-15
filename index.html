@@ -255,6 +255,9 @@
   .pr__src { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone-dim); }
   .pr__date { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; color: var(--muted-deep); white-space: nowrap; }
   .pr__title { font-family: var(--font-display); font-size: clamp(22px, 2.4vw, 30px); line-height: 1.02; text-transform: uppercase; color: var(--bone); margin: 0; }
+  /* Hebt den Track-/Release-Namen innerhalb der Schlagzeile hervor — sonst
+     verschwindet er in Beitragstiteln, die ihn nur beilaeufig nennen. */
+  .pr__title b { font-weight: inherit; text-decoration: underline; text-decoration-color: var(--tiefrot); text-decoration-thickness: 2px; text-underline-offset: 4px; }
   a.pr:hover .pr__title { color: var(--tiefrot); }
   .pr__quote { font-family: var(--font-body); font-size: 14.5px; line-height: 1.55; color: var(--bone-dim); margin: 0; padding-left: var(--s-4); border-left: 2px solid var(--hairline); }
   .pr__go { margin-top: auto; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
@@ -1580,6 +1583,20 @@
     return "nt-badge";
   }
 
+  // Der Songtitel/`about` sass am Ende eines Fliesstext-Satzes und ging
+  // dort unter — niemand liest bis zur letzten umgebrochenen Zeile, um zu
+  // sehen, dass genau die den eigentlichen Track nennt. Statt den Text zu
+  // aendern, wird der Name im Titel hervorgehoben, wo er vorkommt.
+  function presseTitleHtml(p){
+    var title = p.title || ("Beitrag über " + (p.about || "NULLTAG"));
+    if (!p.about) return catEsc(title);
+    var i = title.toLowerCase().indexOf(String(p.about).toLowerCase());
+    if (i < 0) return catEsc(title);
+    return catEsc(title.slice(0, i)) +
+      "<b>" + catEsc(title.slice(i, i + p.about.length)) + "</b>" +
+      catEsc(title.slice(i + p.about.length));
+  }
+
   function renderPresse(){
     var sec = document.getElementById("presse");
     var box = document.getElementById("presse-list");
@@ -1635,8 +1652,7 @@
           // Ohne Schlagzeile beschreibt die Karte, was der Link ist. `about`
         // nennt dabei das Thema, wenn es feststeht — „Beitrag über
         // Freedom" statt sechsmal derselben Zeile.
-        '<h3 class="pr__title">' +
-          catEsc(p.title || ("Beitrag über " + (p.about || "NULLTAG"))) + "</h3>" +
+        '<h3 class="pr__title">' + presseTitleHtml(p) + "</h3>" +
           (p.quote ? '<p class="pr__quote">' + catEsc(p.quote) + "</p>" : "") +
             '<div class="pr__go">' + (sehen ? "Beitrag ansehen ↗" : "Beitrag lesen ↗") + "</div>" +
         "</div>" +
