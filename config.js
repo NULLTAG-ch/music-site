@@ -183,6 +183,9 @@ window.CONFIG = {
   //   kind    "TV" | "Artikel" | "Interview" | "Blog" — steuert das Badge
   //   title   Die Ueberschrift des Beitrags, nicht die eigene Zusammenfassung
   //   url     Link auf den Beitrag (extern oder eine eigene Seite)
+  //   author  optional, die Byline ("jan", "Ana.P470") — steht neben dem Datum
+  //   about   optional, das Thema/Release, wenn kein `title` vorliegt —
+  //           die Karte liest sich dann als "Beitrag über <about>"
   //   quote   optional, ein Satz aus dem Beitrag
   //   video   optional, 11-stellige YouTube-ID. Der erste Eintrag mit Video
   //           bekommt die volle Breite und eine Klick-Facade: bis zum Klick
@@ -194,7 +197,50 @@ window.CONFIG = {
   //
   // { date: "2026-06-12", source: "1FL TV", kind: "TV",
   //   title: "…", url: "https://…", quote: "…", video: "…" },
-  presse: []
+  presse: [
+    // Vier Beitraege, am 2026-08-14 von der Vault-Seite (Claudian)
+    // recherchiert und mit Volltext-URL belegt — nichts geraten, nichts
+    // aus einer Suchmaschinen-Zusammenfassung geschaetzt. Reihenfolge hier
+    // ist Ablage; die Seite sortiert selbst nach Datum.
+
+    // 1FL TV — Liechtensteiner Fernsehen, Web-Artikel zur Sendung.
+    //
+    // Diese Session hatte zuvor einen Facebook-Reel derselben Sendergruppe
+    // (facebook.com/reel/2262232791280600) als Platzhalter eingetragen,
+    // ohne Datum oder Thema belegen zu koennen — facebook.com ist per
+    // Egress-Regel nicht erreichbar. Mit Datum, Autor und Thema jetzt
+    // bestaetigt, ersetzt die zitierfaehige Artikelseite den Platzhalter.
+    // Falls der Reel ein eigener, zweiter Beitrag ist statt derselben
+    // Sendung: bitte melden, dann kommt er als eigene Karte zurueck.
+    { date: "2026-08-06", source: "1FL TV", kind: "TV", author: "jan",
+      about: "Mein Name ist Hase",
+      url: "https://1fl.li/wp/6-august-2026/" },
+
+    // Besprechung von „Freedom" (NULLTAG-13) bei einem spanischsprachigen
+    // Indie-Musikblog. Titel per Websuche bestaetigt (die Seite selbst ist
+    // von der Netzwerk-Policy blockiert). Der Besprechungstext liegt nur
+    // als Suchmaschinen-Zusammenfassung vor — 200 BPM, Einsatz ab 0:31,
+    // maennliche und weibliche Stimme, Anti-System-Botschaft — das ist
+    // eine Paraphrase, kein Wortlaut, und steht deshalb NICHT als `quote`.
+    { date: "2026-06-03", source: "Rockola Indie", kind: "Artikel", author: "Ana.P470",
+      title: "NULLTAG - Freedom", about: "Freedom",
+      url: "https://www.rockolaindie.com/2026/06/nulltag-freedom.html" },
+
+    // Besprechung von „LOVESONG" (NULLTAG-11) bei einem brasilianischen
+    // Musikblog. Titel aus dem URL-Slug rekonstruiert (Portugiesisch,
+    // Original-Sprache, nicht uebersetzt) — der Fliesstext selbst liegt
+    // nicht vor, daher kein `quote`.
+    { date: "2026-05-30", source: "BeatForBeat", kind: "Artikel", author: "Carlos Vinicius",
+      title: "NULLTAG mostra uma atmosfera forte e imersiva em LOVESONG", about: "LOVESONG",
+      url: "https://beatforbeat.com.br/site/nulltag-mostra-uma-atmosfera-forte-e-imersiva-em-lovesong/" },
+
+    // Besprechung von „Freedom" (NULLTAG-13) bei einem mexikanischen
+    // Radio-/Musikmagazin aus Mexiko-Stadt, unsigniert. `about` statt
+    // `title`: die Schlagzeile selbst liegt nicht vor.
+    { date: "2026-05-30", source: "Cosmonauta Radio", kind: "Artikel",
+      about: "Freedom",
+      url: "https://cosmonautaradio.com.mx/2026/05/30/nulltag-freedom/" }
+  ]
 
   // Kein `upcoming` mehr — bewusst entfernt, nicht ersetzt (Entscheidung
   // Ivan Stricker, 2026-08-13, siehe nulltag-cd/vault-export/meta.json).
