@@ -1630,7 +1630,8 @@
             '<span class="pr__src">' + catEsc(p.source || "Presse") + "</span>" +
             '<span class="' + presseBadge(p.kind) + '">' + catEsc(p.kind || "Artikel") + "</span>" +
           "</div>" +
-          '<div class="pr__date">' + catEsc(p.date || "") + "</div>" +
+          '<div class="pr__date">' + catEsc(p.date || "") +
+            (p.author ? " · " + catEsc(p.author) : "") + "</div>" +
           // Ohne Schlagzeile beschreibt die Karte, was der Link ist. `about`
         // nennt dabei das Thema, wenn es feststeht — „Beitrag über
         // Freedom" statt sechsmal derselben Zeile.
