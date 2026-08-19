@@ -41,6 +41,19 @@ YouTube RSS ────┘        │                                 ─► NE
 3. **New short link** → add slug → URL to `shortlinks` in `config.js`.
    Verify the SoundCloud permalink returns 200 first (dead permalinks have
    bitten before).
+4. **New trainer version on learn.nulltag.ch** → add a line to `LEARN_TRACKS`
+   in `index.html` (§09 Tools, "Am Klavier"). That list is the one place this
+   site knows which tracks are playable over there. The `slug` is the key
+   between the two sites (`?track=<slug>`) and comes from the vault, not from
+   the title — where catalog and trainer carry different titles, the catalog
+   wins (`Pilze, Pläne und Panik` → `mushrooms-plans-and-panic`).
+
+## Cross-property bar
+
+The `.nt-bar` at the very top is the one element identical on every
+nulltag.ch domain — it is defined in the design system (`web.css`, vendored
+from `nulltag-cd`), not here. Do not restyle it locally: a change belongs in
+the design system so both properties move together.
 
 ## Short links — `music.nulltag.ch/s/<slug>`
 

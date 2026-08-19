@@ -73,6 +73,16 @@
   .nav__menu .nav__cta:hover { background: var(--tiefrot); color: var(--void); }
   @media (max-width: 720px) { .nav__menu a:not(.nav__cta) { display: none; } .nav__menu .nav__cta { margin-left: 0; } }
 
+  /* ===== Am Klavier (Trainer-Deep-Links) ===== */
+  .learn__lead { color: var(--muted); font-size: var(--fs-body-sm); line-height: var(--lh-body); margin: var(--s-4) 0 var(--s-4); max-width: 62ch; }
+  .learn__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s-2); }
+  .learn__item { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-2) var(--s-3); border: var(--bw) solid var(--border); border-radius: var(--r-md); background: var(--surface); text-decoration: none; color: var(--bone); transition: border-color var(--t-base) var(--ease), background var(--t-base) var(--ease); }
+  .learn__item:hover { border-color: var(--tiefrot); background: var(--surface-2); text-decoration: none; }
+  .learn__cov { width: 40px; height: 40px; flex: none; border-radius: var(--r-sm); object-fit: cover; display: block; background: var(--code-bg); }
+  .learn__txt { min-width: 0; display: block; }
+  .learn__t { display: block; font-family: var(--font-grotesk); font-size: var(--fs-body-sm); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .learn__m { display: block; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: var(--ls-mono-eye); text-transform: uppercase; color: var(--muted); margin-top: 2px; white-space: nowrap; }
+
   /* ===== hero ===== */
   .hero { position: relative; min-height: 88vh; overflow: hidden; border-bottom: 1px solid var(--border); background: radial-gradient(ellipse at 78% 50%, #1a0e02 0%, #050505 55%, #020202 100%); }
   .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; opacity: 0.95; pointer-events: none; z-index: 0; }
@@ -698,6 +708,17 @@
 <div class="cursor-ring" aria-hidden="true"></div>
 <div class="cursor-dot" aria-hidden="true"></div>
 
+<!-- Cross-property bar — the one element that is identical on every
+     nulltag.ch domain. Defined in the design system (web.css). Bis hierher
+     gab es von music.nulltag.ch aus ueberhaupt keinen Weg zur Lernseite. -->
+<div class="nt-bar">
+  <a class="nt-bar__mark" href="/"><span class="nt-dot" aria-hidden="true"></span><span>NULLTAG</span></a>
+  <nav class="nt-switch" aria-label="NULLTAG-Seiten">
+    <a href="/" aria-current="page">Music</a>
+    <a href="https://learn.nulltag.ch">Learn</a>
+  </nav>
+</div>
+
 <nav class="nav" data-screen-label="00 Nav">
   <div class="container nav__inner">
     <a class="nav__mark" href="#top"><span class="nav__dot" aria-hidden="true"></span><span>NULLTAG</span></a>
@@ -1172,6 +1193,22 @@
         </div>
       </section>
 
+      <!-- AM KLAVIER — Deep-Links in den Trainer auf learn.nulltag.ch.
+           Die Liste steht hier von Hand: sie ist die eine Stelle, an der
+           music.nulltag.ch weiss, welche Tracks drueben eine Lernfassung
+           haben. Ein neuer Track dort bekommt hier eine Zeile. -->
+      <section class="tbpanel">
+        <div class="tbbar"><span class="t"><span class="dot"></span>Am Klavier · learn.nulltag.ch</span>
+          <a class="tbbtn" href="https://learn.nulltag.ch" target="_blank" rel="noopener">↗ Trainer öffnen</a></div>
+        <p class="learn__lead">Diese Tracks gibt es als interaktive Lernfassung: fallende Noten, drei
+        Schwierigkeitsgrade, Web-MIDI. Ein Klick startet den Song direkt im Trainer.</p>
+        <div class="learn__grid" id="learn-grid"></div>
+        <p class="learn__lead" style="margin-bottom:0">Dazu weitere Stücke und Arrangements, die es nur als
+        Lernfassung gibt — <a href="https://learn.nulltag.ch/" target="_blank" rel="noopener">Zeitfaden,
+        Erster Schritt, Eintracht-Hymne, Hauptmotiv, Hymn of the Void, Euphoric Night, How My Brain Sounds,
+        Eisflug (Nocturne) und Ashes to Anthem (Reverie)</a>.</p>
+      </section>
+
       <div style="text-align:right; margin-top:var(--s-2);">
         <a class="btn-hero btn-hero--ghost" href="tools-demo.html" target="_blank" rel="noopener" style="font-size:11px;">↗ Toolbench-Demo öffnen</a>
       </div>
@@ -1394,6 +1431,41 @@
     });
   }
   renderCatalog("ALL");
+
+  // ── Am Klavier ────────────────────────────────────────────────────
+  // Die Tracks, die auf learn.nulltag.ch eine Lernfassung haben. Der Slug
+  // ist der Schluessel zwischen den beiden Seiten (?track=…) — er kommt aus
+  // dem Vault, nicht aus dem Titel: wo Katalog und Trainer verschiedene
+  // Titel fuehren, gilt der Katalog. Kein Cover heisst: die Lernseite hat
+  // dort noch einen Platzhalter, dann steht hier nur der Titel.
+  var LEARN_TRACKS = [
+    { t:"Heat Death",             slug:"heat-death",                m:"LJ · As-Dur · 95 BPM",     img:"covers/lichtjahre.jpg" },
+    { t:"Peace Remains",          slug:"peace-remains",             m:"d-Moll · 95 BPM",          img:"covers/peace_remains.jpg" },
+    { t:"Higher Ground",          slug:"higher-ground",             m:"c-Moll · 88 BPM",          img:"covers/higher_ground.jpg" },
+    { t:"Burn the Void",          slug:"burn-the-void",             m:"NULLTAG-20 · a-Moll",      img:"covers/rail_standalone.jpg" },
+    { t:"Eisflug",                slug:"eisflug",                   m:"CT-05 · a-Moll"           , img:"covers/cinetekk.jpg" },
+    { t:"Fifteen Years",          slug:"fifteen-years",             m:"E-Dur · 153 BPM",          img:"covers/fifteen_years.jpg" },
+    { t:"Pilze, Pläne und Panik", slug:"mushrooms-plans-and-panic", m:"B-Dur · 92 BPM",           img:"covers/rail_standalone.jpg" },
+    { t:"Ashes to Anthem",        slug:"ashes-to-anthem",           m:"NULLTAG-26 · c-Moll",      img:"covers/rail_standalone.jpg" },
+    { t:"Lovesong",               slug:"lovesong",                  m:"Es-Dur · 97 BPM",          img:"covers/lovesong.jpg" },
+    { t:"Paper Kings",            slug:"paper-kings",               m:"NULLTAG-18 · f-Moll",      img:"covers/paper_kings.jpg" }
+  ];
+
+  (function(){
+    var box = document.getElementById("learn-grid");
+    if (!box) return;
+    LEARN_TRACKS.forEach(function(x){
+      var a = document.createElement("a");
+      a.className = "learn__item";
+      a.href = "https://learn.nulltag.ch/?track=" + x.slug;
+      a.target = "_blank"; a.rel = "noopener";
+      a.innerHTML = (x.img ? '<img class="learn__cov" src="' + x.img + '" alt="" loading="lazy" decoding="async" />'
+                           : '<span class="learn__cov"></span>') +
+        '<span class="learn__txt"><span class="learn__t">' + catEsc(x.t) + '</span>' +
+        '<span class="learn__m">' + catEsc(x.m) + '</span></span>';
+      box.appendChild(a);
+    });
+  })();
 
   // ── Filterzeile aus CATALOG ───────────────────────────────────────
   // Reihenfolge: wie RAIL_ORDER, damit die Chips nicht bei jedem neuen
